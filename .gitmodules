@@ -1,0 +1,3 @@
+[submodule "libs/reframed"]
+	path = libs/reframed
+	url = git@github.com:sirno/reframed.git

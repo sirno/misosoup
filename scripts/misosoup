@@ -1,0 +1,109 @@
+#!/usr/bin/env python
+
+import argparse
+import logging
+import os
+
+import multiprocessing as mp
+from functools import partial
+
+import yaml
+from tqdm import tqdm
+from reframed import Community, solver_instance
+import gurobipy as gp
+
+from misolib.readwrite import load_models, read_compounds
+from misolib.readwrite import write_minimal_suppliers
+from misolib.common import get_reaction_name
+from misolib.load import setup_medium, introduce_binary_variables
+from misolib.solve import minimal_suppliers
+from misolib.getters import get_biomass, get_exchange_reactions
+
+
+def work(org_id, base_medium, carbon_source, community, parsimony, community_size):
+    with gp.Env() as env:
+        solver = solver_instance(community.merged_model, env=env)
+
+        introduce_binary_variables(community, solver)
+
+        setup_medium(
+            community.merged_model,
+            solver,
+            base_medium,
+            [get_reaction_name(carbon_source)],
+        )
+
+        solution = minimal_suppliers(
+            org_id,
+            community,
+            solver,
+            values=(
+                get_biomass(community) + get_exchange_reactions(community.merged_model)
+            ),
+            community_size=community_size,
+            parsimony=parsimony,
+        )
+
+        return (org_id, solution)
+
+
+def main(args):
+    models = load_models(args.input)
+    base_medium = read_compounds(args.base_medium)
+    carbon_sources = read_compounds(args.carbon_sources)
+
+    community = Community("CoI", models, copy_models=False)
+
+    solution = {}
+
+    for carbon_source in carbon_sources:
+        solution[carbon_source] = {}
+
+        org_id, sol = work(
+            args.strain,
+            base_medium=base_medium,
+            carbon_source=carbon_source,
+            community=community,
+            community_size=args.community_size,
+            parsimony=args.parsimony,
+        )
+
+        solution[carbon_source][org_id] = sol
+
+    output = yaml.dump(
+        {
+            k: {
+                org: [{var: rate for var, rate in s.values.items() if rate} for s in sol]
+                if sol
+                else [{f"Growth_{org}": 0}]
+                for org, sol in v.items()
+            }
+            for k, v in solution.items()
+        }
+    )
+
+    if args.output:
+        if not os.path.exists(os.path.dirname(args.output)):
+            os.makedirs(os.path.dirname(args.output))
+        with open(args.output, "w") as fd:
+            fd.write(output)
+    else:
+        print(output)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Compute minimal supplying communities with MiSoS(oup).")
+    parser.add_argument("input", nargs="+", type=str, help="List or Regex for model paths.")
+    parser.add_argument("-o", "--output", type=str, help="Output file. Format: YAML. If not supplied, will print to stdout.")
+    parser.add_argument("--base-medium", type=str, required=True, help="Path to base medium. Format: YAML. File needs to contain list with BiGG IDs.")
+    parser.add_argument("--carbon-sources", type=str, required=True, help="Path to carbon sources. Format: YAML. File needs to contain list with BiGG IDs.")
+    parser.add_argument("--strain", type=str, required=True, help="Focal strain model id.")
+    parser.add_argument("--parsimony", action="store_true", help="Compute parsimony solution.")
+    parser.add_argument("--community-size", type=int, default=0, help="Maximum community size. Default: 0 (Arbitrary).")
+    parser.add_argument("--log", default="INFO", help="Log level. Default: INFO")
+
+    args = parser.parse_args()
+
+    logging.basicConfig(level=args.log, format="%(asctime)s %(message)s")
+
+    main(args)
