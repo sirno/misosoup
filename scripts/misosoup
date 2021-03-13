@@ -20,7 +20,7 @@ from misolib.solve import minimal_suppliers
 from misolib.getters import get_biomass, get_exchange_reactions
 
 
-def work(org_id, base_medium, carbon_source, community, parsimony, community_size):
+def compute_solution(org_id, base_medium, carbon_source, community, parsimony, community_size):
     with gp.Env() as env:
         solver = solver_instance(community.merged_model, env=env)
 
@@ -59,7 +59,7 @@ def main(args):
     for carbon_source in carbon_sources:
         solution[carbon_source] = {}
 
-        org_id, sol = work(
+        org_id, sol = compute_solution(
             args.strain,
             base_medium=base_medium,
             carbon_source=carbon_source,
