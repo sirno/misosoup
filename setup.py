@@ -13,5 +13,5 @@ setuptools.setup(
         "pandas",
         "tqdm",
     ],
-    extras_require={"dev": ["black", "pylint"]},
+    extras_require={"dev": ["black", "pylint", "pytest"]},
 )
