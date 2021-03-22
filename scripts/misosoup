@@ -50,13 +50,12 @@ def main(args):
     """Main function."""
     models = load_models(args.input)
     base_medium = read_compounds(args.base_medium)
-    carbon_sources = read_compounds(args.carbon_sources)
 
     community = Community("CoI", models, copy_models=False)
 
     solution = {}
 
-    for carbon_source in carbon_sources:
+    for carbon_source in args.carbon_sources:
         solution[carbon_source] = {}
 
         org_id, sol = compute_solution(
@@ -115,8 +114,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--carbon-sources",
         type=str,
-        required=True,
-        help="Path to carbon sources. Format: YAML. File needs to contain list with BiGG IDs.",
+        nargs="+",
+        help="List of carbon sources based on their BiGG IDs.",
     )
     parser.add_argument(
         "--strain", type=str, required=True, help="Focal strain model id."
