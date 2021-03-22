@@ -110,13 +110,13 @@ if __name__ == "__main__":
         "--base-medium",
         type=str,
         required=True,
-        help="Path to base medium. Format: YAML. File needs to contain list with BiGG IDs.",
+        help="Path to base medium. Format: YAML. File needs to contain list with BiGG IDs, e.g. EX_h_e.",
     )
     parser.add_argument(
         "--carbon-sources",
         type=str,
         nargs="+",
-        help="List of carbon sources based on their BiGG IDs.",
+        help="List of carbon sources based on their BiGG IDs, e.g. ac",
     )
     parser.add_argument(
         "--strain", type=str, required=True, help="Focal strain model id."
