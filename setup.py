@@ -12,6 +12,7 @@ setuptools.setup(
         "pyyaml",
         "pandas",
         "tqdm",
+        "snakemake",
     ],
     extras_require={"dev": ["black", "pylint", "pytest"]},
 )

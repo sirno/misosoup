@@ -43,9 +43,7 @@ def test_integration():
         capture_output=True,
         check=False,
     )
-    print("hi")
     assert complete_process.returncode == 0
-    str2 = complete_process.stdout
     assert (
         complete_process.stdout
         == b"""Academic license - for non-commercial use only - expires 2021-05-13

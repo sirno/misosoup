@@ -1,0 +1,9 @@
+strains:
+  - A1R12
+  - I2R16
+carbon_sources:
+  - ac
+base_medium:
+  ../tests/data/medium.yaml
+models:
+  ../tests/data/*.xml

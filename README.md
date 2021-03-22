@@ -34,3 +34,17 @@ Make sure you have `docker` installed and run tests with `pytest tests`.
 ```bash
 misosoup --help
 ```
+
+## Workflows
+
+`snakemake` is a useful tool to execute many experiments and gather results. In
+`./workflows` one can find a workflow to execute `misosoup` that can be
+configured with `workflows/config.yaml`. The workflow can be used as follows:
+
+```bash
+cd workflows
+snakemake -j1 gather
+```
+
+For cluster execution refer to [https://snakemake.readthedocs.io/en/stable/executing/cluster.html]
+and consider installing a profile, e.g. for LSF [https://github.com/Snakemake-Profiles/lsf]
