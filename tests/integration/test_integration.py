@@ -1,7 +1,6 @@
 """Integration tests."""
 
 import subprocess
-import os
 
 
 def test_installation():
@@ -33,7 +32,7 @@ def test_integration():
             "--base-medium",
             "tests/data/medium.yaml",
             "--carbon-sources",
-            "tests/data/carbon_sources.yaml",
+            "ac",
             "--strain",
             "A1R12",
             "--parsimony",

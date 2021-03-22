@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+"""MiSoS(oup)"""
 
 import argparse
 import logging
