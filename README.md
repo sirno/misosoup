@@ -40,8 +40,9 @@ misosoup --help
 ## Workflows
 
 `snakemake` is a useful tool to execute many experiments and gather results. In
-`./workflows` one can find a workflow to execute `misosoup` that can be
-configured with `workflows/config.yaml`. The workflow can be used as follows:
+`./workflows` you can find a workflow to execute `misosoup`. It can be
+configured in `workflows/config.yaml`. With our test data (not part of this
+repository), the workflow can be used as followed:
 
 ```bash
 cd workflows
