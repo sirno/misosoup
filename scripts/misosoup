@@ -4,8 +4,10 @@
 import argparse
 import logging
 import os
-
 import yaml
+
+from collections import defaultdict
+
 from reframed import Community, solver_instance
 import gurobipy as gp
 
@@ -13,8 +15,10 @@ from misolib.readwrite import load_models, read_compounds
 from misolib.readwrite import write_minimal_suppliers
 from misolib.common import get_reaction_name
 from misolib.load import setup_medium, introduce_binary_variables
-from misolib.solve import minimal_suppliers
+from misolib.solve import minimal_suppliers, minimal_communities
 from misolib.getters import get_biomass, get_exchange_reactions
+
+compute_function = defaultdict(lambda: minimal_suppliers, {"min": minimal_communities})
 
 
 def compute_solution(
@@ -33,7 +37,7 @@ def compute_solution(
             [get_reaction_name(carbon_source)],
         )
 
-        solution = minimal_suppliers(
+        solution = compute_function[org_id](
             org_id,
             community,
             solver,
@@ -120,7 +124,10 @@ if __name__ == "__main__":
         help="List of carbon sources based on their BiGG IDs, e.g. `ac`",
     )
     parser.add_argument(
-        "--strain", type=str, required=True, help="Focal strain model id."
+        "--strain",
+        type=str,
+        default="min",
+        help="Focal strain model id. If no strain is provided, we compute minimal communities.",
     )
     parser.add_argument(
         "--parsimony", action="store_true", help="Compute parsimony solution."

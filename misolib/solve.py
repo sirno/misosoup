@@ -26,10 +26,6 @@ def minimal_suppliers(
     growth -- optimize growth (default: True)
     parsimony -- minimize flux (default: False)
     """
-    solutions = []
-    constraints = []
-    temporary_constraints = []
-
     solver.add_constraint(
         f"c_{org}_growth",
         {community.reaction_map[org, community.organisms[org].biomass_reaction]: 1},
@@ -37,9 +33,44 @@ def minimal_suppliers(
         0.01,
         update=True,
     )
-    constraints.append(f"c_{org}_growth")
+    solutions = _minimize(community, solver, values, community_size, growth, parsimony)
+    solver.remove_constraints([f"c_{org}_growth"])
+    return solutions
 
-    obj = {f"y_{org_id}": 1 for org_id in community.organism.keys()}
+
+def minimal_communities(
+    org_id, community, solver, values, community_size=0, growth=True, parsimony=False
+):
+    """Compute minimal communities with MiSoS(oup).
+
+    Keyword Arguments:
+    community -- community model
+    solver -- solver instance
+    values -- list with variables to store
+    community_size -- max community size, if 0 all community sizes will be searched (default: 0)
+    growth -- optimize growth (default: True)
+    parsimony -- minimize flux (default: False)
+    """
+    assert org_id == "min"
+    solver.add_constraint(
+        "c_community_growth",
+        {community.merged_model.biomass_reaction: 1},
+        ">",
+        0.01,
+        update=True,
+    )
+    solutions = _minimize(community, solver, values, community_size, growth, parsimony)
+    solver.remove_constraints(["c_community_growth"])
+    return solutions
+
+
+def _minimize(community, solver, values, community_size, growth, parsimony):
+    """Minimize the community size for problem as set up in solver."""
+    solutions = []
+    constraints = []
+    temporary_constraints = []
+
+    obj = {f"y_{org_id}": 1 for org_id in community.organisms.keys()}
 
     solution_length = 0
     i = 0
