@@ -39,9 +39,7 @@ def minimal_suppliers(
     )
     constraints.append(f"c_{org}_growth")
 
-    others = [org_id for org_id in community.organisms.keys() if org_id != org]
-
-    obj = {f"y_{org_id}": 1 for org_id in others}
+    obj = {f"y_{org_id}": 1 for org_id in community.organism.keys()}
 
     solution_length = 0
     i = 0

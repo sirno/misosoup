@@ -49,5 +49,5 @@ cd workflows
 snakemake -j1 gather
 ```
 
-For cluster execution refer to [https://snakemake.readthedocs.io/en/stable/executing/cluster.html]
-and consider installing a profile, e.g. for LSF [https://github.com/Snakemake-Profiles/lsf]
+For cluster execution refer to [https://snakemake.readthedocs.io/en/stable/executing/cluster.html](https://snakemake.readthedocs.io/en/stable/executing/cluster.html)
+and consider installing a profile, e.g. for LSF [https://github.com/Snakemake-Profiles/lsf](https://github.com/Snakemake-Profiles/lsf)
