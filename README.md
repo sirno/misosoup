@@ -29,7 +29,7 @@ pip install -i https://pypi.gurobi.com gurobipy
 pip install -e .[dev]
 ```
 
-Make sure you have `docker` installed and run tests with `pytest tests`.
+Run tests with `tox`.
 
 ## Usage
 

@@ -11,12 +11,6 @@ def test_installation():
     )
     complete_process = subprocess.run(
         [
-            "docker",
-            "run",
-            "--rm",
-            "--name",
-            "misosoup_test_container_run",
-            "misosoup_test_container",
             "misosoup",
             "-h",
         ],

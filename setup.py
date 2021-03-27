@@ -14,5 +14,5 @@ setuptools.setup(
         "tqdm",
         "snakemake",
     ],
-    extras_require={"dev": ["black", "pylint", "pytest"]},
+    extras_require={"dev": ["black", "pylint", "pytest", "tox"]},
 )
