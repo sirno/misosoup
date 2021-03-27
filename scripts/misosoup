@@ -22,7 +22,13 @@ compute_function = defaultdict(lambda: minimal_suppliers, {"min": minimal_commun
 
 
 def compute_solution(
-    org_id, base_medium, carbon_source, community, parsimony, community_size
+    org_id,
+    base_medium,
+    carbon_source,
+    community,
+    parsimony,
+    community_size,
+    minimal_growth,
 ):
     """Setup and execute misosoup."""
     with gp.Env() as env:
@@ -46,6 +52,7 @@ def compute_solution(
             ),
             community_size=community_size,
             parsimony=parsimony,
+            minimal_growth=minimal_growth,
         )
 
         return (org_id, solution)
@@ -70,6 +77,7 @@ def main(args):
             community=community,
             community_size=args.community_size,
             parsimony=args.parsimony,
+            minimal_growth=args.minimal_growth,
         )
 
         solution[carbon_source][org_id] = sol
@@ -137,6 +145,12 @@ if __name__ == "__main__":
         type=int,
         default=0,
         help="Maximum community size. Default: 0 (Arbitrary).",
+    )
+    parser.add_argument(
+        "--minimal-growth",
+        type=float,
+        default=0.01,
+        help="Minimal required growth for strain or community.",
     )
     parser.add_argument("--log", default="INFO", help="Log level. Default: INFO")
 

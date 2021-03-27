@@ -14,6 +14,7 @@ def minimal_suppliers(
     community_size=0,
     growth=True,
     parsimony=False,
+    minimal_growth=0.01,
 ):
     """Compute minimal suppliers with MiSoS(oup).
 
@@ -30,7 +31,7 @@ def minimal_suppliers(
         f"c_{org}_growth",
         {community.reaction_map[org, community.organisms[org].biomass_reaction]: 1},
         ">",
-        0.01,
+        minimal_growth,
         update=True,
     )
     solutions = _minimize(community, solver, values, community_size, growth, parsimony)
@@ -39,7 +40,14 @@ def minimal_suppliers(
 
 
 def minimal_communities(
-    org_id, community, solver, values, community_size=0, growth=True, parsimony=False
+    org_id,
+    community,
+    solver,
+    values,
+    community_size=0,
+    growth=True,
+    parsimony=False,
+    minimal_growth=0.01,
 ):
     """Compute minimal communities with MiSoS(oup).
 
@@ -56,7 +64,7 @@ def minimal_communities(
         "c_community_growth",
         {community.merged_model.biomass_reaction: 1},
         ">",
-        0.01,
+        minimal_growth,
         update=True,
     )
     solutions = _minimize(community, solver, values, community_size, growth, parsimony)
