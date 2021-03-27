@@ -5,10 +5,7 @@ import yaml
 
 
 def test_installation():
-    """Build and run docker container."""
-    subprocess.run(
-        ["docker", "build", "-t", "misosoup_test_container", "."], check=False
-    )
+    """Check installation."""
     complete_process = subprocess.run(
         [
             "misosoup",
@@ -20,7 +17,7 @@ def test_installation():
 
 
 def test_integration():
-    """Run docker container on data."""
+    """Run example problem."""
     complete_process = subprocess.run(
         [
             "misosoup",
