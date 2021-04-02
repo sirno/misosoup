@@ -180,9 +180,6 @@ def _minimize(community, solver, values, community_size, growth, parsimony):
 
         i += 1
 
-        if not community_size:
-            break
-
     solver.remove_constraints(constraints)
 
     return solutions
