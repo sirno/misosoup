@@ -39,15 +39,6 @@ misosoup --help
 
 ## Workflows
 
-`snakemake` is a useful tool to execute many experiments and gather results. In
-`./workflows` you can find a workflow to execute `misosoup`. It can be
-configured in `workflows/config.yaml`. With our test data (not part of this
-repository), the workflow can be used as followed:
-
-```bash
-cd workflows
-snakemake -j1 gather
-```
-
-For cluster execution refer to [https://snakemake.readthedocs.io/en/stable/executing/cluster.html](https://snakemake.readthedocs.io/en/stable/executing/cluster.html)
-and consider installing a profile, e.g. for LSF [https://github.com/Snakemake-Profiles/lsf](https://github.com/Snakemake-Profiles/lsf)
+`snakemake` is a useful tool to execute many experiments and gather results.
+See [MiSoS(oup) Workflow Template](https://gitlab.ethz.ch/ochsnern/misosoup_workflow_template)
+on how to use it.
