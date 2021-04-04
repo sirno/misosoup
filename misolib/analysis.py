@@ -34,3 +34,30 @@ def compute_crossfeed(df, tol=1e-4):
 
 def compute_directed_crossfeed(df, tol=1e-4):
     return df.apply(_find_directed_cross_feed, axis=1, tol=tol)
+
+
+def find_suppliers(df):
+    """Find suppliers.
+
+    Args:
+        df (DataFrame): MiSoS(oup) solution.
+    """
+
+    def find_suppliers(row):
+        suppliers = set()
+        for col, value in row.items():
+            if col.startswith("y_") and value > 0.5:
+                suppliers.add(col)
+        return suppliers
+
+    df["suppliers"] = df.apply(find_suppliers, axis=1)
+    return df
+
+
+def find_focal_strain_growth(df):
+    """Find focal strain growth and add to DataFrame.
+    Args:
+        df (DataFrame): MiSoS(oup) solution.
+    """
+    df["strain_growth"] = df.apply(lambda row: row[f"Growth_{row.name[1]}"], axis=1)
+    return df
