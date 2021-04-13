@@ -73,7 +73,7 @@ def main(args):
         org_id, sol = compute_solution(
             args.strain,
             base_medium=base_medium,
-            carbon_source=carbon_source,
+            carbon_source=args.exchange_format.format(carbon_source),
             community=community,
             community_size=args.community_size,
             parsimony=args.parsimony,
@@ -129,7 +129,7 @@ if __name__ == "__main__":
         type=str,
         nargs="+",
         required=True,
-        help="List of carbon sources based on their exchange reactions, e.g. `EX_ac_e`",
+        help="List of carbon sources based on their id, e.g. `ac`",
     )
     parser.add_argument(
         "--strain",
@@ -151,6 +151,15 @@ if __name__ == "__main__":
         type=float,
         default=0.01,
         help="Minimal required growth for strain or community.",
+    )
+    parser.add_argument(
+        "--exchange-format",
+        type=str,
+        default="EX_{}_e",
+        help=(
+            "Format string that specifies how compounds are mapped to exchange reactions, "
+            "default: `EX_{}_e`, will map `ac` to `EX_ac_e`"
+        ),
     )
     parser.add_argument("--log", default="INFO", help="Log level. Default: INFO")
 
