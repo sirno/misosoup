@@ -9,9 +9,9 @@ setuptools.setup(
     version="0.1.0",
     author="Nicolas Ochsner",
     author_email="ochsnern@student.ethz.ch",
-    scripts=["scripts/misosoup", "scripts/pickmodels"],
+    scripts=["scripts/misosoup"],
     install_requires=[
-        f"reframed @ git+https://github.com/sirno/reframed.git",
+        "reframed @ git+https://github.com/sirno/reframed.git",
         "pyyaml",
         "pandas",
         "tqdm",
