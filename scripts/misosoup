@@ -40,7 +40,7 @@ def compute_solution(
             community.merged_model,
             solver,
             base_medium,
-            [get_reaction_name(carbon_source)],
+            [carbon_source],
         )
 
         solution = compute_function[org_id](
@@ -122,14 +122,14 @@ if __name__ == "__main__":
         "--base-medium",
         type=str,
         required=True,
-        help="Path to base medium. Format: YAML. File needs to contain list with BiGG IDs, e.g. `EX_h_e`.",
+        help="Path to base medium. Format: YAML. File needs to contain list with exchange reactions, e.g. `EX_h_e`.",
     )
     parser.add_argument(
         "--carbon-sources",
         type=str,
         nargs="+",
         required=True,
-        help="List of carbon sources based on their BiGG IDs, e.g. `ac`",
+        help="List of carbon sources based on their exchange reactions, e.g. `EX_ac_e`",
     )
     parser.add_argument(
         "--strain",
