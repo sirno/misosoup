@@ -33,7 +33,7 @@ def introduce_binary_variables(community, solver, min_growth=0.01):
             )
             solver.add_constraint(
                 f"c_{merged_id}_ub",
-                {merged_id: 1, org_var: ubound},
+                {merged_id: 1, org_var: -ubound},
                 "<",
                 0,
                 update=False,
