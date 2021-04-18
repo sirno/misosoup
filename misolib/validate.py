@@ -1,5 +1,6 @@
 """Validate."""
 import re
+import yaml
 import logging
 
 
@@ -27,3 +28,21 @@ def validate_solution(solution, exchange_format):
             valid = False
 
     return valid
+
+
+def validate_solution_dict(solution_data, exchange_format):
+    """Validate if a solution dictionary reports numerical inconsistency."""
+    for cs, cs_sols in solution_data.items():
+        for org, org_sols in cs_sols.items():
+            for i, sol in enumerate(org_sols):
+                if not validate_solution(sol, exchange_format):
+                    print(
+                        f"Inconsistency found: carbon source={cs}, organism={org}, solution={i}"
+                    )
+
+
+def validate_solution_file(path, exchange_format="R_EX_{}_e"):
+    """Validate if a solution file reports numerical inconsistency."""
+    with open(path) as fd:
+        solution_data = yaml.safe_load(fd)
+    validate_solution_dict(solution_data, exchange_format)
