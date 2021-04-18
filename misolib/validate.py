@@ -3,7 +3,7 @@ import re
 import logging
 
 
-def validate_solution(solution, pattern):
+def validate_solution(solution, exchange_format):
     """Validate solution."""
     valid = True
     active_strains = []
@@ -17,10 +17,10 @@ def validate_solution(solution, pattern):
                 active_exchanges.append(var)
 
     matchers = [
-        re.compile(pattern.format("\w+") + f"_{strain}_INT")
+        re.compile(exchange_format.format("\w+") + f"_{strain}_INT")
         for strain in active_strains
     ]
-    print(matchers)
+
     for var in active_exchanges:
         if var.endswith("_INT") and not any(m.match(var) for m in matchers):
             logging.warning("Numerical inconsistency found for %s", var)

@@ -1,7 +1,7 @@
 """Test validate."""
 from misolib.validate import validate_solution
 
-test_pattern = "R_EX_{}_e"
+exchange_format = "R_EX_{}_e"
 
 
 def test_reject_invalid_exchange():
@@ -11,7 +11,7 @@ def test_reject_invalid_exchange():
             "R_EX_meta_e_BBBB_INT": 2.3283064365386963e-10,
             "y_AAAA": 1,
         },
-        test_pattern,
+        exchange_format,
     )
 
 
@@ -22,7 +22,7 @@ def test_accept_valid_exchange():
             "R_EX_meta_e_AAAA_INT": -10.0,
             "y_AAAA": 1,
         },
-        test_pattern,
+        exchange_format,
     )
 
 
@@ -32,7 +32,7 @@ def test_accept_other_reactions():
         {
             "R_any_reaction_name": 1000.0,
         },
-        test_pattern,
+        exchange_format,
     )
 
 
@@ -43,5 +43,5 @@ def test_ignore_inactive_reactions():
             "R_EX_meta_e_BBBB_INT": 0,
             "y_AAAA": 1,
         },
-        test_pattern,
+        exchange_format,
     )
