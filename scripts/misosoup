@@ -17,6 +17,7 @@ from misolib.common import get_reaction_name
 from misolib.load import setup_medium, introduce_binary_variables
 from misolib.solve import minimal_suppliers, minimal_communities
 from misolib.getters import get_biomass, get_exchange_reactions
+from misolib.validate import validate_solution
 
 compute_function = defaultdict(lambda: minimal_suppliers, {"min": minimal_communities})
 
@@ -65,11 +66,9 @@ def main(args):
 
     community = Community("CoI", models, copy_models=False)
 
-    solution = {}
+    solution = defaultdict(dict)
 
     for carbon_source in args.carbon_sources:
-        solution[carbon_source] = {}
-
         org_id, sol = compute_solution(
             args.strain,
             base_medium=base_medium,
@@ -81,6 +80,15 @@ def main(args):
         )
 
         solution[carbon_source][org_id] = sol
+
+    if args.validate:
+        for cs, solutions in solution.items():
+            for org, sol in solutions.items():
+                for s, i in enumerate(sol):
+                    if not validate_solution(s.values, args.exchange_format):
+                        print(
+                            f"Inconsistency found: carbon source={cs}, organism={org}, solution={i}"
+                        )
 
     output = yaml.dump(
         {
@@ -160,6 +168,11 @@ if __name__ == "__main__":
             "Format string that specifies how compounds are mapped to exchange reactions, "
             "default: `EX_{}_e`, will map `ac` to `EX_ac_e`"
         ),
+    )
+    parser.add_argument(
+        "--validate",
+        action="store_true",
+        help="Validate solution. Numerical consistency will verified.",
     )
     parser.add_argument("--log", default="INFO", help="Log level. Default: INFO")
 
