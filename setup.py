@@ -8,7 +8,7 @@ setuptools.setup(
     version="0.1.0",
     author="Nicolas Ochsner",
     author_email="ochsnern@student.ethz.ch",
-    scripts=["scripts/misosoup", "scripts/taste_soup"],
+    scripts=["scripts/misosoup", "scripts/taste_soup", "scripts/filter_soup"],
     install_requires=[
         "pyyaml",
         "pandas",

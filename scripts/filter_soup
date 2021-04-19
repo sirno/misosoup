@@ -1,0 +1,47 @@
+#!/usr/bin/env python
+"""Postprocess MiSoS(oup) solution."""
+import argparse
+import os
+
+import yaml
+from misolib.readwrite import read_solutions_yaml
+
+
+def main(args):
+    """Main."""
+    with open(args.input) as fd:
+        solution_data = yaml.safe_load(fd)
+    output_dict = {
+        cs: {
+            org: [
+                {r: v for r, v in sol.items() if abs(v) > args.threshold}
+                for sol in org_sols
+            ]
+            for org, org_sols in cs_sols.items()
+        }
+        for cs, cs_sols in solution_data.items()
+    }
+
+    output = yaml.dump(output_dict)
+
+    if args.output:
+        if not os.path.exists(os.path.dirname(args.output)):
+            os.makedirs(os.path.dirname(args.output))
+        with open(args.output, "w") as fd:
+            fd.write(output)
+    else:
+        print(output)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Remove numerical relicts from `misosoup` solutions."
+    )
+    parser.add_argument("--log", default="INFO")
+    parser.add_argument("input", type=str)
+    parser.add_argument("-o", "--output", type=str)
+    parser.add_argument("--threshold", type=float, default=10e-8)
+
+    _args = parser.parse_args()
+
+    main(_args)
