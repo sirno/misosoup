@@ -1,4 +1,4 @@
-"""Integration tests."""
+"""Integration tests for misosoup."""
 
 import subprocess
 import yaml
