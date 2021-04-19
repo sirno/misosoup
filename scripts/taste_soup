@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+"""Validate MiSoS(oup) solution file"""
+import argparse
+
+from misolib.validate import validate_solution_file
+
+
+def main(args):
+    """Main."""
+    if validate_solution_file(args.input):
+        print("\033[92mValid solution file.\033[0m")
+    else:
+        print("\033[91mInvalid solution file.\033[0m")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="")
+    parser.add_argument("--log", default="INFO")
+    parser.add_argument("input", type=str)
+
+    _args = parser.parse_args()
+
+    main(_args)
