@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.0 --- Gut Conformity (wip)
+
+- Add support for biomass exchange reactions
+- Fix issue with internal metabolites not being separated in some cases
+
 ## 0.2.0 --- Selective Procedures (April 19, 2021)
 
 - Add simple solution validation `taste_soup`
