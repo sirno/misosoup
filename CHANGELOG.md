@@ -3,6 +3,8 @@
 ## 0.3.0 --- Gut Conformity (wip)
 
 - Add support for biomass exchange reactions
+- Add script that selects strains and populates the current directory with symbolic links
+- Fix issue where target could not be an arbitrary relative path
 - Fix issue with internal metabolites not being separated in some cases
 
 ## 0.2.0 --- Selective Procedures (April 19, 2021)
