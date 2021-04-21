@@ -8,7 +8,12 @@ setuptools.setup(
     version="0.2.0",
     author="Nicolas Ochsner",
     author_email="ochsnern@student.ethz.ch",
-    scripts=["scripts/misosoup", "scripts/taste_soup", "scripts/filter_soup"],
+    scripts=[
+        "scripts/misosoup",
+        "scripts/taste_soup",
+        "scripts/filter_soup",
+        "scripts/select_ingredients",
+    ],
     install_requires=[
         "reframed @ git+https://github.com/sirno/reframed",
         "pyyaml",
