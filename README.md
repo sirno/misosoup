@@ -7,9 +7,6 @@
 ```bash
 git clone git@github.com:sirno/misosoup.git
 cd misosoup
-git submodule init
-git submodule update
-pip install libs/reframed
 pip install -i https://pypi.gurobi.com gurobipy
 pip install .
 ```
@@ -22,14 +19,11 @@ For testing and developement:
 ```bash
 git clone git@github.com:sirno/misosoup.git
 cd misosoup
-git submodule init
-git submodule update
-pip install libs/reframed
 pip install -i https://pypi.gurobi.com gurobipy
 pip install -e .[dev]
 ```
 
-Run tests with `tox`.
+Run tests with `tox`. You will need our test data to pass.
 
 ## Usage
 

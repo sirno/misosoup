@@ -10,6 +10,7 @@ setuptools.setup(
     author_email="ochsnern@student.ethz.ch",
     scripts=["scripts/misosoup", "scripts/taste_soup", "scripts/filter_soup"],
     install_requires=[
+        "reframed @ git+https://github.com/sirno/reframed",
         "pyyaml",
         "pandas",
         "tqdm",
