@@ -50,7 +50,7 @@ def setup_medium(model, solver, base_medium, carbon_sources):
     carbon_sources -- list with carbon sources
     """
     for r_id in model.reactions.keys():
-        if r_id.startswith("R_EX_") and not r_id.endswith("_INT"):
+        if r_id.startswith("R_EX_") and not r_id.endswith("_i"):
             if r_id[2:] in base_medium:
                 bound = -1000
             elif r_id[2:] in carbon_sources:

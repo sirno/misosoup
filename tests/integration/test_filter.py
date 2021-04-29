@@ -30,7 +30,7 @@ def test_filter():
     out = yaml.safe_load(complete_process.stdout)
     assert not "other" in out["ac"]["AAAA"][0]
     assert "community_growth" in out["ac"]["AAAA"][0]
-    assert "R_EX_meta_e_AAAA_INT" in out["ac"]["AAAA"][0]
-    assert "R_EX_meta_e_BBBB_INT" in out["ac"]["AAAA"][0]
+    assert "R_EX_meta_e_AAAA_i" in out["ac"]["AAAA"][0]
+    assert "R_EX_meta_e_BBBB_i" in out["ac"]["AAAA"][0]
     assert "R_EX_meta_e" in out["ac"]["AAAA"][0]
     assert "y_BBBB" in out["ac"]["AAAA"][0]

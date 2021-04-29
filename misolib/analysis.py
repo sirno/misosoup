@@ -7,7 +7,7 @@ def _find_cross_feed(row, tol=1e-4):
     negative = set()
     for rid, val in row.items():
         compound = re.search("(?<=R_EX_).*(?=_e)", rid)
-        if compound and rid.endswith("INT"):
+        if compound and rid.endswith("_i"):
             global_rid = f"R_EX_{compound}_e"
             global_val = row[global_rid] if global_rid in row else 0
             adjusted_val = val - global_val
@@ -23,7 +23,7 @@ def _find_directed_cross_feed(row, tol=1e-4):
     crossfeed = _find_cross_feed(row, tol)
     directed_crossfeed = {}
     for compound in crossfeed:
-        rid = f"R_EX_{compound}_e_{strain}_INT"
+        rid = f"R_EX_{compound}_e_{strain}_i"
         directed_crossfeed[compound] = row[rid] if rid in row else 0
     return directed_crossfeed
 

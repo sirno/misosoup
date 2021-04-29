@@ -9,8 +9,8 @@ def test_find_valid_crossfeed():
     assert "met" in _find_cross_feed(
         pd.Series(
             {
-                "R_EX_met_e_AAAA_INT": 2,
-                "R_EX_met_e_BBBB_INT": -2,
+                "R_EX_met_e_AAAA_i": 2,
+                "R_EX_met_e_BBBB_i": -2,
             }
         )
     )
@@ -21,8 +21,8 @@ def test_miss_consumed_metabolites():
     assert "met" not in _find_cross_feed(
         pd.Series(
             {
-                "R_EX_met_e_AAAA_INT": -2,
-                "R_EX_met_e_BBBB_INT": -2,
+                "R_EX_met_e_AAAA_i": -2,
+                "R_EX_met_e_BBBB_i": -2,
             }
         )
     )
@@ -33,8 +33,8 @@ def test_miss_produced_metabolites():
     assert "met" not in _find_cross_feed(
         pd.Series(
             {
-                "R_EX_met_e_AAAA_INT": 2,
-                "R_EX_met_e_BBBB_INT": 2,
+                "R_EX_met_e_AAAA_i": 2,
+                "R_EX_met_e_BBBB_i": 2,
             }
         )
     )
