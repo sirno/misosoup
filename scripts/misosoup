@@ -5,6 +5,7 @@ import argparse
 import logging
 import os
 import yaml
+import glob
 
 from collections import defaultdict
 
@@ -61,6 +62,7 @@ def compute_solution(
 
 def main(args):
     """Main function."""
+    input_paths = glob.glob(args.input[0]) if len(args.input) == 1 else args.input
     models = load_models(args.input)
     base_medium = read_compounds(args.base_medium)
 
