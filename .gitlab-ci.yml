@@ -1,9 +1,13 @@
 image: python:latest
 
+stages:
+    - deploy
+
 deploy:
+  stage: deploy
   rules:
     - if: $CI_COMMIT_TAG
   script:
     - pip install twine
     - python setup.py sdist bdist_wheel
-    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url https://gitlab.gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/pypi dist/*
+    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url https://gitlab.ethz.com/api/v4/projects/${CI_PROJECT_ID}/packages/pypi dist/*
