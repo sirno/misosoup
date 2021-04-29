@@ -1,9 +1,10 @@
 # Changelog
 
-## 0.3.0 --- Gut Conformity (wip)
+## 0.3.0 --- Gut Conformity (April 29, 2021)
 
 - Add support for biomass exchange reactions
 - Add script that selects strains and populates the current directory with symbolic links
+- Change the naming convention for species specific exchange reactions to `_i`
 - Fix issue where target could not be an arbitrary relative path
 - Fix issue with internal metabolites not being separated in some cases
 
