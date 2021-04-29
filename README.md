@@ -5,7 +5,7 @@
 ## Install MiSoS(soup)
 
 ```bash
-git clone git@github.com:sirno/misosoup.git
+git clone git@gitlab.ethz.ch:ochsnern/misosoup.git
 cd misosoup
 pip install -i https://pypi.gurobi.com gurobipy
 pip install .
@@ -17,7 +17,7 @@ cluster support page of the `gurobi` module.
 For testing and developement:
 
 ```bash
-git clone git@github.com:sirno/misosoup.git
+git clone git@gitlab.ethz.ch:ochsnern/misosoup.git
 cd misosoup
 pip install -i https://pypi.gurobi.com gurobipy
 pip install -e .[dev]
