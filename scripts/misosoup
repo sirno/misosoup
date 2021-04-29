@@ -112,7 +112,7 @@ if __name__ == "__main__":
         description="Compute minimal supplying communities with MiSoS(oup)."
     )
     parser.add_argument(
-        "input", nargs="+", type=str, help="List or Regex for model paths."
+        "input", nargs="+", type=str, help="List or wildcard for model paths."
     )
     parser.add_argument(
         "-o",

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0 --- Unnamed (wip)
+
+- Support expansion in code for large input expansion
+
 ## 0.3.0 --- Gut Conformity (April 29, 2021)
 
 - Add support for biomass exchange reactions
