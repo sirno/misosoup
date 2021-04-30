@@ -63,7 +63,7 @@ def compute_solution(
 def main(args):
     """Main function."""
     input_paths = glob.glob(args.input[0]) if len(args.input) == 1 else args.input
-    models = load_models(args.input)
+    models = load_models(input_paths)
     base_medium = read_compounds(args.base_medium)
 
     community = Community("CoI", models, copy_models=False)
