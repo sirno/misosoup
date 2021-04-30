@@ -109,7 +109,26 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Compute minimal supplying communities with MiSoS(oup)."
+        description="""
+    Compute minimal supplying communities with MiSoS(oup).
+
+    `misosoup` will create a large community network and evaluate which
+    communities can supply growth of some strain (or each other, if no strain
+    is chosen).
+
+    It will report the results in `yaml` format, where the dictionaries contain
+    all active exchange reactions and their rates, as well as the activity of
+    strains (i.e. `y_strain: 1` for any active strain), the community growth
+    rate and the individual growth rates of all participating strains:
+
+        ```
+        carbon_source:
+            strain:
+                - {}
+                - {}
+        ```
+""",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
         "input", nargs="+", type=str, help="List or wildcard for model paths."
@@ -152,7 +171,11 @@ if __name__ == "__main__":
         "--minimal-growth",
         type=float,
         default=0.01,
-        help="Minimal required growth for strain or community.",
+        help=(
+            "Minimal required growth for strain or community."
+            "Each strain that is considered to grow needs to at least achieve "
+            "this minimal growth rate given by this argument."
+        ),
     )
     parser.add_argument(
         "--exchange-format",
