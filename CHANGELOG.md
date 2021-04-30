@@ -2,9 +2,11 @@
 
 ## 0.4.0 --- Documentation Expansion (wip)
 
+- Reaction Ids in medium need to exactly match the Ids in the models now
+- Add warning if reactions Ids are not contained in the model
 - Support expansion in code for large input expansion
-- Minimal growth cli argument now controls any minimal growth setting
-- Add a brief description of the content of output to the argparse description.
+- Minimal growth CLI argument now controls any minimal growth setting
+- Add a brief description of the content of output to the `argparse` description.
 
 ## 0.3.0 --- Gut Conformity (April 29, 2021)
 

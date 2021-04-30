@@ -1,4 +1,6 @@
 """Load and init solvers."""
+import logging
+
 from reframed.solvers.solver import VarType
 
 
@@ -51,11 +53,14 @@ def setup_medium(model, solver, base_medium, carbon_sources):
     base_medium -- list with compounds
     carbon_sources -- list with carbon sources
     """
+    missing_reactions = set(base_medium + carbon_sources) - set(model.reactions.keys())
+    for r_id in missing_reactions:
+        logging.warning("Missing reaction %s in model %s", r_id, model.id)
     for r_id in model.reactions.keys():
         if r_id.startswith("R_EX_") and not r_id.endswith("_i"):
-            if r_id[2:] in base_medium:
+            if r_id in base_medium:
                 bound = -1000
-            elif r_id[2:] in carbon_sources:
+            elif r_id in carbon_sources:
                 bound = -10
             else:
                 bound = 0
