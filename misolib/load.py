@@ -5,7 +5,7 @@ from reframed.solvers.solver import VarType
 BOUND_INF = 1000
 
 
-def introduce_binary_variables(community, solver, min_growth=0.01):
+def introduce_binary_variables(community, solver, minimal_growth=0.01):
     """Add binary variables to the solver instance.
 
     Keyword arguments:
@@ -22,7 +22,9 @@ def introduce_binary_variables(community, solver, min_growth=0.01):
         org_var = f"y_{org_id}"
         for r_id in org_model.reactions.keys():
             merged_id = community.reaction_map[(org_id, r_id)]
-            lbound = -min_growth if r_id == org_model.biomass_reaction else BOUND_INF
+            lbound = (
+                -minimal_growth if r_id == org_model.biomass_reaction else BOUND_INF
+            )
             ubound = BOUND_INF
             solver.add_constraint(
                 f"c_{merged_id}_lb",

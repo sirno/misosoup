@@ -1,8 +1,9 @@
 # Changelog
 
-## 0.4.0 --- Unnamed (wip)
+## 0.4.0 --- Documentation Expansion (wip)
 
 - Support expansion in code for large input expansion
+- Minimal growth cli argument now controls any minimal growth setting
 
 ## 0.3.0 --- Gut Conformity (April 29, 2021)
 

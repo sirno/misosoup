@@ -36,7 +36,7 @@ def compute_solution(
     with gp.Env() as env:
         solver = solver_instance(community.merged_model, env=env)
 
-        introduce_binary_variables(community, solver)
+        introduce_binary_variables(community, solver, minimal_growth=minimal_growth)
 
         setup_medium(
             community.merged_model,
