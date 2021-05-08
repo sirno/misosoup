@@ -6,6 +6,7 @@
 - Add warning if reactions Ids are not contained in the model
 - Support expansion in code for large input expansion
 - Minimal growth CLI argument now controls any minimal growth setting
+- Always choose dual simplex method
 - Add a brief description of the content of output to the `argparse` description.
 
 ## 0.3.0 --- Gut Conformity (April 29, 2021)

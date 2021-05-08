@@ -7,7 +7,7 @@
 ```bash
 git clone git@gitlab.ethz.ch:ochsnern/misosoup.git
 cd misosoup
-pip install -i https://pypi.gurobi.com gurobipy
+pip install gurobipy
 pip install .
 ```
 
@@ -19,7 +19,7 @@ For testing and developement:
 ```bash
 git clone git@gitlab.ethz.ch:ochsnern/misosoup.git
 cd misosoup
-pip install -i https://pypi.gurobi.com gurobipy
+pip install gurobipy
 pip install -e .[dev]
 ```
 
