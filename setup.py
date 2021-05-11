@@ -5,7 +5,7 @@ from setuptools import find_packages
 setuptools.setup(
     name="misosoup",
     packages=find_packages(),
-    version="0.3.0",
+    version="0.4.0",
     author="Nicolas Ochsner",
     author_email="ochsnern@student.ethz.ch",
     scripts=[

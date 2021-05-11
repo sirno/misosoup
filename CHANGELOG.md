@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.0 --- Documentation Expansion (wip)
+## 0.4.0 --- Documentation Expansion (May 11, 2021)
 
 - Reaction Ids in medium need to exactly match the Ids in the models now
 - Add warning if reactions Ids are not contained in the model
