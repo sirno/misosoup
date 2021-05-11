@@ -16,6 +16,7 @@ setuptools.setup(
     ],
     install_requires=[
         "reframed @ git+https://github.com/sirno/reframed",
+        "gurobipy",
         "pyyaml",
         "pandas",
         "tqdm",

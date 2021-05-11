@@ -7,19 +7,18 @@
 ```bash
 git clone git@gitlab.ethz.ch:ochsnern/misosoup.git
 cd misosoup
-pip install gurobipy
 pip install .
 ```
 
-If you are unable to install `gurobipy`, you may need to have a look at the
-cluster support page of the `gurobi` module.
+If you are unable to install `gurobipy`, it may need to be installed manually
+e.g. on a hpc cluster, to make use of the local gurobi installation. In such 
+a case please refer to the instructions on the cluster support page. 
 
 For testing and developement:
 
 ```bash
 git clone git@gitlab.ethz.ch:ochsnern/misosoup.git
 cd misosoup
-pip install gurobipy
 pip install -e .[dev]
 ```
 
