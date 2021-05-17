@@ -76,7 +76,7 @@ def _minimize(community, solver, values, community_size, growth, parsimony):
     """Minimize the community size for problem as set up in solver."""
     solutions = []
     constraints = []
-    temporary_constraints = []
+    knowledge_constraints = []
 
     obj = {f"y_{org_id}": 1 for org_id in community.organisms.keys()}
 
@@ -122,14 +122,12 @@ def _minimize(community, solver, values, community_size, growth, parsimony):
                         "Community Inconsistent: %s", str(list(selected.keys()))
                     )
                     solver.add_constraint(
-                        f"c_tmp_{len(temporary_constraints) + 1}", not_selected, ">", 1
+                        f"c_tmp_{len(knowledge_constraints) + 1}", not_selected, ">", 1
                     )
-                    temporary_constraints.append(
-                        f"c_tmp_{len(temporary_constraints) + 1}"
+                    knowledge_constraints.append(
+                        f"c_tmp_{len(knowledge_constraints) + 1}"
                     )
                     continue
-                solver.remove_constraints(temporary_constraints)
-                temporary_constraints = []
                 logging.info(
                     "Community growth: %f",
                     solution.values[community.merged_model.biomass_reaction],
@@ -181,5 +179,6 @@ def _minimize(community, solver, values, community_size, growth, parsimony):
         i += 1
 
     solver.remove_constraints(constraints)
+    solver.remove_constraints(knowledge_constraints)
 
     return solutions
