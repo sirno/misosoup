@@ -33,7 +33,7 @@ def compute_solution(
     minimal_growth,
 ):
     """Setup and execute misosoup."""
-    with gp.Env(params={"Method": 1}) as env:
+    with gp.Env(params={"Method": 1, "LogToConsole": 0}) as env:
         solver = solver_instance(community.merged_model, env=env)
 
         introduce_binary_variables(community, solver, minimal_growth=minimal_growth)
