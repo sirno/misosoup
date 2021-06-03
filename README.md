@@ -37,19 +37,19 @@ After installation, you can easily use MiSoS(oup) with:
 misosoup PATH_TO_MODELS/*.xml --output OUTPUT --base-medium PATH_BASE_MEDIUM --carbon-sources CARBON_SOURCES --strain STRAIN
 ```
 
-** Arguments **
+**Arguments**
 
 * PATH_TO_MODELS: indicates the path to the directory where the strains' metabolic models are found. Strains with metabolic models included in this directory will be considered as potential members in the minimal communities. The models should be in xml format and follow the same naming conventions (e.g. if glucose's id in one model is 'glc__D', the same id should be used in the  other models). 
 * --output
     * Use OUTPUT file name in yaml format. If it is not given, the results will be printed to stdout.
 * --base-medium
     * Use the path PATH_BASE_MEDIUM to the yaml file with the detailed description of the growth medium. The file requires a list with those metabolites found in the medium. These should be introduced using the ids of the exchange reactions, as they appear in the strains' metabolic models, e.g. 'R_EX_h_e'. (We suggest looking at the reaction ids of the model in a browser since tools such us cobrapy might change the naming.) All metabolites listed in PATH_BASE_MEDIUM can be consumed in unlimited amounts (see the below for an example of the format).
-* --carbon-sources C
-    * Use the list of CARBON_SOURCES to include in the medium. Introduce the metabolite id, as it appears in the strains' genome-scale metabolic models (e.g. 'ac'). The community's carbon source consumption is limitted to 10 mmol gDW-1 h-1.
+* --carbon-sources 
+    * Use the list of CARBON_SOURCES to include in the medium. Introduce the metabolite id, as it appears in the strains' genome-scale metabolic models (e.g. 'ac'). The community's carbon source consumption is limited to 10 mmol gDW-1 h-1.
 * --strain 
      * Indicates the focal STRAIN model id. If no strain is provided, `misosoup` computes minimal communities.
 
-** Additional arguments** 
+**Additional arguments** 
 
 MiSoS(oup) can be used with the additional arguments:
 
