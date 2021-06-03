@@ -4,9 +4,9 @@
 
 MInimal Supplying cOmmunity Search (MiSoS(oup)) is a python-based command line tool that implements a series of constraint-based metabolic methods to search for minimal microbial communities - communities in which every member is required for the community to persist. MiSoS(oup) can be used with two objectives: 1- to find minimal communities in a given medium and 2 - to find minimal supplying communities which are the minimal communities required for growth of a strain (or species) of interest, that we refer to as the focal strain.
 
-The input to MiSoS(oup) is a set of genome-scale metabolic models, corresponding to the strains (species) that will be considered as focal strains or potential community members. To find minimal communities, MiSoS(oup) implements a series of constraint-based metabolic methods in which metabolic steady-state is assumed (as in Flux Balance Analysis). The output of MiSoS(oup) is a human readable yaml file that returns all minimal communities with a detail of the community members, their growth rate and their metabolic consumptions and secresions. 
+The input to MiSoS(oup) is a set of genome-scale metabolic models, corresponding to the strains (species) that will be considered as focal strains or potential community members. To find minimal communities, MiSoS(oup) implements a series of constraint-based metabolic methods in which metabolic steady-state is assumed (as in Flux Balance Analysis). The output of MiSoS(oup) is a human readable yaml file that returns all minimal communities with a detail of the community members, their growth rate and their metabolic consumptions and secretions. 
 
-Specifically, to find a minimal community, MiSoS(oup) first minimizes the number of community members. For this optimization step MiSoS(oup) uses the simplex method in `gurobi` (optimization solver). In a second step, MiSoS(oup) maximizes the total community biomass. As a result of these two optimization steps one gets a community which is minimal and in which the consumption/secretion pattern of each community member reflects what is required for optimal community growth. In addition, MiSoS(oup) can be set to perform a third optimization to reflect parsimonious enzyme usage (see Lewis, et al. Mol Syst Bio doi:10.1038/msb.2010.47). When this third optimization is done, the consumption/secretion pattern of each community member in the minimal community, will be one that allows maximal (community or focal strain) growth while minimizing the total flux through the system.
+Specifically, to find a minimal community, MiSoS(oup) first minimizes the number of community members. For this optimization step MiSoS(oup) uses the simplex method in `gurobi` (optimization solver). In a second step, MiSoS(oup) maximizes the total community biomass. As a result of these two optimizations steps one gets a community which is minimal and in which the consumption/secretion pattern of each community member reflects what is required for optimal community growth. In addition, MiSoS(oup) can be set to perform a third optimization to reflect parsimonious enzyme usage (see Lewis, et al. Mol Syst Bio doi:10.1038/msb.2010.47). When this third optimization is done, the consumption/secretion pattern of each community member in the minimal community, will be one that allows maximal (community or focal strain) growth while minimizing the total flux through the system.
 
 ## Install MiSoS(soup)
 
@@ -20,7 +20,7 @@ If you are unable to install `gurobipy`, it may need to be installed manually
 e.g. on a hpc cluster, to make use of the local gurobi installation. In such 
 a case please refer to the instructions on the cluster support page. 
 
-For testing and developement:
+For testing and development:
 
 ```bash
 git clone git@gitlab.ethz.ch:ochsnern/misosoup.git
