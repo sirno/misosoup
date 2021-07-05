@@ -23,7 +23,7 @@ a case please refer to the instructions on the cluster support page.
 For testing and development:
 
 ```bash
-git clone git@gitlab.ethz.ch:ochsnern/misosoup.git
+git clone https://gitlab.ethz.ch/ochsnern/misosoup.git
 cd misosoup
 pip install -e .[dev]
 ```
