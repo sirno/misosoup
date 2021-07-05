@@ -37,7 +37,7 @@ After installation, you can easily use MiSoS(oup) with:
 misosoup PATH_TO_MODELS/*.xml --output OUTPUT --base-medium PATH_BASE_MEDIUM --carbon-sources CARBON_SOURCES --strain STRAIN
 ```
 
-**Arguments**
+## Arguments
 
 * PATH_TO_MODELS: indicates the path to the directory where the strains' metabolic models are found. Strains with metabolic models included in this directory will be considered as potential members in the minimal communities. The models should be in xml format and follow the same naming conventions (e.g. if glucose's id in one model is 'glc__D', the same id should be used in the other models). 
 * --output
@@ -49,7 +49,7 @@ misosoup PATH_TO_MODELS/*.xml --output OUTPUT --base-medium PATH_BASE_MEDIUM --c
 * --strain 
      * Indicates the focal STRAIN model id. If no strain is provided, `misosoup` computes minimal communities.
 
-**Additional arguments** 
+## Additional arguments
 
 MiSoS(oup) can be used with the additional arguments:
 
