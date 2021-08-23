@@ -141,14 +141,14 @@ if __name__ == "__main__":
         "--base-medium",
         type=str,
         required=True,
-        help="Path to base medium. Format: YAML. File needs to contain list with exchange reactions, e.g. `EX_h_e`.",
+        help="Path to base medium. Format: YAML. File needs to contain list with exchange reactions, e.g. `R_EX_h_e`.",
     )
     parser.add_argument(
         "--carbon-sources",
         type=str,
         nargs="+",
         required=True,
-        help="List of carbon sources based on their id, e.g. `ac`",
+        help="List of carbon sources based on their id, e.g. `R_EX_ac_e`",
     )
     parser.add_argument(
         "--strain",
@@ -180,8 +180,10 @@ if __name__ == "__main__":
         type=str,
         default="R_EX_{}_e",
         help=(
-            "Format string that specifies how compounds are mapped to exchange reactions, "
-            "default: `R_EX_{}_e`, will map `ac` to `R_EX_ac_e`"
+            "Regular expression to retrieve the carbon source from an exchange "
+            "reaction. The group containing the carbon source, should be named "
+            "`carbon_source`; as can be seen from the default. "
+            "default: `R_EX_(\\w+)_e"
         ),
     )
     parser.add_argument(
