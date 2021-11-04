@@ -12,7 +12,7 @@ def minimal_suppliers(
     solver,
     values,
     community_size=0,
-    growth=True,
+    objective=None,
     parsimony=False,
     minimal_growth=0.01,
 ):
@@ -34,7 +34,9 @@ def minimal_suppliers(
         minimal_growth,
         update=True,
     )
-    solutions = _minimize(community, solver, values, community_size, growth, parsimony)
+    solutions = _minimize(
+        community, solver, values, community_size, objective, parsimony
+    )
     solver.remove_constraints([f"c_{org}_growth"])
     return solutions
 
@@ -45,7 +47,7 @@ def minimal_communities(
     solver,
     values,
     community_size=0,
-    growth=True,
+    objective=None,
     parsimony=False,
     minimal_growth=0.01,
 ):
@@ -67,12 +69,14 @@ def minimal_communities(
         minimal_growth,
         update=True,
     )
-    solutions = _minimize(community, solver, values, community_size, growth, parsimony)
+    solutions = _minimize(
+        community, solver, values, community_size, objective, parsimony
+    )
     solver.remove_constraints(["c_community_growth"])
     return solutions
 
 
-def _minimize(community, solver, values, community_size, growth, parsimony):
+def _minimize(community, solver, values, community_size, objective, parsimony):
     """Minimize the community size for problem as set up in solver."""
     solutions = []
     constraints = []
@@ -110,10 +114,10 @@ def _minimize(community, solver, values, community_size, growth, parsimony):
         solver.add_constraint("c_selection", selected, "=", len(selected), update=True)
 
         try:
-            if growth:
+            if objective:
                 logging.info("Starting growth optimization.")
                 solution = solver.solve(
-                    linear={community.merged_model.biomass_reaction: 1},
+                    linear=objective,
                     get_values=list(obj.keys()) + values,
                     minimize=False,
                 )
@@ -135,14 +139,14 @@ def _minimize(community, solver, values, community_size, growth, parsimony):
 
             if parsimony:
                 logging.info("Starting parsimony optimization.")
-
-                solver.add_constraint(
-                    "c_growth",
-                    {community.merged_model.biomass_reaction: 1},
-                    ">",
-                    solution.values[community.merged_model.biomass_reaction] - 1e-4,
-                    update=True,
-                )
+                if objective:
+                    solver.add_constraint(
+                        "c_growth",
+                        objective,
+                        ">",
+                        solution.values[community.merged_model.biomass_reaction] - 1e-4,
+                        update=True,
+                    )
 
                 solution = solver.solve(
                     quadratic={

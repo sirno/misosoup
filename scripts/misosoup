@@ -26,6 +26,7 @@ def compute_solution(
     base_medium,
     carbon_source,
     community,
+    objective,
     parsimony,
     community_size,
     minimal_growth,
@@ -51,11 +52,12 @@ def compute_solution(
                 get_biomass(community) + get_exchange_reactions(community.merged_model)
             ),
             community_size=community_size,
+            objective=objective,
             parsimony=parsimony,
             minimal_growth=minimal_growth,
         )
 
-        return (org_id, solution)
+    return (org_id, solution)
 
 
 def main(args):
@@ -68,6 +70,11 @@ def main(args):
 
     solution = defaultdict(dict)
 
+    if args.objective:
+        objective = {reaction: 1 for reaction in args.objective}
+    else:
+        objective = {community.merged_model.biomass_reaction: 1}
+
     for carbon_source in args.carbon_sources:
         org_id, sol = compute_solution(
             args.strain,
@@ -75,6 +82,7 @@ def main(args):
             carbon_source=args.exchange_format.format(carbon_source),
             community=community,
             community_size=args.community_size,
+            objective=objective,
             parsimony=args.parsimony,
             minimal_growth=args.minimal_growth,
         )
@@ -99,8 +107,8 @@ def main(args):
     if args.output:
         if not os.path.exists(os.path.dirname(args.output)):
             os.makedirs(os.path.dirname(args.output))
-        with open(args.output, "w") as fd:
-            fd.write(output)
+        with open(args.output, "w") as file_descriptor:
+            file_descriptor.write(output)
     else:
         print(output)
 
@@ -184,6 +192,15 @@ if __name__ == "__main__":
             "reaction. The group containing the carbon source, should be named "
             "`carbon_source`; as can be seen from the default. "
             "default: `R_EX_(\\w+)_e"
+        ),
+    )
+    parser.add_argument(
+        "--objective",
+        type=str,
+        nargs="+",
+        help=(
+            "List of ids that are part of the objective function. By default "
+            "the community biomass is maximized."
         ),
     )
     parser.add_argument(

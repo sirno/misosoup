@@ -23,6 +23,9 @@ def introduce_binary_variables(community, solver, minimal_growth=0.01):
     for org_id, org_model in community.organisms.items():
         org_var = f"y_{org_id}"
         for r_id in org_model.reactions.keys():
+            if not r_id.startswith("R_EX") and r_id != org_model.biomass_reaction:
+                continue
+
             merged_id = community.reaction_map[(org_id, r_id)]
             lbound = (
                 -minimal_growth if r_id == org_model.biomass_reaction else BOUND_INF
