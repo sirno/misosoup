@@ -1,3 +1,4 @@
+"""Common functions."""
 import re
 import yaml
 from tqdm import tqdm
@@ -41,6 +42,6 @@ def merge_yaml(file_list):
     """Merge yaml files."""
     solutions = {}
     for path in tqdm(file_list):
-        with open(path, "r") as fd:
-            merge_dicts(solutions, yaml.safe_load(fd))
+        with open(path, "r") as file_descriptor:
+            merge_dicts(solutions, yaml.safe_load(file_descriptor))
     return solutions

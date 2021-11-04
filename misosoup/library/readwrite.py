@@ -4,7 +4,7 @@ import pandas as pd
 
 from reframed.io.sbml import load_cbmodel
 
-from misolib.common import get_reaction_name
+from .common import get_reaction_name
 
 
 def load_models(paths):
@@ -73,7 +73,10 @@ def read_solutions_yaml(file_path):
         }
     )
 
-    df = pd.DataFrame.from_dict(data_dict, orient="index",).sort_index(level=0)
+    df = pd.DataFrame.from_dict(
+        data_dict,
+        orient="index",
+    ).sort_index(level=0)
     df.index.names = ["carbon_source", "strain", "solution_idx"]
     df["growth_rate"] = df.community_growth
 

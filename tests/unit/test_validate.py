@@ -1,7 +1,7 @@
 """Test validate."""
-from misolib.validate import validate_solution
+from misosoup.library.validate import validate_solution
 
-exchange_format = "R_EX_{}_e"
+EXCHANGE_FORMAT = "R_EX_{}_e"
 
 
 def test_reject_invalid_exchange():
@@ -11,7 +11,7 @@ def test_reject_invalid_exchange():
             "R_EX_meta_e_BBBB_i": 2.3283064365386963e-10,
             "y_AAAA": 1,
         },
-        exchange_format,
+        EXCHANGE_FORMAT,
     )
 
 
@@ -22,7 +22,7 @@ def test_accept_valid_exchange():
             "R_EX_meta_e_AAAA_i": -10.0,
             "y_AAAA": 1,
         },
-        exchange_format,
+        EXCHANGE_FORMAT,
     )
 
 
@@ -32,7 +32,7 @@ def test_accept_other_reactions():
         {
             "R_any_reaction_name": 1000.0,
         },
-        exchange_format,
+        EXCHANGE_FORMAT,
     )
 
 
@@ -43,5 +43,5 @@ def test_ignore_inactive_reactions():
             "R_EX_meta_e_BBBB_i": 0,
             "y_AAAA": 1,
         },
-        exchange_format,
+        EXCHANGE_FORMAT,
     )

@@ -5,6 +5,7 @@
 .snakemake
 out
 tests/data
+.DS_Store
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -23,7 +24,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/

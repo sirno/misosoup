@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """MiSoS(oup)"""
 
 import argparse
@@ -12,11 +11,11 @@ import gurobipy as gp
 
 from reframed import Community, solver_instance
 
-from misolib.getters import get_biomass, get_exchange_reactions
-from misolib.load import introduce_binary_variables, setup_medium
-from misolib.readwrite import load_models, read_compounds
-from misolib.solve import minimal_communities, minimal_suppliers
-from misolib.validate import validate_solution_dict
+from .library.getters import get_biomass, get_exchange_reactions
+from .library.load import introduce_binary_variables, setup_medium
+from .library.readwrite import load_models, read_compounds
+from .library.solve import minimal_communities, minimal_suppliers
+from .library.validate import validate_solution_dict
 
 compute_function = defaultdict(lambda: minimal_suppliers, {"min": minimal_communities})
 
@@ -113,7 +112,8 @@ def main(args):
         print(output)
 
 
-if __name__ == "__main__":
+def entry():
+    """Misosoup entry point."""
     parser = argparse.ArgumentParser(
         description="""
     Compute minimal supplying communities with MiSoS(oup).

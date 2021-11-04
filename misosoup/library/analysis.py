@@ -1,5 +1,5 @@
+"""Functions for analysis."""
 import re
-from misolib.common import get_compound_name
 
 
 def _find_cross_feed(row, tol=1e-4):
@@ -28,36 +28,38 @@ def _find_directed_cross_feed(row, tol=1e-4):
     return directed_crossfeed
 
 
-def compute_crossfeed(df, tol=1e-4):
-    return df.apply(_find_cross_feed, axis=1, tol=tol)
+def compute_crossfeed(data_frame, tol=1e-4):
+    return data_frame.apply(_find_cross_feed, axis=1, tol=tol)
 
 
-def compute_directed_crossfeed(df, tol=1e-4):
-    return df.apply(_find_directed_cross_feed, axis=1, tol=tol)
+def compute_directed_crossfeed(data_frame, tol=1e-4):
+    return data_frame.apply(_find_directed_cross_feed, axis=1, tol=tol)
 
 
-def find_suppliers(df):
+def find_suppliers(data_frame):
     """Find suppliers.
 
     Args:
-        df (DataFrame): MiSoS(oup) solution.
+        data_frame (DataFrame): MiSoS(oup) solution.
     """
 
-    def find_suppliers(row):
+    def _find_suppliers(row):
         suppliers = set()
         for col, value in row.items():
             if col.startswith("y_") and value > 0.5:
                 suppliers.add(col)
         return suppliers
 
-    df["suppliers"] = df.apply(find_suppliers, axis=1)
-    return df
+    data_frame["suppliers"] = data_frame.apply(_find_suppliers, axis=1)
+    return data_frame
 
 
-def find_focal_strain_growth(df):
+def find_focal_strain_growth(data_frame):
     """Find focal strain growth and add to DataFrame.
     Args:
-        df (DataFrame): MiSoS(oup) solution.
+        data_frame (DataFrame): MiSoS(oup) solution.
     """
-    df["strain_growth"] = df.apply(lambda row: row[f"Growth_{row.name[1]}"], axis=1)
-    return df
+    data_frame["strain_growth"] = data_frame.apply(
+        lambda row: row[f"Growth_{row.name[1]}"], axis=1
+    )
+    return data_frame

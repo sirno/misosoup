@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.0 --- Operating Generalization (Nov 4, 2021)
+
+- RESTRUCTURED PROJECT to support Windows
+- Added argument to adjust objective
+
 ## 0.4.0 --- Documentation Expansion (May 11, 2021)
 
 - Reaction Ids in medium need to exactly match the Ids in the models now

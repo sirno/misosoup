@@ -1,6 +1,5 @@
 """Create lists with variables for communities and models."""
 from math import copysign
-from misolib.common import get_compound_name, get_metabolite_name
 
 
 def get_binary(community):

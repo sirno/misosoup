@@ -1,7 +1,7 @@
 """Test analysis."""
 import pandas as pd
 
-from misolib.analysis import _find_cross_feed
+from misosoup.library.analysis import _find_cross_feed
 
 
 def test_find_valid_crossfeed():
