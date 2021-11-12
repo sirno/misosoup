@@ -163,9 +163,36 @@ def _minimize(community, solver, values, community_size, objective, parsimony):
 
                 logging.info("Parsimony solution status: %s", str(solution.status))
                 if solution.status != Status.OPTIMAL:
-                    break
+                    logging.info(
+                        "Community Inconsistent: %s", str(list(selected.keys()))
+                    )
+                    solver.add_constraint(
+                        f"c_tmp_{len(knowledge_constraints) + 1}", not_selected, ">", 1
+                    )
+                    knowledge_constraints.append(
+                        f"c_tmp_{len(knowledge_constraints) + 1}"
+                    )
+                    continue
                 logging.info(
                     "Parsimony community growth: %f",
+                    solution.values[community.merged_model.biomass_reaction],
+                )
+
+            if not (objective or parsimony):
+                logging.info("Starting no optimization.")
+                solver.solve(get_values=values)
+                if solution.status != Status.OPTIMAL:
+                    logging.info(
+                        "Community Inconsistent: %s", str(list(selected.keys()))
+                    )
+                    solver.add_constraint(
+                        f"c_tmp_{len(knowledge_constraints) + 1}", not_selected, ">", 1
+                    )
+                    knowledge_constraints.append(
+                        f"c_tmp_{len(knowledge_constraints) + 1}"
+                    )
+                logging.info(
+                    "Community growth: %f",
                     solution.values[community.merged_model.biomass_reaction],
                 )
         finally:

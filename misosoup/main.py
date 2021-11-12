@@ -74,6 +74,9 @@ def main(args):
     else:
         objective = {community.merged_model.biomass_reaction: 1}
 
+    if args.disable_objective:
+        objective = None
+
     for carbon_source in args.carbon_sources:
         org_id, sol = compute_solution(
             args.strain,
@@ -193,6 +196,11 @@ def entry():
             "`carbon_source`; as can be seen from the default. "
             "default: `R_EX_(\\w+)_e"
         ),
+    )
+    parser.add_argument(
+        "--disable-objective",
+        action="store_true",
+        help="If set, no objective will be optimized."
     )
     parser.add_argument(
         "--objective",
