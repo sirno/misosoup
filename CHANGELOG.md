@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.5.0 --- Operating Generalization (Nov 4, 2021)
+## 0.5.0 --- Operating Generalization (WIP)
 
 - RESTRUCTURED PROJECT to support Windows
 - Added argument to adjust objective
