@@ -35,7 +35,7 @@ def test_integration():
         check=False,
     )
     assert complete_process.returncode == 0
-    print(complete_process.stdout)
-    out = yaml.safe_load("\n".join(str(complete_process.stdout).split("\\n")[4:-1]))
+    # print(complete_process.stdout)
+    out = yaml.safe_load(complete_process.stdout.decode("utf8"))
     assert out["ac"]["A1R12"][0]["y_A1R12"] == 1
     assert out["ac"]["A1R12"][0]["y_I2R16"] == 1

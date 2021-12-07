@@ -4,5 +4,6 @@ ac:
       R_EX_meta_e_AAAA_i: -10
       R_EX_meta_e_BBBB_i: -20
       R_EX_meta_e: 10
+      y_AAAA: 1
       y_BBBB: 1
       other: -1.0e-10

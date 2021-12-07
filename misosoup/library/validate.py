@@ -37,9 +37,9 @@ def validate_solution_dict(solution_data, exchange_format):
     """Validate if a solution dictionary reports numerical inconsistency."""
     valid = True
     for carbon_source, carbon_source_solutions in solution_data.items():
-        for org, org_sols in carbon_source_solutions.items():
+        for _, org_sols in carbon_source_solutions.items():
             for _, sol in enumerate(org_sols):
-                if not validate_solution(sol, exchange_format, exclude_strains=[org]):
+                if not validate_solution(sol, exchange_format):
                     valid = False
                     print(
                         f"Inconsistency found: carbon source={carbon_source}, "
@@ -50,6 +50,6 @@ def validate_solution_dict(solution_data, exchange_format):
 
 def validate_solution_file(path, exchange_format="R_EX_{}_e"):
     """Validate if a solution file reports numerical inconsistency."""
-    with open(path) as file_descriptor:
+    with open(path, encoding="utf8") as file_descriptor:
         solution_data = yaml.safe_load(file_descriptor)
     return validate_solution_dict(solution_data, exchange_format)
