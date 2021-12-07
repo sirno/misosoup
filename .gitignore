@@ -4,7 +4,6 @@
 .vscode
 .snakemake
 out
-tests/data
 .DS_Store
 
 ### Python ###
