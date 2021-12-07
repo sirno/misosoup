@@ -14,7 +14,7 @@ def minimal_suppliers(
     community_size=0,
     objective=None,
     parsimony=False,
-    minimal_growth=0.01,
+    **kwargs,
 ):
     """Compute minimal suppliers with MiSoS(oup).
 
@@ -28,10 +28,10 @@ def minimal_suppliers(
     parsimony -- minimize flux (default: False)
     """
     solver.add_constraint(
-        f"c_{org}_growth",
-        {community.reaction_map[org, community.organisms[org].biomass_reaction]: 1},
+        f"c_{org}_focal",
+        {f"y_{org}": 1},
         ">",
-        minimal_growth,
+        1,
         update=True,
     )
     solutions = _minimize(

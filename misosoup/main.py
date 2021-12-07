@@ -109,7 +109,7 @@ def main(args):
     if args.output:
         if not os.path.exists(os.path.dirname(args.output)):
             os.makedirs(os.path.dirname(args.output))
-        with open(args.output, "w") as file_descriptor:
+        with open(args.output, "w", encoding="utf8") as file_descriptor:
             file_descriptor.write(output)
     else:
         print(output)
@@ -200,7 +200,7 @@ def entry():
     parser.add_argument(
         "--disable-objective",
         action="store_true",
-        help="If set, no objective will be optimized."
+        help="If set, no objective will be optimized.",
     )
     parser.add_argument(
         "--objective",
