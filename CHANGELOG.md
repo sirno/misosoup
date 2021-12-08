@@ -4,6 +4,7 @@
 
 - RESTRUCTURED PROJECT to support Windows
 - Added argument to adjust objective
+- Focal strain is now constraint by its binary variable
 
 ## 0.4.0 --- Documentation Expansion (May 11, 2021)
 
