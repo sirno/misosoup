@@ -36,12 +36,12 @@ def compute_solution(
 
         introduce_binary_variables(community, solver, minimal_growth=minimal_growth)
 
-        setup_medium(
-            community.merged_model,
-            solver,
-            base_medium,
-            [carbon_source],
-        )
+        medium = {
+            carbon_source: -10,
+            **base_medium,
+        }
+
+        setup_medium(community.merged_model, solver, medium)
 
         solution = compute_function[org_id](
             org_id,

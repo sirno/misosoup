@@ -1,6 +1,10 @@
 # Changelog
 
-## 0.5.0 --- Operating Generalization (WIP)
+## 0.6.0 --- Interface Recalibration (WIP)
+
+- Pass media as dictionaries
+
+## 0.5.0 --- Operating Generalization (Dec 9, 2021)
 
 - RESTRUCTURED PROJECT to support Windows
 - Added argument to adjust objective

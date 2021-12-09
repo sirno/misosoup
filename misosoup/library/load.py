@@ -47,26 +47,20 @@ def introduce_binary_variables(community, solver, minimal_growth=0.01):
             )
 
 
-def setup_medium(model, solver, base_medium, carbon_sources):
+def setup_medium(model, solver, medium):
     """Setup the medium for model on solver.
 
     Arguments:
     model -- model instance
     solver -- solver instance
-    base_medium -- list with compounds
-    carbon_sources -- list with carbon sources
+    medium -- medium dict
     """
-    missing_reactions = set(base_medium + carbon_sources) - set(model.reactions.keys())
+    missing_reactions = set(medium.keys()) - set(model.reactions.keys())
     for r_id in missing_reactions:
         logging.warning("Missing reaction %s in model %s", r_id, model.id)
     for r_id in model.reactions.keys():
         if r_id.startswith("R_EX_") and not r_id.endswith("_i"):
-            if r_id in base_medium:
-                bound = -1000
-            elif r_id in carbon_sources:
-                bound = -10
-            else:
-                bound = 0
+            bound = medium[r_id] if r_id in medium.keys() else 0
             solver.add_constraint(
                 f"c_{r_id}_lb",
                 {r_id: 1},
