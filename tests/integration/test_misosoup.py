@@ -21,10 +21,8 @@ def test_integration():
     complete_process = subprocess.run(
         [
             "misosoup",
-            "--base-medium",
+            "--media",
             "tests/data/medium.yaml",
-            "--carbon-sources",
-            "ac",
             "--strain",
             "A1R12",
             "--parsimony",

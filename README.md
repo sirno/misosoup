@@ -54,70 +54,97 @@ pip install -e .[dev]
 Run tests with `tox`. You will need our test data to pass.
 
 ## Usage
+
 After installation, you can easily use MiSoS(oup) with:
 
 ```bash
-misosoup PATH_TO_MODELS/*.xml --output OUTPUT --base-medium PATH_BASE_MEDIUM --carbon-sources CARBON_SOURCES --strain STRAIN
+misosoup MODEL_PATH/*.xml --output OUTPUT_FILE --media MEDIA_FILE --strain STRAIN
 ```
 
-## Arguments
+### Arguments
 
-* PATH_TO_MODELS: indicates the path to the directory where the strains' metabolic models are found. Strains with metabolic models included in this directory will be considered as potential members in the minimal communities. The models should be in xml format and follow the same naming conventions (e.g. if glucose's id in one model is 'glc__D', the same id should be used in the other models). 
+* MODEL_PATH: indicates the path to the directory where the metabolic models are
+  described. Strains with metabolic models included in this directory will be
+  considered as potential members in the minimal communities. The models should
+  be in sbml format and follow the same naming conventions (e.g. if glucose's id
+  in one model is 'glc__D', the same id should be used in the other models).
 * --output
-    * Use OUTPUT file name in yaml format. If it is not given, the results will be printed to stdout.
+  * Use OUTPUT_FILE for output in yaml format. If it is not given, the results
+    will be printed to stdout.
 * --base-medium
-    * Use the path PATH_BASE_MEDIUM to the yaml file with the detailed description of the growth medium. The file requires a list with those metabolites found in the medium. These should be introduced using the ids of the exchange reactions, as they appear in the strains' metabolic models, e.g. 'R_EX_h_e'. (We suggest looking at the reaction ids of the model in a browser since tools such as cobrapy might change the naming.) All metabolites listed in PATH_BASE_MEDIUM can be consumed in unlimited amounts (see below for an example of the format).
-* --carbon-sources 
-    * Use the list of CARBON_SOURCES to include in the medium. Introduce the metabolite id, as it appears in the strains' genome-scale metabolic models (e.g. 'ac'). The community's carbon source consumption is limited to 10 mmol gDW-1 h-1.
-* --strain 
-     * Indicates the focal STRAIN model id. If no strain is provided, `misosoup` computes minimal communities.
+  * Load media from MEDIA_FILE. The file should contain the description of the
+    growth media that shall be tested. The file should contain a dictionary
+    with all media that the community should be evaluated on. Each of the
+    media needs to contain a dictionary of exchange reactions and there lower
+    bound, (i.e. `R_EX_ac_e: -10` provides *acetate* to the communities).
+    The medium with id `base_medium` will be added to all media.
+* --strain
+  * Indicates the focal STRAIN model id. If no strain is provided, `misosoup`
+    computes minimal communities.
 
 ## Additional arguments
 
 MiSoS(oup) can be used with the additional arguments:
 
 ```bash
-misosoup PATH_TO_MODELS/*.xml --output OUTPUT --base-medium PATH_BASE_MEDIUM --carbon-sources CARBON_SOURCES --strain STRAIN --parsimony --community-size COMMUNITY_SIZE --minimal-growth MINIMAL_GROWTH --exchange-format EXCHANGE_FORMAT --validate --log LOG
+misosoup MODEL_PATH/*.xml --output OUTPUT_FILE --media MEDIA_FILE --strain STRAIN --parsimony --community-size COMMUNITY_SIZE --minimal-growth MINIMAL_GROWTH --exchange-format EXCHANGE_FORMAT --validate --log LOG
 ```
+
 * --parsimony
-    * If this flag is used the algorithm will return the solution that minimizes the total flux. This does not affect the community members but can alter what each member consumes and secretes. 
-* --community-size 
-    * COMMUNITY_SIZE [Description needed]
-* --minimal-growth 
-    * Set the MINIMAL_GROWTH rate of strains. Every strain that makes up a community needs to satisfy this minimal growth constraint. The default growth rate used is 0.01 (1/h).
+  * If this flag is used the algorithm will return the solution that minimizes
+    the total flux. This does not affect the community members but can alter
+    what each member consumes and secretes.
+* --community-size
+  * Look for communities up to size COMMUNITY_SIZE, then stop.
+* --minimal-growth
+  * Set the MINIMAL_GROWTH rate of strains. Every strain that makes up a community needs to satisfy this minimal growth constraint. The default growth rate used is 0.01 (1/h).
 
 For further description:
+
 ```bash
 misosoup --help
 ```
+
 ## Output file
+
 The .yaml output file will give:
 
-* The community members: ```y_STRAIN-NAME: 1.0```. 
-* The growth of each community member ```Growth_STRAIN-NAME```. 
-* The total community growth ```community_growth```. 
-* The flux at which metabolites are taken up or secreted to the medium. Negative and positive fluxes indicate consumption and secretion, respectively. This consumption/secretion pattern is given for:
-     * The community as a whole: (```EX-ID```) 
-     * Each community member separately (```EX-ID_STRAIN-NAME_i```).  
+* The community members: `y_<STRAIN_NAME>: 1.0`.
+* The growth of each community member `Growth_<STRAIN_NAME>`.
+* The total community growth `community_growth`.
+* The flux at which metabolites are taken up or secreted to the medium. Negative
+  and positive fluxes indicate consumption and secretion, respectively. This
+  consumption/secretion pattern is given for:
+  * The community as a whole: (`R_EX_<ID>_e`)
+  * Each community member separately (`R_EX_<ID>_<STRAIN_NAME>_i`).  
 
 ## Example
 
-```
+```bash
 cd example
 ```
-The following code will run `misosoup` to find minimal supplying communities for A1R12 in a medium that contains acetate as carbon source:
+
+The following code will run `misosoup` to find minimal supplying communities for
+A1R12 in a medium that contains acetate as carbon source:
 
 ```bash
-misosoup ./strains/*.xml --output ./OUTPUT_example.yaml --base-medium medium_MBM_no_co2_hco3.yaml --carbon-sources ac --strain A1R12 --parsimony 
+misosoup ./strains/*.xml --output ./OUTPUT_example.yaml --media medium_MBM_no_co2_hco3.yaml --strain A1R12 --parsimony 
 ```
 
-In the example, we run `misosoup`  to find minimal supplying communities that would allow growth of A1R12 in MBM with acetate (ac) as the sole source of carbon. Looking at the output of the simulation (OUTPUT_example.yaml) you'll see that `misosoup` found two alternative supplying communities: 
+In the example, we run `misosoup` to find minimal supplying communities that
+would allow growth of A1R12 in MBM with acetate (ac) as the sole source of
+carbon. Looking at the output of the simulation (OUTPUT_example.yaml) you'll see
+that `misosoup` found two alternative supplying communities:
 
- * Solution 1: A1R12 can grow when in the presence of I3M07. If we inspect this solution in more detail we can see (for example): 
-    * Each strain produces carbon dioxide. We note this by looking at the strain-specific carbon dioxide fluxes: `R_EX_co2_e_A1R12_i: 0.742` and `R_EX_co2_e_I3M07_i: 0.957`.
-    * The community as a whole also produces carbon dioxide, which can be seen looking at the community-level carbon dioxide flux `R_EX_co2_e: 1.699`.
- * Solution 2:  A1R12 can grow when in the presence of I2R16. A similar analysis to the one conducted for solution 1 could be followed.
-
+* Solution 1: A1R12 can grow when in the presence of I3M07. If we inspect this
+  solution in more detail we can see (for example):
+  * Each strain produces carbon dioxide. We note this by looking at the
+    strain-specific carbon dioxide fluxes: `R_EX_co2_e_A1R12_i: 0.742` and
+    `R_EX_co2_e_I3M07_i: 0.957`.
+  * The community as a whole also produces carbon dioxide, which can be seen
+    looking at the community-level carbon dioxide flux `R_EX_co2_e: 1.699`.
+* Solution 2: A1R12 can grow when in the presence of I2R16. A similar analysis
+  to the one conducted for solution 1 could be followed.
 
 ## Citation
 

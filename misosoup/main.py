@@ -22,8 +22,7 @@ compute_function = defaultdict(lambda: minimal_suppliers, {"min": minimal_commun
 
 def compute_solution(
     org_id,
-    base_medium,
-    carbon_source,
+    medium,
     community,
     objective,
     parsimony,
@@ -35,11 +34,6 @@ def compute_solution(
         solver = solver_instance(community.merged_model, env=env)
 
         introduce_binary_variables(community, solver, minimal_growth=minimal_growth)
-
-        medium = {
-            carbon_source: -10,
-            **base_medium,
-        }
 
         setup_medium(community.merged_model, solver, medium)
 
@@ -63,7 +57,9 @@ def main(args):
     """Main function."""
     input_paths = glob.glob(args.input[0]) if len(args.input) == 1 else args.input
     models = load_models(input_paths)
-    base_medium = read_compounds(args.base_medium)
+
+    media = read_compounds(args.media)
+    base_medium = media["base_medium"] if "base_medium" in media.keys() else {}
 
     community = Community("CoI", models, copy_models=False)
 
@@ -77,19 +73,23 @@ def main(args):
     if args.disable_objective:
         objective = None
 
-    for carbon_source in args.carbon_sources:
-        org_id, sol = compute_solution(
-            args.strain,
-            base_medium=base_medium,
-            carbon_source=args.exchange_format.format(carbon_source),
-            community=community,
-            community_size=args.community_size,
-            objective=objective,
-            parsimony=args.parsimony,
-            minimal_growth=args.minimal_growth,
-        )
+    for medium_id, medium_composition in media.items():
+        if not medium_id == "base_medium":
+            medium = {
+                **medium_composition,
+                **base_medium,
+            }
+            org_id, sol = compute_solution(
+                args.strain,
+                medium=medium,
+                community=community,
+                community_size=args.community_size,
+                objective=objective,
+                parsimony=args.parsimony,
+                minimal_growth=args.minimal_growth,
+            )
 
-        solution[carbon_source][org_id] = sol
+            solution[medium_id][org_id] = sol
 
     output_dict = {
         k: {
@@ -149,17 +149,10 @@ def entry():
         help="Output file. Format: YAML. If not supplied, will print to stdout.",
     )
     parser.add_argument(
-        "--base-medium",
+        "--media",
         type=str,
         required=True,
-        help="Path to base medium. Format: YAML. File needs to contain list with exchange reactions, e.g. `R_EX_h_e`.",
-    )
-    parser.add_argument(
-        "--carbon-sources",
-        type=str,
-        nargs="+",
-        required=True,
-        help="List of carbon sources based on their id, e.g. `R_EX_ac_e`",
+        help="Path to media. Format: YAML. File needs to contain dictionary with media, see examples.",
     )
     parser.add_argument(
         "--strain",

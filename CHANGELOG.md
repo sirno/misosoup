@@ -3,6 +3,10 @@
 ## 0.6.0 --- Interface Recalibration (WIP)
 
 - Pass media as dictionaries
+- Rework how we screen multiple carbon sources
+- Command line argument `--media` added
+- Command line argument `--carbon-sources` removed
+- Command line argument `--base-medium` removed
 
 ## 0.5.0 --- Operating Generalization (Dec 9, 2021)
 

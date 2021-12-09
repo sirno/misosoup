@@ -1,34 +1,37 @@
-R_EX_h2o_e: -1000
-R_EX_o2_e: -1000
-R_EX_cl_e: -1000
-R_EX_na1_e: -1000
-R_EX_so4_e: -1000
-R_EX_k_e: -1000
-R_EX_mg2_e: -1000
-R_EX_ca2_e: -1000
-R_EX_nh4_e: -1000
-R_EX_pi_e: -1000
-R_EX_btn_e: -1000
-R_EX_fol_e: -1000
-R_EX_pydxn_e: -1000
-R_EX_ribflv_e: -1000
-R_EX_thm_e: -1000
-R_EX_nac_e: -1000
-R_EX_ala_B_e: -1000
-R_EX_4abz_e: -1000
-R_EX_fe3_e: -1000
-R_EX_h_e: -1000
-R_EX_cobalt2_e: -1000
-R_EX_cu2_e: -1000
-R_EX_fe2_e: -1000
-R_EX_mn2_e: -1000
-R_EX_mobd_e: -1000
-R_EX_zn2_e: -1000
-R_EX_sel_e: -1000
-R_EX_ni2_e: -1000
-R_EX_slnt_e: -1000
-R_EX_tungs_e: -1000
-R_EX_h2_e: -1000
-R_EX_cu_e: -1000
-R_EX_cbl1_e: -1000
+base_medium:
+  R_EX_h2o_e: -1000
+  R_EX_o2_e: -1000
+  R_EX_cl_e: -1000
+  R_EX_na1_e: -1000
+  R_EX_so4_e: -1000
+  R_EX_k_e: -1000
+  R_EX_mg2_e: -1000
+  R_EX_ca2_e: -1000
+  R_EX_nh4_e: -1000
+  R_EX_pi_e: -1000
+  R_EX_btn_e: -1000
+  R_EX_fol_e: -1000
+  R_EX_pydxn_e: -1000
+  R_EX_ribflv_e: -1000
+  R_EX_thm_e: -1000
+  R_EX_nac_e: -1000
+  R_EX_ala_B_e: -1000
+  R_EX_4abz_e: -1000
+  R_EX_fe3_e: -1000
+  R_EX_h_e: -1000
+  R_EX_cobalt2_e: -1000
+  R_EX_cu2_e: -1000
+  R_EX_fe2_e: -1000
+  R_EX_mn2_e: -1000
+  R_EX_mobd_e: -1000
+  R_EX_zn2_e: -1000
+  R_EX_sel_e: -1000
+  R_EX_ni2_e: -1000
+  R_EX_slnt_e: -1000
+  R_EX_tungs_e: -1000
+  R_EX_h2_e: -1000
+  R_EX_cu_e: -1000
+  R_EX_cbl1_e: -1000
+ac:
+  R_EX_ac_e: -10
 
