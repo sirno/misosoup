@@ -2,26 +2,25 @@
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-MInimal Supplying cOmmunity Search (MiSoS(oup)) is a command line tool that
-searches for minimal microbial communities. In such communities every member
-is required for the community to persist.
+Minimal Supplying Community Search (`misosoup`) is a command line tool that
+searches for minimal microbial communities. These are communities in which every
+member is required for the community to persist. `misosoup` can be used for two
+major objectives: (1) Find minimal communities in a given medium or (2) Find
+minimal supplying communities in a medium; these are the minimal communities
+required for growth of a strain (or species) of interest, that we refer to as
+the focal strain.
 
-MiSoS(oup) can be used for two objectives: (1) Find minimal communities in a
-given medium or (2) Find minimal supplying communities which are the minimal
-communities required for growth of a strain (or species) of interest, that we
-refer to as the focal strain.
-
-As input MiSoS(oup) takes a set of genome-scale metabolic models, one for each
+As input `misosoup` takes a set of genome-scale metabolic models, one for each
 strain (species) that will be considered as potential community members. The
 tool will then execute a series of constraint-based optimizations to find
 minimal communities. For the computation of the solutions metabolic steady-state
-is assumed (as in Flux Balance Analysis). Once computed, by default community
-members, their respective growth rates and there metabolic consumption and
-secretion will be reported in a human-readable and parsable format.
+is assumed (as in Flux Balance Analysis). Once computed, community members,
+their respective growth rates and there metabolic consumption and secretion will
+be reported in a human-readable and parsable format.
 
 ## Details
 
-To obtain minimal microbial communities MiSoS(oup) solves multiple optimization
+To obtain minimal microbial communities `misosoup` solves multiple optimization
 problems. All optimizations problems are solved with gurobi.
 
 1. Minimize the number of community member.
@@ -55,7 +54,7 @@ Run tests with `tox`. You will need our test data to pass.
 
 ## Usage
 
-After installation, you can easily use MiSoS(oup) with:
+After installation, you can easily use `misosoup` with:
 
 ```bash
 misosoup MODEL_PATH/*.xml --output OUTPUT_FILE --media MEDIA_FILE --strain STRAIN
@@ -84,7 +83,7 @@ misosoup MODEL_PATH/*.xml --output OUTPUT_FILE --media MEDIA_FILE --strain STRAI
 
 ## Additional arguments
 
-MiSoS(oup) can be used with the additional arguments:
+`misosoup` can be used with the additional arguments:
 
 ```bash
 misosoup MODEL_PATH/*.xml --output OUTPUT_FILE --media MEDIA_FILE --strain STRAIN --parsimony --community-size COMMUNITY_SIZE --minimal-growth MINIMAL_GROWTH --exchange-format EXCHANGE_FORMAT --validate --log LOG
@@ -153,7 +152,7 @@ If you use misosoup, please cite X.
 ## Workflows
 
 `snakemake` is a useful tool to execute many experiments and gather results.
-See [MiSoS(oup) Workflow Template](https://gitlab.ethz.ch/ochsnern/misosoup_workflow_template)
+See [`misosoup` Workflow Template](https://gitlab.ethz.ch/ochsnern/misosoup_workflow_template)
 on how to use it.
 
 ## Development
