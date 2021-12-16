@@ -22,18 +22,28 @@ def introduce_binary_variables(community, solver, minimal_growth=0.01):
 
     for org_id, org_model in community.organisms.items():
         org_var = f"y_{org_id}"
-        for r_id in org_model.reactions.keys():
-            if not r_id.startswith("R_EX") and r_id != org_model.biomass_reaction:
+        for r_id, reaction in org_model.reactions.items():
+            if (
+                not r_id.startswith("R_EX")
+                and r_id != org_model.biomass_reaction
+                and reaction.lb <= 0
+            ):
                 continue
 
             merged_id = community.reaction_map[(org_id, r_id)]
-            lbound = (
-                -minimal_growth if r_id == org_model.biomass_reaction else BOUND_INF
-            )
             ubound = BOUND_INF
+            lbound = -BOUND_INF
+
+            if r_id == org_model.biomass_reaction:
+                lbound = minimal_growth
+
+            if reaction.lb > 0:
+                lbound = reaction.lb
+                solver.problem.getVarByName(merged_id).lb = 0
+
             solver.add_constraint(
                 f"c_{merged_id}_lb",
-                {merged_id: 1, org_var: lbound},
+                {merged_id: 1, org_var: -lbound},
                 ">",
                 0,
                 update=False,

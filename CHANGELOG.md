@@ -7,6 +7,7 @@
 - Command line argument `--media` added
 - Command line argument `--carbon-sources` removed
 - Command line argument `--base-medium` removed
+- Maintenance requirements in the model are now supported
 
 ## 0.5.0 --- Operating Generalization (Dec 9, 2021)
 
