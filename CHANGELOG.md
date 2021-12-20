@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.6.0 --- Interface Recalibration (WIP)
+## 0.6.0 --- Interface Recalibration (Dec 20, 2021)
 
 - Pass media as dictionaries
 - Rework how we screen multiple carbon sources
@@ -41,3 +41,4 @@
 ## 0.1.0 --- Community Emergence (April 17, 2021)
 
 - Initial version of MiSoS(oup)
+
