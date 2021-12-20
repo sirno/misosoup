@@ -1,5 +1,6 @@
 """Load and init solvers."""
 import logging
+import math
 
 from reframed.solvers.solver import VarType
 
@@ -26,7 +27,7 @@ def introduce_binary_variables(community, solver, minimal_growth=0.01):
             if (
                 not r_id.startswith("R_EX")
                 and r_id != org_model.biomass_reaction
-                and reaction.lb <= 0
+                and reaction.lb * reaction.ub <= 0
             ):
                 continue
 
@@ -37,9 +38,10 @@ def introduce_binary_variables(community, solver, minimal_growth=0.01):
             if r_id == org_model.biomass_reaction:
                 lbound = minimal_growth
 
-            if reaction.lb > 0:
-                lbound = reaction.lb
-                solver.problem.getVarByName(merged_id).lb = 0
+            if reaction.lb * reaction.ub > 0:
+                lbound = -BOUND_INF if math.isinf(reaction.lb) else reaction.lb
+                ubound = BOUND_INF if math.isinf(reaction.ub) else reaction.ub 
+                solver.set_bounds({merged_id: (-BOUND_INF, BOUND_INF)})
 
             solver.add_constraint(
                 f"c_{merged_id}_lb",
