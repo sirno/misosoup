@@ -9,8 +9,6 @@ from collections import defaultdict
 import yaml
 import gurobipy as gp
 
-from reframed import solver_instance
-
 from .library.getters import get_biomass, get_exchange_reactions
 from .library.load import introduce_binary_variables, setup_medium
 from .library.readwrite import load_models, read_compounds
@@ -18,6 +16,7 @@ from .library.solve import minimal_communities, minimal_suppliers
 from .library.validate import validate_solution_dict
 
 from .reframed.layered_community import LayeredCommunity
+from .reframed.gurobi_env_solver import GurobiEnvSolver
 
 compute_function = defaultdict(lambda: minimal_suppliers, {"min": minimal_communities})
 
@@ -33,7 +32,7 @@ def compute_solution(
 ):
     """Setup and execute misosoup."""
     with gp.Env(params={"Method": 1, "LogToConsole": 0}) as env:
-        solver = solver_instance(community.merged_model, env=env)
+        solver = GurobiEnvSolver(community.merged_model, env)
 
         introduce_binary_variables(community, solver, minimal_growth=minimal_growth)
 

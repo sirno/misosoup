@@ -2,7 +2,8 @@
 
 ## 1.0.0 --- Standalone Practice (WIP)
 
-- Create `LayeredCommunity` subclass for reframed community.
+- Create `LayeredCommunity` subclass for `reframed.Community`
+- Create `GurobiEnvSolver` subclass of `reframed.solvers.GurobiSolver`
 
 ## 0.6.0 --- Interface Recalibration (Dec 20, 2021)
 
