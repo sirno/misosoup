@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.0 --- Standalone Practice (WIP)
+
+- Create `LayeredCommunity` subclass for reframed community.
+
 ## 0.6.0 --- Interface Recalibration (Dec 20, 2021)
 
 - Pass media as dictionaries
@@ -41,4 +45,3 @@
 ## 0.1.0 --- Community Emergence (April 17, 2021)
 
 - Initial version of MiSoS(oup)
-
