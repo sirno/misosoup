@@ -10,7 +10,7 @@ minimal supplying communities in a medium; these are the minimal communities
 required for growth of a strain (or species) of interest, that we refer to as
 the focal strain.
 
-As input `misosoup` takes a set of genome-scale metabolic models, one for each
+As input `misosoup` takes a set of genome-scale metabolic models; one for each
 strain (species) that will be considered as potential community members. The
 tool will then execute a series of constraint-based optimizations to find
 minimal communities. For the computation of the solutions metabolic steady-state
@@ -20,10 +20,11 @@ be reported in a human-readable and parsable format.
 
 ## Details
 
-To obtain minimal microbial communities `misosoup` solves multiple optimization
-problems. All optimizations problems are solved with gurobi.
+To find minimal microbial communities `misosoup` solves a repeated sequence of
+optimization problems using MILP formulations:
 
-1. Minimize the number of community member.
+1. Minimize the number of community member (see Zelezniak, et al. PNAS
+   doi:10.1073/pnas.1421834112)
 2. Fix the active community members and optimize growth of the total community
    biomass. If this fails, exclude the community from the possible solutions and
    repeat.
@@ -33,24 +34,12 @@ problems. All optimizations problems are solved with gurobi.
 ## Install MiSoS(soup)
 
 ```bash
-git clone git@gitlab.ethz.ch:ochsnern/misosoup.git
-cd misosoup
-pip install .
+pip install misosoup
 ```
 
 If you are unable to install `gurobipy`, it may need to be installed manually
 e.g. on a hpc cluster, to make use of the local gurobi installation. In such
 a case please refer to the instructions on the cluster support page.
-
-For testing and development:
-
-```bash
-git clone https://gitlab.ethz.ch/ochsnern/misosoup.git
-cd misosoup
-pip install -e .[dev]
-```
-
-Run tests with `tox`. You will need our test data to pass.
 
 ## Usage
 
@@ -70,13 +59,13 @@ misosoup MODEL_PATH/*.xml --output OUTPUT_FILE --media MEDIA_FILE --strain STRAI
 * --output
   * Use OUTPUT_FILE for output in yaml format. If it is not given, the results
     will be printed to stdout.
-* --base-medium
+* --media
   * Load media from MEDIA_FILE. The file should contain the description of the
-    growth media that shall be tested. The file should contain a dictionary
-    with all media that the community should be evaluated on. Each of the
-    media needs to contain a dictionary of exchange reactions and there lower
-    bound, (i.e. `R_EX_ac_e: -10` provides *acetate* to the communities).
-    The medium with id `base_medium` will be added to all media.
+    growth media that shall be tested. The file should contain a dictionary with
+    all media that the community should be evaluated on. Each of the media needs
+    to contain a dictionary of exchange reactions and there lower bound, (i.e.
+    `R_EX_ac_e: -10` provides *acetate* to the communities). The medium with id
+    `base_medium` will be added to all media.
 * --strain
   * Indicates the focal STRAIN model id. If no strain is provided, `misosoup`
     computes minimal communities.
@@ -96,7 +85,9 @@ misosoup MODEL_PATH/*.xml --output OUTPUT_FILE --media MEDIA_FILE --strain STRAI
 * --community-size
   * Look for communities up to size COMMUNITY_SIZE, then stop.
 * --minimal-growth
-  * Set the MINIMAL_GROWTH rate of strains. Every strain that makes up a community needs to satisfy this minimal growth constraint. The default growth rate used is 0.01 (1/h).
+  * Set the MINIMAL_GROWTH rate of strains. Every strain that makes up a
+    community needs to satisfy this minimal growth constraint. The default
+    growth rate used is 0.01 (1/h).
 
 For further description:
 
@@ -127,12 +118,12 @@ The following code will run `misosoup` to find minimal supplying communities for
 A1R12 in a medium that contains acetate as carbon source:
 
 ```bash
-misosoup ./strains/*.xml --output ./OUTPUT_example.yaml --media medium_MBM_no_co2_hco3.yaml --strain A1R12 --parsimony 
+misosoup ./strains/*.xml --output ./example_output.yaml --media medium_MBM_no_co2_hco3.yaml --strain A1R12 --parsimony 
 ```
 
 In the example, we run `misosoup` to find minimal supplying communities that
 would allow growth of A1R12 in MBM with acetate (ac) as the sole source of
-carbon. Looking at the output of the simulation (OUTPUT_example.yaml) you'll see
+carbon. Looking at the output of the simulation (example_output.yaml) you'll see
 that `misosoup` found two alternative supplying communities:
 
 * Solution 1: A1R12 can grow when in the presence of I3M07. If we inspect this
