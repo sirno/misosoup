@@ -1,9 +1,12 @@
 # Changelog
 
-## 1.0.0 --- Standalone Practice (WIP)
+## 1.0.0 --- Standalone Practice (Dec 23, 2021)
 
 - Create `LayeredCommunity` subclass for `reframed.Community`
 - Create `GurobiEnvSolver` subclass of `reframed.solvers.GurobiSolver`
+- Remove loading bars
+- Remove `tqdm` dependency
+- Provide package on pypi
 
 ## 0.6.0 --- Interface Recalibration (Dec 20, 2021)
 
