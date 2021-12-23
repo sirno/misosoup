@@ -1,6 +1,7 @@
 # MiSoS(oup)
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![PyPI version](https://badge.fury.io/py/misosoup.svg)](https://badge.fury.io/py/misosoup)
 
 Minimal Supplying Community Search (`misosoup`) is a command line tool that
 searches for minimal microbial communities. These are communities in which every
