@@ -27,8 +27,7 @@ optimization problems using MILP formulations:
 1. Minimize the number of community member (see Zelezniak, et al. PNAS
    doi:10.1073/pnas.1421834112)
 2. Fix the active community members and optimize growth of the total community
-   biomass. If this fails, exclude the community from the possible solutions and
-   repeat.
+   biomass.
 3. Optionally: Execute a third optimization to reflect parsimonious enzyme usage
    (see Lewis, et al. Mol Syst Bio doi:10.1038/msb.2010.47)
 
@@ -107,7 +106,7 @@ The .yaml output file will give:
   and positive fluxes indicate consumption and secretion, respectively. This
   consumption/secretion pattern is given for:
   * The community as a whole: (`R_EX_<ID>_e`)
-  * Each community member separately (`R_EX_<ID>_<STRAIN_NAME>_i`).  
+  * Each community member separately (`R_EX_<ID>_<STRAIN_NAME>_i`).
 
 ## Example
 
@@ -119,7 +118,7 @@ The following code will run `misosoup` to find minimal supplying communities for
 A1R12 in a medium that contains acetate as carbon source:
 
 ```bash
-misosoup ./strains/*.xml --output ./example_output.yaml --media medium_MBM_no_co2_hco3.yaml --strain A1R12 --parsimony 
+misosoup ./strains/*.xml --output ./OUTPUT_example.yaml --media media_MBM_no_co2_hco3.yaml --strain A1R12 --parsimony
 ```
 
 In the example, we run `misosoup` to find minimal supplying communities that
