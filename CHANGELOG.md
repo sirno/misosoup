@@ -3,6 +3,7 @@
 ## 1.1.0 --- Optimization Indifference (WIP)
 
 - Enable gurobi logging to file
+- Community feasibility test without optimization
 
 ## 1.0.0 --- Standalone Practice (Dec 23, 2021)
 

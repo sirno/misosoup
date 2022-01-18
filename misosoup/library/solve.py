@@ -180,7 +180,10 @@ def _minimize(community, solver, values, community_size, objective, parsimony):
 
             if not (objective or parsimony):
                 logging.info("Starting no optimization.")
-                solver.solve(get_values=values)
+                solution = solver.solve(
+                    get_values=list(obj.keys()) + values,
+                )
+                logging.info(f"{solution=}")
                 if solution.status != Status.OPTIMAL:
                     logging.info(
                         "Community Inconsistent: %s", str(list(selected.keys()))
@@ -191,6 +194,7 @@ def _minimize(community, solver, values, community_size, objective, parsimony):
                     knowledge_constraints.append(
                         f"c_tmp_{len(knowledge_constraints) + 1}"
                     )
+                    continue
                 logging.info(
                     "Community growth: %f",
                     solution.values[community.merged_model.biomass_reaction],

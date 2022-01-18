@@ -40,7 +40,7 @@ def introduce_binary_variables(community, solver, minimal_growth=0.01):
 
             if reaction.lb * reaction.ub > 0:
                 lbound = -BOUND_INF if math.isinf(reaction.lb) else reaction.lb
-                ubound = BOUND_INF if math.isinf(reaction.ub) else reaction.ub 
+                ubound = BOUND_INF if math.isinf(reaction.ub) else reaction.ub
                 solver.set_bounds({merged_id: (-BOUND_INF, BOUND_INF)})
 
             solver.add_constraint(
