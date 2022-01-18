@@ -31,7 +31,9 @@ def compute_solution(
     minimal_growth,
 ):
     """Setup and execute misosoup."""
-    with gp.Env(params={"Method": 1, "LogToConsole": 0}) as env:
+    with gp.Env(
+        params={"Method": 1, "LogToConsole": 0, "LogFile": "gurobi.log"}
+    ) as env:
         solver = GurobiEnvSolver(community.merged_model, env)
 
         introduce_binary_variables(community, solver, minimal_growth=minimal_growth)

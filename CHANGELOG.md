@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0 --- Optimization Indifference (WIP)
+
+- Enable gurobi logging to file
+
 ## 1.0.0 --- Standalone Practice (Dec 23, 2021)
 
 - Create `LayeredCommunity` subclass for `reframed.Community`

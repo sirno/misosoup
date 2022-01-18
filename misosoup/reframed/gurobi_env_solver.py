@@ -14,7 +14,6 @@ class GurobiEnvSolver(GurobiSolver):
             self.problem = GurobiModel(env=env)
         else:
             self.problem = GurobiModel()
-        self.set_logging(False)
         self.set_parameters(default_parameters)
         if model:
             self.build_problem(model)
