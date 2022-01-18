@@ -26,9 +26,9 @@ optimization problems using MILP formulations:
 
 1. Minimize the number of community member (see Zelezniak, et al. PNAS
    doi:10.1073/pnas.1421834112)
-2. Fix the active community members and optimize growth of the total community
-   biomass.
-3. Optionally: Execute a third optimization to reflect parsimonious enzyme usage
+2. Fix the active community members and check fisibility
+3. Optionally: Optimize growth of the total community biomass
+4. Optionally: Execute a third optimization to reflect parsimonious enzyme usage
    (see Lewis, et al. Mol Syst Bio doi:10.1038/msb.2010.47)
 
 ## Install MiSoS(soup)
@@ -148,4 +148,5 @@ on how to use it.
 
 ## Development
 
-Add here some information for developers on how the repo is structured or a basic description of the main scripts.
+Any contributions are welcome.
+
