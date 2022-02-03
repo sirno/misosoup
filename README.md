@@ -83,7 +83,8 @@ misosoup MODEL_PATH/*.xml --output OUTPUT_FILE --media MEDIA_FILE --strain STRAI
     the total flux. This does not affect the community members but can alter
     what each member consumes and secretes.
 * --community-size
-  * Look for communities up to size COMMUNITY_SIZE, then stop.
+  * Instead of looking for all communities, find all communities up to size
+    COMMUNITY_SIZE
 * --minimal-growth
   * Set the MINIMAL_GROWTH rate of strains. Every strain that makes up a
     community needs to satisfy this minimal growth constraint. The default
