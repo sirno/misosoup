@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.0 --- Optimization Indifference (WIP)
+## 1.1.0 --- Optimization Indifference (Feb 3, 2022)
 
 - Enable gurobi logging to file
 - Community feasibility test without optimization
