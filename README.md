@@ -4,20 +4,19 @@
 [![PyPI version](https://badge.fury.io/py/misosoup.svg)](https://badge.fury.io/py/misosoup)
 
 Minimal Supplying Community Search (`misosoup`) is a command line tool that
-searches for minimal microbial communities. These are communities in which every
-member is required for the community to persist. `misosoup` can be used for two
-major objectives: (1) Find minimal communities in a given medium or (2) Find
-minimal supplying communities in a medium; these are the minimal communities
-required for growth of a strain (or species) of interest, that we refer to as
-the focal strain.
+searches for minimal microbial communities --- where every member is required
+for the community to persist in a medium. `misosoup` can be used for two major
+objectives: (1) Find minimal communities in a given medium or (2) Find minimal
+_supplying_ communities in a medium; where every member is required for growth
+of a strain / species of interest (focal strain).
 
 As input `misosoup` takes a set of genome-scale metabolic models; one for each
-strain (species) that will be considered as potential community members. The
-tool will then execute a series of constraint-based optimizations to find
-minimal communities. For the computation of the solutions metabolic steady-state
-is assumed (as in Flux Balance Analysis). Once computed, community members,
-their respective growth rates and there metabolic consumption and secretion will
-be reported in a human-readable and parsable format.
+strain / species that will be considered as potential community member. The tool
+will then execute a series of constraint-based optimizations to find minimal
+communities. For the computation of the solutions metabolic steady-state is
+assumed (as in Flux Balance Analysis). Once computed, community members, their
+respective growth rates and there metabolic consumption and secretion will be
+reported in a human-readable and parsable format.
 
 ## Details
 
