@@ -14,11 +14,11 @@ of a strain / species of interest (focal strain).
 As input `misosoup` takes a set of genome-scale metabolic models; one for each
 strain / species that will be considered as potential community member. The tool
 will then execute a series of constraint-based optimizations to find minimal
-communities. For the computation of the solutions it is assumed a metabolic steady-state 
- (as in Flux Balance Analysis) but no optimization criteria are required (although
- can be optionally applied). Once computed, community members, their
-respective growth rates and there metabolic consumption and secretion will be
-reported in a human-readable and parseable format.
+communities. For the computation of the solutions it is assumed a metabolic
+steady-state (as in Flux Balance Analysis) but no optimization criteria are
+required (although can be optionally applied). Once computed, community members,
+their respective growth rates and there metabolic consumption and secretion will
+be reported in a human-readable and parseable format.
 
 ## Details
 
@@ -28,55 +28,70 @@ optimization problems using MILP formulations:
 
 1. Minimize the number of community member (see Zelezniak, et al. PNAS
    doi:10.1073/pnas.1421834112)
-2. Fix the active community members and check the feasibility of the entire community.
+2. Fix the active community members and check the feasibility of the entire
+   community.
 3. Optionally: Optimize growth of the total community biomass.
-4. Optionally: Perform an optimization to reflect parsimonious enzyme usage
-   (see Lewis, et al. Mol Syst Bio doi:10.1038/msb.2010.47)
+4. Optionally: Perform an optimization to reflect parsimonious enzyme usage (see
+   Lewis, et al. Mol Syst Bio doi:10.1038/msb.2010.47)
 
 ## Install MiSoS(soup)
 
-`misosoup` requires a version of Python >3.7 and <3.10 (it will be compatible with 3.10 soon).
+`misosoup` requires a version of Python >3.7 and <3.10 (it will be compatible
+with 3.10 soon).
 
-The latest stable version of `misosoup` is available through `pip` and hence it can easily installed executing:
+The latest stable version of `misosoup` is available through `pip` and hence it
+can easily installed executing:
 
 ```bash
 pip install misosoup
 ```
 
-**Dependencies:** 
+### Dependencies
 
-* `misosoup` uses the `Guroby` optimizer that is free for academic use but it requires a license. [document]
+* `misosoup` uses the `Guroby` optimizer that is free for academic use but it
+  requires a license.
+* Academic licenses can be obtained at
+  [](https://www.gurobi.com/academia/academic-program-and-licenses/)
+* To retrieve a license, the `grbgetkey` command is needed. The command is not
+  provided with `gurobipy` when installed through pip. Please download the full
+  gurobi version on their website and install gurobi with their installer.
 
-**Notes:**
+### Notes
 
 * If you are unable to install `gurobipy`, it may need to be installed manually
 e.g. on a hpc cluster, to make use of the local gurobi installation. In such
 a case please refer to the instructions on the cluster support page.
 
- * If `misosoup` requirements are not those of your local installation, you may consider installing it within a [conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html). Once you have `anaconda` installed in your computer you create an environment:
- 
+ * If `misosoup` requirements are not those of your local installation, you may
+   consider installing it within a [conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
+   Once you have `anaconda` installed in your computer you create an
+   environment:
+
 ```bash
-conda create --name misosoup python=3.9
+conda create --name misosoup --channel gurobi python=3.9 gurobi
 ```
  then you activate it:
- 
+
 ```bash
 conda activate misosoup
-``` 
+```
 
-and finally you can install `misosoup` within that environment.  
- 
+and finally you can install `misosoup` within that environment.
+
 ```bash
 pip install misosoup
 ```
 
-By default, `pip` installation comes with a free-trial license. Once you obtain your academic license, you want to substitute the free license by the academic one. Search in the anaconda environment the license file:
+By default, `pip` installation comes with a free-trial license. Once you obtain
+your academic license, you want to substitute the free license by the academic
+one. Search in the anaconda environment the license file:
 
 ```bash
 find $path_misosoup_environment -iname '*gurobi.lic'
 ```
 
-Which will return the $path_free_license. Now simply overwrite the free license by the academic one:
+Which will return the $path_free_license. Now simply overwrite the free license
+by the academic one:
 
 ```bash
 cp $path_academic_license $path_free_license
@@ -164,10 +179,11 @@ misosoup ./strains/*.xml --output ./OUTPUT_example.yaml --media medium_MBM_no_co
 ```
 
 In the example, we run `misosoup` to find minimal supplying communities that
-would allow growth of the strain [A1R12](https://biocyc.org/A1R12/organism-summary) 
-in MBM with acetate (ac) as the sole source of
-carbon. Looking at the output of the simulation (example_output.yaml) you'll see
-that `misosoup` found two alternative supplying communities:
+would allow growth of the strain
+[A1R12](https://biocyc.org/A1R12/organism-summary) in MBM with acetate (ac) as
+the sole source of carbon. Looking at the output of the simulation
+(example_output.yaml) you'll see that `misosoup` found two alternative supplying
+communities:
 
 * Solution 1: A1R12 can grow when in the presence of I3M07. If we inspect this
   solution in more detail we can see (for example):
