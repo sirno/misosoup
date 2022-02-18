@@ -20,20 +20,6 @@ required (although can be optionally applied). Once computed, community members,
 their respective growth rates and there metabolic consumption and secretion will
 be reported in a human-readable and parseable format.
 
-## Details
-
-
-To find minimal microbial communities `misosoup` solves a repeated sequence of
-optimization problems using MILP formulations:
-
-1. Minimize the number of community member (see Zelezniak, et al. PNAS
-   doi:10.1073/pnas.1421834112)
-2. Fix the active community members and check the feasibility of the entire
-   community.
-3. Optionally: Optimize growth of the total community biomass.
-4. Optionally: Perform an optimization to reflect parsimonious enzyme usage (see
-   Lewis, et al. Mol Syst Bio doi:10.1038/msb.2010.47)
-
 ## Install MiSoS(soup)
 
 `misosoup` requires a version of Python >3.7 and <3.10 (it will be compatible
@@ -120,7 +106,7 @@ misosoup MODEL_PATH/*.xml --output OUTPUT_FILE --media MEDIA_FILE --strain STRAI
     growth media that shall be tested. The file should contain a dictionary with
     all media that the community should be evaluated on. Each of the media needs
     to contain a dictionary of exchange reactions and there lower bound, (i.e.
-    `R_EX_ac_e: -10` provides *acetate* to the communities). The medium with id
+    `R_EX_ac_e: -10` provides _acetate_ to the communities). The medium with id
     `base_medium` will be added to all media.
 * --strain
   * Indicates the focal STRAIN model id. If no strain is provided, `misosoup`
@@ -135,16 +121,16 @@ misosoup MODEL_PATH/*.xml --output OUTPUT_FILE --media MEDIA_FILE --strain STRAI
 ```
 
 * `--parsimony`
-    * If this flag is used the algorithm will return the solution that minimizes
-    the total flux. This does not affect the community members but can alter
-    what each member consumes and secretes.
+  * If this flag is used the algorithm will return the solution that minimizes
+  the total flux. This does not affect the community members but can alter
+  what each member consumes and secretes.
 * `--community-size`
-    * Instead of looking for all communities, find all communities up to size
-    COMMUNITY_SIZE
+  * Instead of looking for all communities, find all communities up to size
+  COMMUNITY_SIZE
 * `--minimal-growth`
-    * Set the MINIMAL_GROWTH rate of strains. Every strain that makes up a
-    community needs to satisfy this minimal growth constraint. The default
-    growth rate used is 0.01 (1/h).
+  * Set the MINIMAL_GROWTH rate of strains. Every strain that makes up a
+  community needs to satisfy this minimal growth constraint. The default
+  growth rate used is 0.01 (1/h).
 
 For further description:
 
@@ -208,4 +194,3 @@ on how to use it.
 ## Development
 
 Any contributions are welcome.
-

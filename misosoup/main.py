@@ -77,7 +77,9 @@ def main(args):
         objective = None
 
     for medium_id, medium_composition in media.items():
-        if not medium_id == "base_medium":
+        if not medium_id == "base_medium" and (
+            not args.media_select or medium_id in args.media_select
+        ):
             medium = {
                 **medium_composition,
                 **base_medium,
@@ -156,6 +158,12 @@ def entry():
         type=str,
         required=True,
         help="Path to media. Format: YAML. File needs to contain dictionary with media, see examples.",
+    )
+    parser.add_argument(
+        "--media-select",
+        type=str,
+        nargs="+",
+        help="List of media names to use from the media file.",
     )
     parser.add_argument(
         "--strain",

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1 --- Media Selections (Feb 18, 2022)
+
+- Add argument `--media-select` to choose subset of media
+
 ## 1.1.0 --- Optimization Indifference (Feb 3, 2022)
 
 - Enable gurobi logging to file
