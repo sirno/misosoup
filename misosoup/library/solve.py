@@ -183,7 +183,6 @@ def _minimize(community, solver, values, community_size, objective, parsimony):
                 solution = solver.solve(
                     get_values=list(obj.keys()) + values,
                 )
-                logging.info(f"{solution=}")
                 if solution.status != Status.OPTIMAL:
                     logging.info(
                         "Community Inconsistent: %s", str(list(selected.keys()))
