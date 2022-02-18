@@ -161,14 +161,14 @@ The following code will run `misosoup` to find minimal supplying communities for
 A1R12 in a medium that contains acetate as carbon source:
 
 ```bash
-misosoup ./strains/*.xml --output ./OUTPUT_example.yaml --media medium_MBM_no_co2_hco3.yaml --strain A1R12 --parsimony
+misosoup ./strains/*.xml --output ./output_example.yaml --media media_mbm_no_co2_hco3.yaml --strain A1R12 --parsimony
 ```
 
 In the example, we run `misosoup` to find minimal supplying communities that
 would allow growth of the strain
 [A1R12](https://biocyc.org/A1R12/organism-summary) in MBM with acetate (ac) as
 the sole source of carbon. Looking at the output of the simulation
-(example_output.yaml) you'll see that `misosoup` found two alternative supplying
+example_output.yaml) you'll see that `misosoup` found two alternative supplying
 communities:
 
 * Solution 1: A1R12 can grow when in the presence of I3M07. If we inspect this
