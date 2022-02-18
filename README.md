@@ -50,8 +50,8 @@ pip install misosoup
 
 * `misosoup` uses the `Guroby` optimizer that is free for academic use but it
   requires a license.
-* Academic licenses can be obtained at
-  [](https://www.gurobi.com/academia/academic-program-and-licenses/)
+* Academic licenses can be obtained on the
+  [gurobi license page](https://www.gurobi.com/academia/academic-program-and-licenses/)
 * To retrieve a license, the `grbgetkey` command is needed. The command is not
   provided with `gurobipy` when installed through pip. Please download the full
   gurobi version on their website and install gurobi with their installer.
