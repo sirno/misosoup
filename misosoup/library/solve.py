@@ -121,6 +121,7 @@ def _minimize(community, solver, values, community_size, objective, parsimony):
                     get_values=list(obj.keys()) + values,
                     minimize=False,
                 )
+                logging.debug("Objective solution status: %s", str(solution.status))
                 if solution.status != Status.OPTIMAL:
                     logging.info(
                         "Community Inconsistent: %s", str(list(selected.keys()))
@@ -161,7 +162,7 @@ def _minimize(community, solver, values, community_size, objective, parsimony):
 
                 solver.remove_constraints(["c_growth"])
 
-                logging.info("Parsimony solution status: %s", str(solution.status))
+                logging.debug("Parsimony solution status: %s", str(solution.status))
                 if solution.status != Status.OPTIMAL:
                     logging.info(
                         "Community Inconsistent: %s", str(list(selected.keys()))
@@ -183,6 +184,7 @@ def _minimize(community, solver, values, community_size, objective, parsimony):
                 solution = solver.solve(
                     get_values=list(obj.keys()) + values,
                 )
+                logging.debug("No objective solution status: %s", str(solution.status))
                 if solution.status != Status.OPTIMAL:
                     logging.info(
                         "Community Inconsistent: %s", str(list(selected.keys()))
