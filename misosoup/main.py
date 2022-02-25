@@ -7,53 +7,13 @@ import os
 from collections import defaultdict
 
 import yaml
-import gurobipy as gp
 
 from .library.getters import get_biomass, get_exchange_reactions
-from .library.load import introduce_binary_variables, setup_medium
 from .library.readwrite import load_models, read_compounds
-from .library.solve import minimal_communities, minimal_suppliers
 from .library.validate import validate_solution_dict
+from .library.minimize import Minimizer
 
 from .reframed.layered_community import LayeredCommunity
-from .reframed.gurobi_env_solver import GurobiEnvSolver
-
-compute_function = defaultdict(lambda: minimal_suppliers, {"min": minimal_communities})
-
-
-def compute_solution(
-    org_id,
-    medium,
-    community,
-    objective,
-    parsimony,
-    community_size,
-    minimal_growth,
-):
-    """Setup and execute misosoup."""
-    with gp.Env(
-        params={"Method": 1, "LogToConsole": 0, "LogFile": "gurobi.log"}
-    ) as env:
-        solver = GurobiEnvSolver(community.merged_model, env)
-
-        introduce_binary_variables(community, solver, minimal_growth=minimal_growth)
-
-        setup_medium(community.merged_model, solver, medium)
-
-        solution = compute_function[org_id](
-            org_id,
-            community,
-            solver,
-            values=(
-                get_biomass(community) + get_exchange_reactions(community.merged_model)
-            ),
-            community_size=community_size,
-            objective=objective,
-            parsimony=parsimony,
-            minimal_growth=minimal_growth,
-        )
-
-    return (org_id, solution)
 
 
 def main(args):
@@ -66,7 +26,7 @@ def main(args):
 
     community = LayeredCommunity("CoI", models, copy_models=False)
 
-    solution = defaultdict(dict)
+    solutions = defaultdict(dict)
 
     if args.objective:
         objective = {reaction: 1 for reaction in args.objective}
@@ -84,17 +44,25 @@ def main(args):
                 **medium_composition,
                 **base_medium,
             }
-            org_id, sol = compute_solution(
-                args.strain,
+
+            minimizer = Minimizer(
+                org_id=args.strain,
                 medium=medium,
                 community=community,
+                values=(
+                    get_biomass(community)
+                    + get_exchange_reactions(community.merged_model)
+                ),
                 community_size=args.community_size,
                 objective=objective,
                 parsimony=args.parsimony,
                 minimal_growth=args.minimal_growth,
+                cache_file=args.cache_file,
             )
 
-            solution[medium_id][org_id] = sol
+            solution = minimizer.minimize()
+
+            solutions[medium_id][args.strain] = solution
 
     output_dict = {
         k: {
@@ -103,7 +71,7 @@ def main(args):
             else [{f"Growth_{org}": 0}]
             for org, sol in v.items()
         }
-        for k, v in solution.items()
+        for k, v in solutions.items()
     }
 
     if args.validate:
@@ -114,7 +82,7 @@ def main(args):
     if args.output:
         if not os.path.exists(os.path.dirname(args.output)):
             os.makedirs(os.path.dirname(args.output))
-        with open(args.output, "w", encoding="utf8") as file_descriptor:
+        with open(args.output, "a", encoding="utf8") as file_descriptor:
             file_descriptor.write(output)
     else:
         print(output)
@@ -141,7 +109,7 @@ def entry():
                 - {}
                 - {}
         ```
-""",
+    """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
@@ -152,6 +120,11 @@ def entry():
         "--output",
         type=str,
         help="Output file. Format: YAML. If not supplied, will print to stdout.",
+    )
+    parser.add_argument(
+        "--cache-file",
+        type=str,
+        help="Path to cache file. If set, intermediate constraints will be stored.",
     )
     parser.add_argument(
         "--media",
