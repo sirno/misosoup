@@ -4,6 +4,10 @@
 
 - Add argument `--media-select` to choose subset of media
 - Add argument `--cache-file` to cache intermediate constraints
+- Add module `misosoup.library.minimizer`.
+- Changed minimization to use state-aware minimizer class.
+- Removed module `misosoup.library.solve`
+- Removed module `misosoup.library.load`
 
 ## 1.1.0 --- Optimization Indifference (Feb 3, 2022)
 
