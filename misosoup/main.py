@@ -11,7 +11,7 @@ import yaml
 from .library.getters import get_biomass, get_exchange_reactions
 from .library.readwrite import load_models, read_compounds
 from .library.validate import validate_solution_dict
-from .library.minimize import Minimizer
+from .library.minimizer import Minimizer
 
 from .reframed.layered_community import LayeredCommunity
 
@@ -65,12 +65,7 @@ def main(args):
             solutions[medium_id][args.strain] = solution
 
     output_dict = {
-        k: {
-            org: [{var: rate for var, rate in s.values.items() if rate} for s in sol]
-            if sol
-            else [{f"Growth_{org}": 0}]
-            for org, sol in v.items()
-        }
+        k: {org: sol if sol else [{f"Growth_{org}": 0}] for org, sol in v.items()}
         for k, v in solutions.items()
     }
 

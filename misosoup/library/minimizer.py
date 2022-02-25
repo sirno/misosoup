@@ -147,7 +147,9 @@ class Minimizer:
             if self.community_size and len(selected) > self.community_size:
                 break
 
-            self.solutions.append(solution)
+            self.solutions.append(
+                {var: rate for var, rate in solution.values.items() if rate}
+            )
 
             i += 1
 
@@ -233,6 +235,8 @@ class Minimizer:
             self.solver.add_constraint(name, not_selected, ">", 1)
             self.knowledge_constraints[name] = not_selected
 
+        self.solutions = cache["solutions"]
+
         self.solver.update()
 
     def _dump_constraints_to_cache(self):
@@ -241,6 +245,7 @@ class Minimizer:
                 {
                     "community_constraints": self.community_constraints,
                     "knowledge_constraints": self.knowledge_constraints,
+                    "solutions": self.solutions,
                 },
                 cache_fd,
             )
