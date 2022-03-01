@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.0 --- Caching Interference (WIP)
+## 1.2.0 --- Caching Interference (Mar 1, 2022)
 
 - Add argument `--media-select` to choose subset of media
 - Add argument `--cache-file` to cache intermediate constraints
