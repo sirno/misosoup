@@ -186,7 +186,10 @@ def entry():
     parser.add_argument(
         "--validate",
         action="store_true",
-        help="Validate solution. Numerical consistency will verified.",
+        help=(
+            "Validate solution. Numerical consistency will be verified on the "
+            "final solution.",
+        )
     )
     parser.add_argument("--log", default="INFO", help="Log level. Default: INFO")
 
