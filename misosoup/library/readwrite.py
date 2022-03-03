@@ -51,8 +51,8 @@ def write_minimal_suppliers(solutions, path=None):
         for org, sols in solutions.items()
     }
     if path:
-        with open(path, "w", encoding="utf8") as f:
-            f.write(yaml.dump(processed))
+        with open(path, "w", encoding="utf8") as file_descriptor:
+            file_descriptor.write(yaml.dump(processed))
     else:
         print(yaml.dump(processed))
 
@@ -79,14 +79,14 @@ def read_solutions_yaml(file_path):
         }
     )
 
-    df = pd.DataFrame.from_dict(
+    data = pd.DataFrame.from_dict(
         data_dict,
         orient="index",
     ).sort_index(level=0)
-    df.index.names = ["carbon_source", "strain", "solution_idx"]
-    df["growth_rate"] = df.community_growth
+    data.index.names = ["carbon_source", "strain", "solution_idx"]
+    data["growth_rate"] = data.community_growth
 
-    return df
+    return data
 
 
 def read_isolates_yaml(file_path):
