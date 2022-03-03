@@ -1,3 +1,4 @@
+"""Read and write utility functions."""
 import yaml
 
 import pandas as pd
@@ -12,8 +13,9 @@ def load_models(paths):
 
 
 def read_medium(path, medium_name):
-    with open(path, "r") as fd:
-        medium_data = yaml.safe_load(fd)
+    """Read medium."""
+    with open(path, "r", encoding="utf8") as file_descriptor:
+        medium_data = yaml.safe_load(file_descriptor)
     return {
         key: [get_reaction_name(compound) for compound in compounds]
         for key, compounds in medium_data[medium_name].items()
@@ -21,18 +23,21 @@ def read_medium(path, medium_name):
 
 
 def read_compounds(path):
-    with open(path, "r") as fd:
-        compounds = yaml.safe_load(fd)
+    """Read compounds."""
+    with open(path, "r", encoding="utf8") as file_descriptor:
+        compounds = yaml.safe_load(file_descriptor)
     return compounds
 
 
 def read_supplements(path):
-    with open(path, "r") as fd:
-        supplement_sources = yaml.safe_load(fd)
+    """Read supplements."""
+    with open(path, "r", encoding="utf8") as file_descriptor:
+        supplement_sources = yaml.safe_load(file_descriptor)
     return [get_reaction_name(source) for source in supplement_sources.carbon_sources]
 
 
 def write_minimal_suppliers(solutions, path=None):
+    """Write minimal suppliers."""
     processed = {
         org: [
             {
@@ -46,15 +51,16 @@ def write_minimal_suppliers(solutions, path=None):
         for org, sols in solutions.items()
     }
     if path:
-        with open(path, "w") as f:
+        with open(path, "w", encoding="utf8") as f:
             f.write(yaml.dump(processed))
     else:
         print(yaml.dump(processed))
 
 
 def read_solutions_yaml(file_path):
-    with open(file_path, "r") as fd:
-        solutions = yaml.safe_load(fd)
+    """Read solutions yaml."""
+    with open(file_path, "r", encoding="utf8") as file_descriptor:
+        solutions = yaml.safe_load(file_descriptor)
 
     carbon_source_solutions_type = list(solutions.values())[0]
     strain_solutions_type = list(carbon_source_solutions_type.values())[0]
@@ -84,8 +90,9 @@ def read_solutions_yaml(file_path):
 
 
 def read_isolates_yaml(file_path):
-    with open(file_path, "r") as fd:
-        solutions = yaml.safe_load(fd)
+    """Read isolates yaml."""
+    with open(file_path, "r", encoding="utf8") as file_descriptor:
+        solutions = yaml.safe_load(file_descriptor)
 
     # carbon_sources = list(solutions.keys())
     # strains = list(solutions[carbon_sources[0]].keys())
