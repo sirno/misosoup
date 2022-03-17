@@ -9,6 +9,7 @@ class GurobiEnvSolver(GurobiSolver):
     """Gurobi interface initialized in gurobi environment."""
 
     def __init__(self, model=None, env=None):
+        """Init GurobiEnvSolver."""
         Solver.__init__(self)
         if env:
             self.problem = GurobiModel(env=env)
