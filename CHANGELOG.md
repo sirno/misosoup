@@ -1,11 +1,15 @@
 # Changelog
 
+## 1.2.1 --- Reporting Bias (WIP)
+
+- Report feasible communities, even if optimization fails
+
 ## 1.2.0 --- Caching Interference (Mar 1, 2022)
 
 - Add argument `--media-select` to choose subset of media
 - Add argument `--cache-file` to cache intermediate constraints
 - Add module `misosoup.library.minimizer`.
-- Changed minimization to use state-aware minimizer class.
+- Changed minimization to use state-aware minimizer class
 - Removed module `misosoup.library.solve`
 - Removed module `misosoup.library.load`
 

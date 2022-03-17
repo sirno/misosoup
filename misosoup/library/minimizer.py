@@ -116,25 +116,40 @@ class Minimizer:
             )
 
             try:
+                solution = self._no_objective_optimization()
+
+                if not self._check_solution(solution, selected, not_selected):
+                    logging.info(
+                        "Community Inconsistent: %s", str(list(selected.keys()))
+                    )
+                    self._add_knowledge_constraint(not_selected)
+                    continue
+
                 growth = 0
                 if self.objective:
-                    solution = self._objective_optimization()
-                    if not self._check_solution(solution, selected, not_selected):
-                        continue
-                    growth = (
-                        solution.values[self.community.merged_model.biomass_reaction]
-                        - 1e-4
-                    )
+                    objective_solution = self._objective_optimization()
+                    if not self._check_solution(
+                        objective_solution, selected, not_selected
+                    ):
+                        logging.warning("Unable to optimize objective.")
+                        growth = -1
+                    else:
+                        growth = (
+                            objective_solution.values[
+                                self.community.merged_model.biomass_reaction
+                            ]
+                            - 1e-4
+                        )
+                        solution = objective_solution
 
                 if self.parsimony:
-                    solution = self._parsimony_optimization(growth)
-                    if not self._check_solution(solution, selected, not_selected):
-                        continue
-
-                if not (self.objective or self.parsimony):
-                    solution = self._no_objective_optimization()
-                    if not self._check_solution(solution, selected, not_selected):
-                        continue
+                    parsimony_solution = self._parsimony_optimization(growth)
+                    if not self._check_solution(
+                        parsimony_solution, selected, not_selected
+                    ):
+                        logging.warning("Unable to minimize fluxes.")
+                    else:
+                        solution = parsimony_solution
 
             finally:
                 self.solver.remove_constraints(["c_not_selection", "c_selection"])
@@ -212,8 +227,6 @@ class Minimizer:
     def _check_solution(self, solution, selected, not_selected):
         logging.debug("Solution status: %s", str(solution.status))
         if solution.status != Status.OPTIMAL:
-            logging.info("Community Inconsistent: %s", str(list(selected.keys())))
-            self._add_knowledge_constraint(not_selected)
             return False
         logging.info(
             "Community growth: %f",
