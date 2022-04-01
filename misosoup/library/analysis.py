@@ -25,11 +25,9 @@ def get_suppliers(data_frame: pd.DataFrame):
 
     df = data_frame.reset_index()
     selector = ["strain"] + [column for column in df.columns if column.startswith("y_")]
-    return (
-        df[selector].apply(
-            lambda row: frozenset(row.index[row == 1]) - frozenset([f"y_{row.strain}"]),
-            axis=1,
-        ),
+    return df[selector].apply(
+        lambda row: frozenset(row.index[row == 1]) - frozenset([f"y_{row.strain}"]),
+        axis=1,
     )
 
 
@@ -43,11 +41,9 @@ def get_communities(data_frame: pd.DataFrame):
     """
     df = data_frame.reset_index()
     selector = ["strain"] + [column for column in df.columns if column.startswith("y_")]
-    return (
-        df[selector].apply(
-            lambda row: (frozenset(row.index[row == 1])),
-            axis=1,
-        ),
+    return df[selector].apply(
+        lambda row: (frozenset(row.index[row == 1])),
+        axis=1,
     )
 
 
@@ -213,6 +209,7 @@ def count_non_redundant_supplying_communities_on_carbon_source(
         supplying_communities.groupby("carbon_source")
         .apply(lambda group: len(frozenset(group.supplying_communities)))
         .rename("supplying_communities")
+        .to_frame()
     )
 
 
@@ -235,6 +232,7 @@ def count_exchanged_metabolites_on_carbon_source(data_frame: pd.DataFrame):
         metabolites_exchanged.groupby("carbon_source")
         .apply(lambda group: len(frozenset(group.metabolites_exchanged)))
         .rename("metabolites_exchanged")
+        .to_frame()
     )
 
 
