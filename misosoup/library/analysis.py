@@ -14,8 +14,8 @@ def compute_directed_crossfeed(data_frame: pd.DataFrame, tol=1e-4):
     return data_frame.apply(_find_directed_cross_feed, axis=1, tol=tol)
 
 
-def find_suppliers(data_frame: pd.DataFrame):
-    """Find suppliers.
+def get_suppliers(data_frame: pd.DataFrame):
+    """Get suppliers.
 
     Parameters
     ----------
@@ -23,15 +23,32 @@ def find_suppliers(data_frame: pd.DataFrame):
         A solution dataframe from misosoup.
     """
 
-    def _find_suppliers(row):
-        suppliers = set()
-        for col, value in row.items():
-            if col.startswith("y_") and value > 0.5:
-                suppliers.add(col)
-        return suppliers
+    df = data_frame.reset_index()
+    selector = ["strain"] + [column for column in df.columns if column.startswith("y_")]
+    return (
+        df[selector].apply(
+            lambda row: frozenset(row.index[row == 1]) - frozenset([f"y_{row.strain}"]),
+            axis=1,
+        ),
+    )
 
-    data_frame["suppliers"] = data_frame.apply(_find_suppliers, axis=1)
-    return data_frame
+
+def get_communities(data_frame: pd.DataFrame):
+    """Get communities.
+
+    Parameters
+    ----------
+    data_frame : pandas.DataFrame
+        A solution dataframe from misosoup.
+    """
+    df = data_frame.reset_index()
+    selector = ["strain"] + [column for column in df.columns if column.startswith("y_")]
+    return (
+        df[selector].apply(
+            lambda row: (frozenset(row.index[row == 1])),
+            axis=1,
+        ),
+    )
 
 
 def find_focal_strain_growth(data_frame: pd.DataFrame):
@@ -78,7 +95,7 @@ def _find_cross_feed(row, tol=1e-4):
                 negative.add(compound.group(0))
             elif adjusted_val > tol:
                 positive.add(compound.group(0))
-    return positive & negative
+    return frozenset(positive & negative)
 
 
 def _find_directed_cross_feed(row, tol=1e-4):
@@ -88,4 +105,4 @@ def _find_directed_cross_feed(row, tol=1e-4):
     for compound in crossfeed:
         rid = f"R_EX_{compound}_e_{strain}_i"
         directed_crossfeed[compound] = row[rid] if rid in row else 0
-    return directed_crossfeed
+    return frozenset(directed_crossfeed)

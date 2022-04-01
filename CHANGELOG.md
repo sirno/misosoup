@@ -4,6 +4,8 @@
 
 - Export `analysis` and `readwrite` module.
 - Report feasible communities, even if optimization fails
+- Add function to get `supplier` and `community` frozensets.
+- Update crossfeed to report as frozensets.
 
 ## 1.2.0 --- Caching Interference (Mar 1, 2022)
 
