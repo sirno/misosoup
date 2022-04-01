@@ -2,6 +2,7 @@
 
 ## 1.2.1 --- Reporting Bias (WIP)
 
+- Export `analysis` and `readwrite` module.
 - Report feasible communities, even if optimization fails
 
 ## 1.2.0 --- Caching Interference (Mar 1, 2022)
