@@ -45,7 +45,7 @@ pip install misosoup
 
 **Dependencies:** 
 
-* `misosoup` uses the `Guroby` optimizer that is free for academic use but it requires a license. [document]
+* `misosoup` uses the `Gurobi` optimizer that is free for academic use but it requires a license. [document]
 
 **Notes:**
 
@@ -70,7 +70,7 @@ and finally you can install `misosoup` within that environment.
 pip install misosoup
 ```
 
-By default, `pip` installation comes with a free-trial license. Once you obtain your academic license, you want to substitute the free license by the academic one. Search in the anaconda environment the license file:
+By default, `pip` installation comes with a free-trial license. Once you obtain your academic license, you want to substitute the free license with the academic one. Search in the anaconda environment the license file:
 
 ```bash
 find $path_misosoup_environment -iname '*gurobi.lic'
