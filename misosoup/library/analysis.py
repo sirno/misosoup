@@ -2,6 +2,7 @@
 import re
 
 import pandas as pd
+import numpy as np
 
 
 def compute_crossfeed(data_frame: pd.DataFrame, tol=1e-4):
@@ -130,6 +131,30 @@ def count_carbon_sources_as_focal_strain(data_frame: pd.DataFrame):
     )
 
 
+def count_carbon_sources_for_isolation(data_frame: pd.DataFrame):
+    """Count the number of viable environments as focal strain.
+
+    Parameters
+    ----------
+    data_frame : pandas.DataFrame
+        A solution dataframe from misosoup.
+    """
+    df = data_frame.reset_index()
+    strains = get_unique_strains(df)
+    supplied = np.array(map(lambda x: len(x) == 0, get_suppliers(df)))
+    unique_carbon_sources = [
+        len(
+            df[
+                (df.strain == strain) & (df.growth_rate > 0) & supplied
+            ].carbon_source.unique()
+        )
+        for strain in strains
+    ]
+    return pd.DataFrame(
+        {"strain": strains, "isolated_carbon_sources": unique_carbon_sources}
+    )
+
+
 def count_carbon_sources_as_supplier_strain(data_frame: pd.DataFrame):
     """Count the number of viable environments as supplier strain.
 
@@ -207,8 +232,8 @@ def count_non_redundant_supplying_communities_on_carbon_source(
     )
     return (
         supplying_communities.groupby("carbon_source")
-        .apply(lambda group: len(frozenset(group.supplying_communities)))
-        .rename("supplying_communities")
+        .apply(lambda group: len(frozenset(group.supplying_community)) - 1)
+        .rename("supplying_community")
         .to_frame()
     )
 
@@ -230,7 +255,7 @@ def count_exchanged_metabolites_on_carbon_source(data_frame: pd.DataFrame):
     )
     return (
         metabolites_exchanged.groupby("carbon_source")
-        .apply(lambda group: len(frozenset(group.metabolites_exchanged)))
+        .apply(lambda group: len(frozenset(group.metabolites_exchanged)) - 1)
         .rename("metabolites_exchanged")
         .to_frame()
     )
