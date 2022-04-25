@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.2.1 --- Reporting Bias (WIP)
+
+- Export `analysis` and `readwrite` module.
+- Report feasible communities, even if optimization fails
+- Add function to get `supplier` and `community` frozensets.
+- Update crossfeed to report as frozensets.
+- Add functions to gather statistics.
+
+## 1.2.0 --- Caching Interference (Mar 1, 2022)
+
+- Add argument `--media-select` to choose subset of media
+- Add argument `--cache-file` to cache intermediate constraints
+- Add module `misosoup.library.minimizer`.
+- Changed minimization to use state-aware minimizer class
+- Removed module `misosoup.library.solve`
+- Removed module `misosoup.library.load`
+
 ## 1.1.0 --- Optimization Indifference (Feb 3, 2022)
 
 - Enable gurobi logging to file

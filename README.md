@@ -43,11 +43,17 @@ The latest stable version of `misosoup` is available through `pip` and hence it 
 pip install misosoup
 ```
 
-**Dependencies:** 
+### Dependencies
 
-* `misosoup` uses the `Gurobi` optimizer that is free for academic use but it requires a license. [document]
+* `misosoup` uses the `Guroby` optimizer that is free for academic use but it
+  requires a license.
+* Academic licenses can be obtained on the
+  [gurobi license page](https://www.gurobi.com/academia/academic-program-and-licenses/)
+* To retrieve a license, the `grbgetkey` command is needed. The command is not
+  provided with `gurobipy` when installed through pip. Please download the full
+  gurobi version on their website and install gurobi with their installer.
 
-**Notes:**
+### Notes
 
 * If you are unable to install `gurobipy`, it may need to be installed manually
 e.g. on a hpc cluster, to make use of the local gurobi installation. In such
@@ -56,7 +62,7 @@ a case please refer to the instructions on the cluster support page.
  * If `misosoup` requirements are not those of your local installation, you may consider installing it within a [conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html). Once you have `anaconda` installed in your computer you create an environment:
  
 ```bash
-conda create --name misosoup python=3.9
+conda create --name misosoup --channel gurobi python=3.9 gurobi
 ```
  then you activate it:
  
@@ -105,7 +111,7 @@ misosoup MODEL_PATH/*.xml --output OUTPUT_FILE --media MEDIA_FILE --strain STRAI
     growth media that shall be tested. The file should contain a dictionary with
     all media that the community should be evaluated on. Each of the media needs
     to contain a dictionary of exchange reactions and there lower bound, (i.e.
-    `R_EX_ac_e: -10` provides *acetate* to the communities). The medium with id
+    `R_EX_ac_e: -10` provides _acetate_ to the communities). The medium with id
     `base_medium` will be added to all media.
 * --strain
   * Indicates the focal STRAIN model id. If no strain is provided, `misosoup`
@@ -160,14 +166,15 @@ The following code will run `misosoup` to find minimal supplying communities for
 A1R12 in a medium that contains acetate as carbon source:
 
 ```bash
-misosoup ./strains/*.xml --output ./OUTPUT_example.yaml --media medium_MBM_no_co2_hco3.yaml --strain A1R12 --parsimony
+misosoup ./strains/*.xml --output ./output_example.yaml --media media_mbm_no_co2_hco3.yaml --strain A1R12 --parsimony
 ```
 
 In the example, we run `misosoup` to find minimal supplying communities that
-would allow growth of the strain [A1R12](https://biocyc.org/A1R12/organism-summary) 
-in MBM with acetate (ac) as the sole source of
-carbon. Looking at the output of the simulation (example_output.yaml) you'll see
-that `misosoup` found two alternative supplying communities:
+would allow growth of the strain
+[A1R12](https://biocyc.org/A1R12/organism-summary) in MBM with acetate (ac) as
+the sole source of carbon. Looking at the output of the simulation
+example_output.yaml) you'll see that `misosoup` found two alternative supplying
+communities:
 
 * Solution 1: A1R12 can grow when in the presence of I3M07. If we inspect this
   solution in more detail we can see (for example):
