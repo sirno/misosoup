@@ -154,8 +154,8 @@ def entry():
         default=0.01,
         help=(
             "Minimal required growth for strain or community."
-            + "Each strain that is considered to grow needs to at least achieve "
-            + "this minimal growth rate given by this argument."
+            "Each strain that is considered to grow needs to at least achieve "
+            "this minimal growth rate given by this argument."
         ),
     )
     parser.add_argument(
@@ -164,9 +164,9 @@ def entry():
         default="R_EX_{}_e",
         help=(
             "Regular expression to retrieve the carbon source from an exchange "
-            + "reaction. The group containing the carbon source, should be named "
-            + "`carbon_source`; as can be seen from the default. "
-            + "default: `R_EX_(\\w+)_e"
+            "reaction. The group containing the carbon source, should be named "
+            "`carbon_source`; as can be seen from the default. "
+            "default: `R_EX_(\\w+)_e"
         ),
     )
     parser.add_argument(
@@ -188,7 +188,7 @@ def entry():
         action="store_true",
         help=(
             "Validate solution. Numerical consistency will be verified on the "
-            + "final solution.",
+            "final solution."
         ),
     )
     parser.add_argument("--log", default="INFO", help="Log level. Default: INFO")
