@@ -274,7 +274,7 @@ class Minimizer:
         for rid in self.community.merged_model.reactions:
             self.solver.add_constraint(
                 f"c_{rid}_abs",
-                {f"abs_{rid}_pos": 1, f"abs_{rid}_neg": -1},
+                {f"abs_{rid}_pos": 1, f"abs_{rid}_neg": -1, rid: -1},
                 "=",
                 0,
             )
