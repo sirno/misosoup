@@ -43,6 +43,9 @@ class Minimizer:
         self._setup_binary_variables()
         self._setup_medium()
 
+        if parsimony:
+            self._setup_parsimony()
+
         if not org_id or org_id == "min":
             self.solver.add_constraint(
                 "c_community_growth",
@@ -134,12 +137,9 @@ class Minimizer:
                         logging.warning("Unable to optimize objective.")
                         growth = -1
                     else:
-                        growth = (
-                            objective_solution.values[
-                                self.community.merged_model.biomass_reaction
-                            ]
-                            - 1e-4
-                        )
+                        growth = objective_solution.values[
+                            self.community.merged_model.biomass_reaction
+                        ]
                         solution = objective_solution
 
                 if self.parsimony:
@@ -210,11 +210,10 @@ class Minimizer:
             )
 
         solution = self.solver.solve(
-            quadratic={
-                (rid, rid): 1
+            linear={
+                f"abs_{rid}_{sense}": 1
                 for rid in self.community.merged_model.reactions
-                if not rid.startswith("Growth")
-                and rid != self.community.merged_model.biomass_reaction
+                for sense in ["pos", "neg"]
             },
             get_values=self._get_values,
             minimize=True,
@@ -263,11 +262,32 @@ class Minimizer:
                 cache_fd,
             )
 
+    def _setup_parsimony(self):
+        # add absolute variables for each reaction
+        for rid in self.community.merged_model.reactions:
+            self.solver.add_variable(f"abs_{rid}_pos", 0, 1000, update=False)
+            self.solver.add_variable(f"abs_{rid}_neg", 0, 1000, update=False)
+
+        self.solver.update()
+
+        # add absolute constraints for each reaction
+        for rid in self.community.merged_model.reactions:
+            self.solver.add_constraint(
+                f"c_{rid}_abs",
+                {f"abs_{rid}_pos": 1, f"abs_{rid}_neg": -1},
+                "=",
+                0,
+            )
+
     def _setup_binary_variables(self):
         """Add binary variables to the solver instance."""
         for org_id in self.community.organisms.keys():
             self.solver.add_variable(
-                f"y_{org_id}", 0, 1, vartype=VarType.BINARY, update=False
+                f"y_{org_id}",
+                0,
+                1,
+                vartype=VarType.BINARY,
+                update=False,
             )
 
         self.solver.update()
