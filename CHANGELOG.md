@@ -1,10 +1,10 @@
 # Changelog
 
-## 1.3.0 --- Linearization Effort (WIP)
+## 1.3.0 --- Linearization Effort (Aug 18, 2022)
 
 - Linear parsimony optimization
 
-## 1.2.1 --- Reporting Bias (WIP)
+## 1.2.1 --- Reporting Bias (NONE)
 
 - Report feasible communities, even if optimization fails
 - Add function to get `supplier` and `community` frozensets.
