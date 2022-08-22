@@ -121,7 +121,7 @@ class Minimizer:
             try:
                 growth = 0
 
-                if not self.objective:
+                if not self.objective and not self.parsimony:
                     solution = self._no_objective_optimization()
 
                     if not self._check_solution(solution, selected, not_selected):
