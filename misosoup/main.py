@@ -93,10 +93,10 @@ def entry():
     communities can supply growth of some strain (or each other, if no strain
     is chosen).
 
-    It will report the results in `yaml` format, where the dictionaries contain
-    all active exchange reactions and their rates, as well as the activity of
-    strains (i.e. `y_strain: 1` for any active strain), the community growth
-    rate and the individual growth rates of all participating strains:
+    It will report the results in `yaml` format, where the dictionaries contain all
+    active exchange reactions and their rates, as well as the activity of strains (i.e.
+    `y_strain: 1` for any active strain), the community growth rate and the individual
+    growth rates of all participating strains:
 
         ```
         carbon_source:

@@ -119,16 +119,18 @@ class Minimizer:
             )
 
             try:
-                solution = self._no_objective_optimization()
-
-                if not self._check_solution(solution, selected, not_selected):
-                    logging.info(
-                        "Community Inconsistent: %s", str(list(selected.keys()))
-                    )
-                    self._add_knowledge_constraint(not_selected)
-                    continue
-
                 growth = 0
+
+                if not self.objective:
+                    solution = self._no_objective_optimization()
+
+                    if not self._check_solution(solution, selected, not_selected):
+                        logging.info(
+                            "Community Inconsistent: %s", str(list(selected.keys()))
+                        )
+                        self._add_knowledge_constraint(not_selected)
+                        continue
+
                 if self.objective:
                     objective_solution = self._objective_optimization()
                     if not self._check_solution(
