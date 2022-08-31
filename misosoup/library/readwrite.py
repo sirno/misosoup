@@ -15,7 +15,7 @@ def load_models(paths):
 def read_medium(path, medium_name):
     """Read medium."""
     with open(path, "r", encoding="utf8") as file_descriptor:
-        medium_data = yaml.safe_load(file_descriptor)
+        medium_data = yaml.load(file_descriptor, Loader=yaml.CSafeLoader)
     return {
         key: [get_reaction_name(compound) for compound in compounds]
         for key, compounds in medium_data[medium_name].items()
@@ -25,14 +25,14 @@ def read_medium(path, medium_name):
 def read_compounds(path):
     """Read compounds."""
     with open(path, "r", encoding="utf8") as file_descriptor:
-        compounds = yaml.safe_load(file_descriptor)
+        compounds = yaml.load(file_descriptor, Loader=yaml.CSafeLoader)
     return compounds
 
 
 def read_supplements(path):
     """Read supplements."""
     with open(path, "r", encoding="utf8") as file_descriptor:
-        supplement_sources = yaml.safe_load(file_descriptor)
+        supplement_sources = yaml.load(file_descriptor, Loader=yaml.CSafeLoader)
     return [get_reaction_name(source) for source in supplement_sources.carbon_sources]
 
 
@@ -52,15 +52,15 @@ def write_minimal_suppliers(solutions, path=None):
     }
     if path:
         with open(path, "w", encoding="utf8") as file_descriptor:
-            file_descriptor.write(yaml.dump(processed))
+            file_descriptor.write(yaml.dump(processed, Dumper=yaml.CSafeDumper))
     else:
-        print(yaml.dump(processed))
+        print(yaml.dump(processed, Dumper=yaml.CSafeDumper))
 
 
 def read_solutions_yaml(file_path):
     """Read solutions yaml."""
     with open(file_path, "r", encoding="utf8") as file_descriptor:
-        solutions = yaml.safe_load(file_descriptor)
+        solutions = yaml.load(file_descriptor, Loader=yaml.CSafeLoader)
 
     carbon_source_solutions_type = list(solutions.values())[0]
     strain_solutions_type = list(carbon_source_solutions_type.values())[0]
@@ -92,7 +92,7 @@ def read_solutions_yaml(file_path):
 def read_isolates_yaml(file_path):
     """Read isolates yaml."""
     with open(file_path, "r", encoding="utf8") as file_descriptor:
-        solutions = yaml.safe_load(file_descriptor)
+        solutions = yaml.load(file_descriptor, Loader=yaml.CSafeLoader)
 
     # carbon_sources = list(solutions.keys())
     # strains = list(solutions[carbon_sources[0]].keys())
