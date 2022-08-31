@@ -72,7 +72,7 @@ def main(args):
     if args.validate:
         validate_solution_dict(output_dict, args.exchange_format)
 
-    output = yaml.dump(output_dict)
+    output = yaml.dump(output_dict, Dumper=yaml.CSafeDumper)
 
     if args.output:
         if not os.path.exists(os.path.dirname(args.output)):

@@ -54,7 +54,7 @@ def write_minimal_suppliers(solutions, path=None):
 
 def read_solutions_yaml(file_path):
     with open(file_path, "r") as fd:
-        solutions = yaml.safe_load(fd)
+        solutions = yaml.load(fd, Loader=yaml.CSafeLoader)
 
     carbon_source_solutions_type = list(solutions.values())[0]
     strain_solutions_type = list(carbon_source_solutions_type.values())[0]
@@ -85,7 +85,7 @@ def read_solutions_yaml(file_path):
 
 def read_isolates_yaml(file_path):
     with open(file_path, "r") as fd:
-        solutions = yaml.safe_load(fd)
+        solutions = yaml.load(fd, Loader=yaml.CSafeLoader)
 
     # carbon_sources = list(solutions.keys())
     # strains = list(solutions[carbon_sources[0]].keys())

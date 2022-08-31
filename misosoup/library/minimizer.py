@@ -71,7 +71,7 @@ class Minimizer:
         self.cache_file = cache_file
         if cache_file and os.path.exists(cache_file):
             with open(cache_file, encoding="utf8") as cache_fd:
-                cache = yaml.safe_load(cache_fd)
+                cache = yaml.load(cache_fd, Loader=yaml.CSafeLoader)
             self._load_constraints_from_cache(cache)
 
     def minimize(self):
@@ -248,6 +248,7 @@ class Minimizer:
                     "solutions": self.solutions,
                 },
                 cache_fd,
+                Dumper=yaml.CSafeDumper,
             )
 
     def _setup_binary_variables(self):
