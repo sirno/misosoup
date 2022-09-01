@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.1 --- Speedup Inclination (Sep 1, 2022)
+
+- Use yaml C loader and dumper
+
 ## 1.3.0 --- Linearization Effort (Aug 18, 2022)
 
 - Linear parsimony optimization

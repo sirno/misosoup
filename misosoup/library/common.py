@@ -42,5 +42,7 @@ def merge_yaml(file_list):
     solutions = {}
     for path in file_list:
         with open(path, "r") as file_descriptor:
-            merge_dicts(solutions, yaml.safe_load(file_descriptor))
+            merge_dicts(
+                solutions, yaml.safe_load(file_descriptor, Loader=yaml.CSafeLoader)
+            )
     return solutions
