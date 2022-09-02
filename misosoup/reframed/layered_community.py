@@ -235,9 +235,9 @@ class LayeredCommunity(Community):
         if value > 0:
             self.solver.add_constraint(
                 "c_growth",
-                self.objective,
-                ">",
                 objective,
+                ">",
+                value,
                 update=True,
             )
 
