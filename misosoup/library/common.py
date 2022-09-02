@@ -2,6 +2,7 @@
 import re
 import yaml
 
+from typing import List
 from collections.abc import Iterable
 
 
@@ -39,7 +40,7 @@ def merge_dicts(a: dict, b: dict, path=None):
     return a
 
 
-def merge_yaml(file_list: list[str]):
+def merge_yaml(file_list: List[str]):
     """Merge yaml files."""
     solutions = {}
     for path in file_list:

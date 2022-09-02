@@ -1,12 +1,12 @@
-from collections.abc import Callable, Iterable
+from collections.abc import Callable
 from collections import defaultdict
-from typing import Any
+from typing import Any, Dict, List
 
-SolutionsDict = dict[str, dict[str, list[dict[str, Any]]]]
+SolutionsDict = Dict[str, Dict[str, List[Dict[str, Any]]]]
 
 
 def map_solutions(
-    func: Callable[[dict[str, float]], Any],
+    func: Callable[[Dict[str, float]], Any],
     solutions: SolutionsDict,
 ) -> SolutionsDict:
     """Map function over solutions and return a new solutions dict."""
@@ -20,7 +20,7 @@ def map_solutions(
 
 
 def filter_solutions(
-    func: Callable[[dict[str, float]], bool],
+    func: Callable[[Dict[str, float]], bool],
     solutions: SolutionsDict,
 ) -> SolutionsDict:
     """Filter solutions and return a new solutions dict."""
