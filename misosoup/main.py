@@ -48,7 +48,7 @@ def main(args):
             minimizer = Minimizer(
                 org_id=args.strain,
                 medium=medium,
-                community=community,
+                community=LayeredCommunity("community", models),
                 values=(
                     get_biomass(community)
                     + get_exchange_reactions(community.merged_model)

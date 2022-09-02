@@ -38,16 +38,11 @@ class Minimizer:
         self.objective = objective
         self.parsimony = parsimony
 
-        self.solver = GurobiSolver(community.merged_model)
-
         self._setup_binary_variables()
-        self._setup_medium()
-
-        if parsimony:
-            self._setup_parsimony()
+        self.community.setup_medium(self.medium)
 
         if not org_id or org_id == "min":
-            self.solver.add_constraint(
+            self.community.solver.add_constraint(
                 "c_community_growth",
                 {community.merged_model.biomass_reaction: 1},
                 ">",
@@ -55,7 +50,7 @@ class Minimizer:
                 update=True,
             )
         else:
-            self.solver.add_constraint(
+            self.community.solver.add_constraint(
                 f"c_{org_id}_focal",
                 {f"y_{org_id}": 1},
                 ">",
@@ -93,6 +88,12 @@ class Minimizer:
                 logging.info("Solution status: %s", str(solution.status))
                 break
 
+            # get community members
+            selected_names = [
+                k[2:]
+                for k in self._community_objective.keys()
+                if solution.values[k] > 0.5
+            ]
             selected = {
                 k: 1
                 for k in self._community_objective.keys()
@@ -110,53 +111,68 @@ class Minimizer:
                 solution.values[self.community.merged_model.biomass_reaction],
             )
 
-            # Fix selected community
-            self.solver.add_constraint(
-                "c_not_selection", not_selected, "=", 0, update=True
-            )
-            self.solver.add_constraint(
-                "c_selection", selected, "=", len(selected), update=True
-            )
+            # build community model
+            selected_models = [
+                model
+                for org_id, model in self.community.organisms.items()
+                if org_id in selected_names
+            ]
+            community = LayeredCommunity(f"{selected_names}", selected_models)
 
-            try:
-                growth = 0
+            community.setup_growth_requirement(self.minimal_growth)
+            community.setup_medium(self.medium)
 
-                if not self.objective and not self.parsimony:
-                    solution = self._no_objective_optimization()
+            if self.parsimony:
+                community.setup_parsimony()
 
-                    if not self._check_solution(solution, selected, not_selected):
-                        logging.info(
-                            "Community Inconsistent: %s", str(list(selected.keys()))
-                        )
-                        self._add_knowledge_constraint(not_selected)
-                        continue
+            objective_value = 0
 
-                if self.objective:
-                    objective_solution = self._objective_optimization()
-                    if not self._check_solution(
-                        objective_solution, selected, not_selected
-                    ):
-                        logging.warning("Unable to optimize objective.")
-                        growth = -1
-                    else:
-                        growth = objective_solution.values[
-                            self.community.merged_model.biomass_reaction
-                        ]
-                        solution = objective_solution
+            if not self.objective and not self.parsimony:
+                solution = community.solver.solve(get_values=self._get_values)
+                if not self._check_solution(solution):
+                    logging.info("Community Inconsistent: %s", str(selected_names))
+                    self._add_knowledge_constraint(not_selected)
+                    continue
 
-                if self.parsimony:
-                    parsimony_solution = self._parsimony_optimization(growth)
-                    if not self._check_solution(
-                        parsimony_solution, selected, not_selected
-                    ):
-                        logging.warning("Unable to minimize fluxes.")
-                    else:
-                        solution = parsimony_solution
+            if self.objective:
+                logging.info("Starting objective optimization.")
+                objective_solution = community.objective_optimization(
+                    self.objective,
+                    self._get_values,
+                )
 
-            finally:
-                self.solver.remove_constraints(["c_not_selection", "c_selection"])
+                # check objective solution
+                if not self._check_solution(objective_solution):
+                    logging.warning("Unable to optimize objective.")
+                    self._add_knowledge_constraint(not_selected)
+                    continue
 
-            self.solver.add_constraint(
+                # compute objective value
+                for k, v in self.objective.items():
+                    if k in objective_solution.values:
+                        objective_value += v * objective_solution.values[k]
+
+                # retain solution
+                solution = objective_solution
+
+            if self.parsimony:
+                logging.info("Starting parsimony optimization.")
+                parsimony_solution = community.parsimony_optimization(
+                    self.objective,
+                    objective_value,
+                    self._get_values,
+                )
+
+                # check parsimony solution
+                if not self._check_solution(parsimony_solution):
+                    logging.warning("Unable to minimize fluxes.")
+                    self._add_knowledge_constraint(not_selected)
+                    continue
+
+                # retain solution
+                solution = parsimony_solution
+
+            self.community.solver.add_constraint(
                 f"c_{i}", selected, "<", len(selected) - 1, update=True
             )
             self.community_constraints[f"c_{i}"] = selected
@@ -173,6 +189,9 @@ class Minimizer:
         if self.cache_file:
             self._dump_constraints_to_cache()
 
+        self.community.solver.remove_constraints(self.knowledge_constraints.keys())
+        self.community.solver.remove_constraints(self.community_constraints.keys())
+
         return self.solutions
 
     @property
@@ -180,52 +199,13 @@ class Minimizer:
         return list(self._community_objective.keys()) + self.values
 
     def _minimize_community(self):
-        return self.solver.solve(
+        return self.community.solver.solve(
             linear=self._community_objective,
             get_values=self._get_values,
             minimize=True,
         )
 
-    def _objective_optimization(self):
-        logging.info("Starting growth optimization.")
-        return self.solver.solve(
-            linear=self.objective,
-            get_values=self._get_values,
-            minimize=False,
-        )
-
-    def _no_objective_optimization(self):
-        logging.info("Starting no optimization.")
-        return self.solver.solve(
-            get_values=self._get_values,
-        )
-
-    def _parsimony_optimization(self, growth: float = 0):
-        logging.info("Starting parsimony optimization.")
-        if growth > 0:
-            self.solver.add_constraint(
-                "c_growth",
-                self.objective,
-                ">",
-                growth,
-                update=True,
-            )
-
-        solution = self.solver.solve(
-            linear={
-                f"abs_{rid}_{sense}": 1
-                for rid in self.community.merged_model.reactions
-                for sense in ["pos", "neg"]
-            },
-            get_values=self._get_values,
-            minimize=True,
-        )
-
-        self.solver.remove_constraints(["c_growth"])
-
-        return solution
-
-    def _check_solution(self, solution, selected, not_selected):
+    def _check_solution(self, solution):
         if solution.status != Status.OPTIMAL:
             logging.info("Solution status: %s", str(solution.status))
             return False
@@ -237,21 +217,21 @@ class Minimizer:
 
     def _add_knowledge_constraint(self, not_selected: dict):
         constraint_name = f"c_tmp_{len(self.knowledge_constraints) + 1}"
-        self.solver.add_constraint(constraint_name, not_selected, ">", 1)
+        self.community.solver.add_constraint(constraint_name, not_selected, ">", 1)
         self.knowledge_constraints[constraint_name] = not_selected
 
     def _load_constraints_from_cache(self, cache: dict):
         for name, selected in cache["community_constraints"].items():
-            self.solver.add_constraint(name, selected, "<", len(selected) - 1)
+            self.community.solver.add_constraint(name, selected, "<", len(selected) - 1)
             self.community_constraints[name] = selected
 
         for name, not_selected in cache["knowledge_constraints"].items():
-            self.solver.add_constraint(name, not_selected, ">", 1)
+            self.community.solver.add_constraint(name, not_selected, ">", 1)
             self.knowledge_constraints[name] = not_selected
 
         self.solutions = cache["solutions"]
 
-        self.solver.update()
+        self.community.solver.update()
 
     def _dump_constraints_to_cache(self):
         with open(self.cache_file, "w", encoding="utf8") as cache_fd:
@@ -265,27 +245,10 @@ class Minimizer:
                 Dumper=yaml.CSafeDumper,
             )
 
-    def _setup_parsimony(self):
-        # add absolute variables for each reaction
-        for rid in self.community.merged_model.reactions:
-            self.solver.add_variable(f"abs_{rid}_pos", 0, 1000, update=False)
-            self.solver.add_variable(f"abs_{rid}_neg", 0, 1000, update=False)
-
-        self.solver.update()
-
-        # add absolute constraints for each reaction
-        for rid in self.community.merged_model.reactions:
-            self.solver.add_constraint(
-                f"c_{rid}_abs",
-                {f"abs_{rid}_pos": 1, f"abs_{rid}_neg": -1, rid: -1},
-                "=",
-                0,
-            )
-
     def _setup_binary_variables(self):
         """Add binary variables to the solver instance."""
         for org_id in self.community.organisms.keys():
-            self.solver.add_variable(
+            self.community.solver.add_variable(
                 f"y_{org_id}",
                 0,
                 1,
@@ -293,7 +256,7 @@ class Minimizer:
                 update=False,
             )
 
-        self.solver.update()
+        self.community.solver.update()
 
         for org_id, org_model in self.community.organisms.items():
             org_var = f"y_{org_id}"
@@ -315,38 +278,21 @@ class Minimizer:
                 if reaction.lb * reaction.ub > 0:
                     lbound = -BOUND_INF if math.isinf(reaction.lb) else reaction.lb
                     ubound = BOUND_INF if math.isinf(reaction.ub) else reaction.ub
-                    self.solver.set_bounds({merged_id: (-BOUND_INF, BOUND_INF)})
+                    self.community.solver.set_bounds(
+                        {merged_id: (-BOUND_INF, BOUND_INF)}
+                    )
 
-                self.solver.add_constraint(
+                self.community.solver.add_constraint(
                     f"c_{merged_id}_lb",
                     {merged_id: 1, org_var: -lbound},
                     ">",
                     0,
                     update=False,
                 )
-                self.solver.add_constraint(
+                self.community.solver.add_constraint(
                     f"c_{merged_id}_ub",
                     {merged_id: 1, org_var: -ubound},
                     "<",
                     0,
                     update=False,
-                )
-
-    def _setup_medium(self):
-        """Setup the medium for model on solver."""
-        missing_reactions = set(self.medium.keys()) - set(
-            self.community.merged_model.reactions.keys()
-        )
-        for r_id in missing_reactions:
-            logging.warning(
-                "Missing reaction %s in model %s", r_id, self.community.merged_model.id
-            )
-        for r_id in self.community.merged_model.reactions.keys():
-            if r_id.startswith("R_EX_") and not r_id.endswith("_i"):
-                bound = self.medium[r_id] if r_id in self.medium.keys() else 0
-                self.solver.add_constraint(
-                    f"c_{r_id}_lb",
-                    {r_id: 1},
-                    ">",
-                    bound,
                 )

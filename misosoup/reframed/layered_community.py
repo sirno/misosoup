@@ -1,5 +1,7 @@
 """Layered community class implementation."""
 
+import logging
+
 from math import inf
 
 from reframed import (
@@ -13,6 +15,7 @@ from reframed import (
     Compartment,
     Metabolite,
 )
+from reframed.solvers import GurobiSolver
 
 
 class LayeredCommunity(Community):
@@ -25,6 +28,7 @@ class LayeredCommunity(Community):
             copy_models=copy_models,
         )
         self.suffix = suffix
+        self.solver = GurobiSolver(self.merged_model)
 
     def merge_models(self):
         comm_model = CBModel(self.id)
@@ -172,3 +176,82 @@ class LayeredCommunity(Community):
             comm_model.add_reaction(rxn)
 
         return comm_model
+
+    def setup_growth_requirement(self, minimal_growth):
+        for org_id, org_model in self.organisms.items():
+            merged_id = self.reaction_map[(org_id, org_model.biomass_reaction)]
+            self.solver.add_constraint(
+                f"c_{merged_id}_lb",
+                {merged_id: 1},
+                ">",
+                minimal_growth,
+                update=False,
+            )
+        self.solver.update()
+
+    def setup_medium(self, medium):
+        """Setup the medium for model on solver."""
+        missing_reactions = set(medium.keys()) - set(self.merged_model.reactions.keys())
+        for r_id in missing_reactions:
+            logging.warning(
+                "Missing reaction %s in model %s", r_id, self.merged_model.id
+            )
+        for r_id in self.merged_model.reactions.keys():
+            if r_id.startswith("R_EX_") and not r_id.endswith("_i"):
+                bound = medium[r_id] if r_id in medium.keys() else 0
+                self.solver.add_constraint(
+                    f"c_{r_id}_lb",
+                    {r_id: 1},
+                    ">",
+                    bound,
+                )
+
+    def setup_parsimony(self):
+        # add absolute variables for each reaction
+        for rid in self.merged_model.reactions:
+            self.solver.add_variable(f"abs_{rid}_pos", 0, 1000, update=False)
+            self.solver.add_variable(f"abs_{rid}_neg", 0, 1000, update=False)
+
+        self.solver.update()
+
+        # add absolute constraints for each reaction
+        for rid in self.merged_model.reactions:
+            self.solver.add_constraint(
+                f"c_{rid}_abs",
+                {f"abs_{rid}_pos": 1, f"abs_{rid}_neg": -1, rid: -1},
+                "=",
+                0,
+            )
+
+    def objective_optimization(self, objective: dict, values: list):
+        existing_values = set(values) & set(self.merged_model.reactions.keys())
+        return self.solver.solve(
+            linear=objective,
+            get_values=existing_values,
+            minimize=False,
+        )
+
+    def parsimony_optimization(self, objective: dict, value: float, values: list):
+        if value > 0:
+            self.solver.add_constraint(
+                "c_growth",
+                self.objective,
+                ">",
+                objective,
+                update=True,
+            )
+
+        existing_values = set(values) & set(self.merged_model.reactions.keys())
+        parsimony_solution = self.solver.solve(
+            linear={
+                f"abs_{rid}_{sense}": 1
+                for rid in self.merged_model.reactions
+                for sense in ["pos", "neg"]
+            },
+            get_values=existing_values,
+            minimize=True,
+        )
+
+        self.solver.remove_constraints(["c_growth"])
+
+        return parsimony_solution

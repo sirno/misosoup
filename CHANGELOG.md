@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.0 --- Numerical Exercise (Sep 2, 2022)
+
+- Build new community models candidate solutions for verification
+
 ## 1.3.1 --- Speedup Inclination (Sep 1, 2022)
 
 - Use yaml C loader and dumper
