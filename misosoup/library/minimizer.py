@@ -226,8 +226,8 @@ class Minimizer:
         return solution
 
     def _check_solution(self, solution, selected, not_selected):
-        logging.debug("Solution status: %s", str(solution.status))
         if solution.status != Status.OPTIMAL:
+            logging.info("Solution status: %s", str(solution.status))
             return False
         logging.info(
             "Community growth: %f",
