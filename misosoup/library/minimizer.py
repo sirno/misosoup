@@ -128,7 +128,7 @@ class Minimizer:
             objective_value = 0
 
             if not self.objective and not self.parsimony:
-                solution = community.solver.solve(get_values=self._get_values)
+                solution = community.check_feasibility(values=self._get_values)
                 if not self._check_solution(solution):
                     logging.info("Community Inconsistent: %s", str(selected_names))
                     self._add_knowledge_constraint(not_selected)
