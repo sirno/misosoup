@@ -187,6 +187,7 @@ class Minimizer:
                 {
                     "objective_optimized": objective,
                     "parsimony_optimized": parsimony,
+                    "parsimony_variables": self.parsimony,
                     **{var: rate for var, rate in solution.values.items() if rate},
                 }
             )

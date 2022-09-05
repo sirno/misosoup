@@ -1,9 +1,11 @@
 # Changelog
 
-## 2.1.0 --- Transparency Dilemma (WIP)
+## 2.1.0 --- Transparency Dilemma (Sep 6, 2022)
 
 - Report feasible communities if optimization fails
 - Report which optimizations succeeded
+- Report if parsimony variables are set
+- Fix missing `check_feasibility` method.
 
 ## 2.0.0 --- Numerical Exercise (Sep 2, 2022)
 
