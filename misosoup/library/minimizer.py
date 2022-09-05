@@ -126,13 +126,15 @@ class Minimizer:
                 community.setup_parsimony()
 
             objective_value = 0
+            objective = False
+            parsimony = False
 
-            if not self.objective and not self.parsimony:
-                solution = community.check_feasibility(values=self._get_values)
-                if not self._check_solution(solution):
-                    logging.info("Community Inconsistent: %s", str(selected_names))
-                    self._add_knowledge_constraint(not_selected)
-                    continue
+            logging.info("Check feasibility of community model.")
+            solution = community.check_feasibility(values=self._get_values)
+            if not self._check_solution(solution):
+                logging.info("Community Inconsistent: %s", str(selected_names))
+                self._add_knowledge_constraint(not_selected)
+                continue
 
             if self.objective:
                 logging.info("Starting objective optimization.")
@@ -145,15 +147,17 @@ class Minimizer:
                 if not self._check_solution(objective_solution):
                     logging.warning("Unable to optimize objective.")
                     self._add_knowledge_constraint(not_selected)
-                    continue
+                else:
+                    # objective solution successful
+                    objective = True
 
-                # compute objective value
-                for k, v in self.objective.items():
-                    if k in objective_solution.values:
-                        objective_value += v * objective_solution.values[k]
+                    # compute objective value
+                    for k, v in self.objective.items():
+                        if k in objective_solution.values:
+                            objective_value += v * objective_solution.values[k]
 
-                # retain solution
-                solution = objective_solution
+                    # retain solution
+                    solution = objective_solution
 
             if self.parsimony:
                 logging.info("Starting parsimony optimization.")
@@ -167,10 +171,9 @@ class Minimizer:
                 if not self._check_solution(parsimony_solution):
                     logging.warning("Unable to minimize fluxes.")
                     self._add_knowledge_constraint(not_selected)
-                    continue
-
-                # retain solution
-                solution = parsimony_solution
+                else:
+                    parsimony = True
+                    solution = parsimony_solution
 
             self.community.solver.add_constraint(
                 f"c_{i}", selected, "<", len(selected) - 1, update=True
@@ -181,7 +184,11 @@ class Minimizer:
                 break
 
             self.solutions.append(
-                {var: rate for var, rate in solution.values.items() if rate}
+                {
+                    "objective_optimized": objective,
+                    "parsimony_optimized": parsimony,
+                    **{var: rate for var, rate in solution.values.items() if rate},
+                }
             )
 
             i += 1

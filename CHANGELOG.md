@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.0 --- Transparency Dilemma (WIP)
+
+- Report feasible communities if optimization fails
+- Report which optimizations succeeded
+
 ## 2.0.0 --- Numerical Exercise (Sep 2, 2022)
 
 - Build new community models candidate solutions for verification

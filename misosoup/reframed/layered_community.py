@@ -223,6 +223,10 @@ class LayeredCommunity(Community):
                 0,
             )
 
+    def check_feasibility(self, values: list):
+        existing_values = set(values) & set(self.merged_model.reactions.keys())
+        return self.solver.solve(get_values=existing_values)
+
     def objective_optimization(self, objective: dict, values: list):
         existing_values = set(values) & set(self.merged_model.reactions.keys())
         return self.solver.solve(
