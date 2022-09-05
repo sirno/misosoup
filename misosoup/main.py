@@ -18,12 +18,15 @@ from .reframed.layered_community import LayeredCommunity
 
 def main(args):
     """Main function."""
+    logging.info("Loading models.")
     input_paths = glob.glob(args.input[0]) if len(args.input) == 1 else args.input
     models = load_models(input_paths)
 
+    logging.info("Loading media.")
     media = read_compounds(args.media)
     base_medium = media["base_medium"] if "base_medium" in media.keys() else {}
 
+    logging.info("Construct community model.")
     community = LayeredCommunity("CoI", models, copy_models=False)
 
     solutions = defaultdict(dict)
@@ -40,6 +43,9 @@ def main(args):
         if not medium_id == "base_medium" and (
             not args.media_select or medium_id in args.media_select
         ):
+            logging.info(
+                "Compute minimal communities for medium with id: %s", medium_id
+            )
             medium = {
                 **medium_composition,
                 **base_medium,
@@ -77,7 +83,7 @@ def main(args):
     if args.output:
         if not os.path.exists(os.path.dirname(args.output)):
             os.makedirs(os.path.dirname(args.output))
-        with open(args.output, "a", encoding="utf8") as file_descriptor:
+        with open(args.output, "w", encoding="utf8") as file_descriptor:
             file_descriptor.write(output)
     else:
         print(output)
