@@ -54,7 +54,7 @@ class Minimizer:
                 f"c_{org_id}_focal",
                 {f"y_{org_id}": 1},
                 ">",
-                1,
+                0.5,
                 update=True,
             )
 
@@ -68,6 +68,7 @@ class Minimizer:
 
         self.cache_file = cache_file
         if cache_file and os.path.exists(cache_file):
+            logging.info("Loading constraints from cache file: %s", cache_file)
             with open(cache_file, encoding="utf8") as cache_fd:
                 cache = yaml.load(cache_fd, Loader=yaml.CSafeLoader)
             self._load_constraints_from_cache(cache)
@@ -86,7 +87,16 @@ class Minimizer:
 
             if solution.status != Status.OPTIMAL:
                 logging.info("Solution status: %s", str(solution.status))
-                break
+                grb_model = self.community.solver.problem
+                vars = grb_model.getVars()
+                pen = [1.0] * grb_model.numVars
+                grb_model.feasRelax(1, False, vars, pen, pen, None, None)
+                solution = self._minimize_community()
+                if solution.status != Status.OPTIMAL:
+                    logging.info("Solution status: %s", str(solution.status))
+                    break
+                # self.community.solver.problem.computeIIS()
+                # self.community.solver.problem.write("iis.ilp")
 
             # get community members
             selected_names = [
