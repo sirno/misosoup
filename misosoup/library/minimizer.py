@@ -87,16 +87,7 @@ class Minimizer:
 
             if solution.status != Status.OPTIMAL:
                 logging.info("Solution status: %s", str(solution.status))
-                grb_model = self.community.solver.problem
-                vars = grb_model.getVars()
-                pen = [1.0] * grb_model.numVars
-                grb_model.feasRelax(1, False, vars, pen, pen, None, None)
-                solution = self._minimize_community()
-                if solution.status != Status.OPTIMAL:
-                    logging.info("Solution status: %s", str(solution.status))
-                    break
-                # self.community.solver.problem.computeIIS()
-                # self.community.solver.problem.write("iis.ilp")
+                break
 
             # get community members
             selected_names = [
