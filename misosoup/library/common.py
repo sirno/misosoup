@@ -1,10 +1,9 @@
 """Common functions."""
 import re
+import yaml
 
 from typing import List
 from collections.abc import Iterable
-
-import yaml
 
 
 def get_metabolite_name(compound: str) -> str:
@@ -46,7 +45,9 @@ def merge_yaml(file_list: List[str]):
     solutions = {}
     for path in file_list:
         with open(path, "r") as file_descriptor:
-            merge_dicts(solutions, yaml.load(file_descriptor, Loader=yaml.CSafeLoader))
+            merge_dicts(
+                solutions, yaml.load(file_descriptor, Loader=yaml.CSafeLoader)
+            )
     return solutions
 
 
