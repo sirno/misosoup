@@ -5,7 +5,6 @@ import math
 import os
 import yaml
 
-from reframed.solvers import GurobiSolver
 from reframed.solvers.solver import VarType
 from reframed.solvers.solution import Status
 
@@ -305,3 +304,5 @@ class Minimizer:
                     0,
                     update=False,
                 )
+
+        self.community.solver.update()
