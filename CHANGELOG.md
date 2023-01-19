@@ -3,6 +3,7 @@
 ## 2.1.2 --- Reporting Madness (WIP)
 
 - Log community members when community solution is stored
+- Missing reaction warnings will be sorted
 
 ## 2.1.0 --- Transparency Dilemma (Sep 6, 2022)
 

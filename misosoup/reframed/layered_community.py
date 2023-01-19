@@ -192,7 +192,7 @@ class LayeredCommunity(Community):
     def setup_medium(self, medium):
         """Setup the medium for model on solver."""
         missing_reactions = set(medium.keys()) - set(self.merged_model.reactions.keys())
-        for r_id in missing_reactions:
+        for r_id in sorted(missing_reactions):
             logging.warning(
                 "Missing reaction %s in model %s", r_id, self.merged_model.id
             )
