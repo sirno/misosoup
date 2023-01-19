@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.2 --- Reporting Madness (WIP)
+
+- Log community members when community solution is stored
+
 ## 2.1.0 --- Transparency Dilemma (Sep 6, 2022)
 
 - Report feasible communities if optimization fails

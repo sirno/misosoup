@@ -183,6 +183,7 @@ class Minimizer:
             if self.community_size and len(selected) > self.community_size:
                 break
 
+            logging.info("Retain solution for community: %s", str(selected_names))
             self.solutions.append(
                 {
                     "objective_optimized": objective,
