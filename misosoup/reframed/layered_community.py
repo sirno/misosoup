@@ -15,7 +15,10 @@ from reframed import (
     Compartment,
     Metabolite,
 )
-from reframed.solvers import GurobiSolver
+from gurobipy import Env
+from ..reframed.gurobi_env_solver import GurobiEnvSolver
+
+DEFAULT_ENVIRONMENT = Env()
 
 
 class LayeredCommunity(Community):
@@ -28,7 +31,7 @@ class LayeredCommunity(Community):
             copy_models=copy_models,
         )
         self.suffix = suffix
-        self.solver = GurobiSolver(self.merged_model)
+        self.solver = GurobiEnvSolver(model=self.merged_model, env=DEFAULT_ENVIRONMENT)
 
     def merge_models(self):
         comm_model = CBModel(self.id)
