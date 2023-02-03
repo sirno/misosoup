@@ -18,7 +18,7 @@ from reframed import (
 from gurobipy import Env
 from ..reframed.gurobi_env_solver import GurobiEnvSolver
 
-DEFAULT_ENVIRONMENT = Env()
+DEFAULT_ENVIRONMENT = Env(params={"Method": 1, "LogToConsole": 0})
 
 
 class LayeredCommunity(Community):
