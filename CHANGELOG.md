@@ -1,9 +1,10 @@
 # Changelog
 
-## 2.1.2 --- Reporting Madness (WIP)
+## 2.1.3 --- Reporting Madness (Feb 3, 2022)
 
 - Log community members when community solution is stored
 - Missing reaction warnings will be sorted
+- Setup custom environment for solver
 
 ## 2.1.0 --- Transparency Dilemma (Sep 6, 2022)
 
