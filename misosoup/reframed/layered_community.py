@@ -18,20 +18,20 @@ from reframed import (
 from gurobipy import Env
 from ..reframed.gurobi_env_solver import GurobiEnvSolver
 
-DEFAULT_ENVIRONMENT = Env(params={"Method": 1, "LogToConsole": 0})
-
 
 class LayeredCommunity(Community):
     """Community model with additional layer of exchange reactions for each member."""
 
-    def __init__(self, community_id: str, models: list, copy_models=False, suffix="_i"):
+    def __init__(
+        self, community_id: str, models: list, env: Env, copy_models=False, suffix="_i"
+    ):
         super().__init__(
             community_id=community_id,
             models=models,
             copy_models=copy_models,
         )
         self.suffix = suffix
-        self.solver = GurobiEnvSolver(model=self.merged_model, env=DEFAULT_ENVIRONMENT)
+        self.solver = GurobiEnvSolver(model=self.merged_model, env=env)
 
     def merge_models(self):
         comm_model = CBModel(self.id)

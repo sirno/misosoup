@@ -8,6 +8,8 @@ from collections import defaultdict
 
 import yaml
 
+from gurobipy import Env
+
 from .library.getters import get_biomass, get_exchange_reactions
 from .library.readwrite import load_models, read_compounds
 from .library.validate import validate_solution_dict
@@ -54,7 +56,9 @@ def main(args):
             minimizer = Minimizer(
                 org_id=args.strain,
                 medium=medium,
-                community=LayeredCommunity("community", models),
+                community=LayeredCommunity(
+                    "community", models, Env(params={"Method": 1, "LogToConsole": 0})
+                ),
                 values=(
                     get_biomass(community)
                     + get_exchange_reactions(community.merged_model)

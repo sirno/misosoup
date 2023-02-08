@@ -5,6 +5,8 @@ import math
 import os
 import yaml
 
+from gurobipy import Env
+
 from reframed.solvers.solver import VarType
 from reframed.solvers.solution import Status
 
@@ -117,7 +119,11 @@ class Minimizer:
                 for org_id, model in self.community.organisms.items()
                 if org_id in selected_names
             ]
-            community = LayeredCommunity(f"{selected_names}", selected_models)
+            community = LayeredCommunity(
+                f"{selected_names}",
+                selected_models,
+                Env(params={"Method": 1, "LogToConsole": 0}),
+            )
 
             community.setup_growth_requirement(self.minimal_growth)
             community.setup_medium(self.medium)
