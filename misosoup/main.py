@@ -28,23 +28,30 @@ def main(args):
     media = read_compounds(args.media)
     base_medium = media["base_medium"] if "base_medium" in media.keys() else {}
 
-    logging.info("Construct community model.")
-    community = LayeredCommunity("CoI", models, copy_models=False)
-
     solutions = defaultdict(dict)
-
-    if args.objective:
-        objective = {reaction: 1 for reaction in args.objective}
-    else:
-        objective = {community.merged_model.biomass_reaction: 1}
-
-    if args.disable_objective:
-        objective = None
 
     for medium_id, medium_composition in media.items():
         if not medium_id == "base_medium" and (
             not args.media_select or medium_id in args.media_select
         ):
+            logging.info("Construct community model.")
+            community = LayeredCommunity(
+                "community",
+                models,
+                Env(params={"Method": 1, "LogToConsole": 0}),
+                copy_models=False,
+            )
+
+            if args.disable_objective:
+                logging.info("Disabling objective function.")
+                objective = None
+            elif args.objective:
+                logging.info("Set objective function.")
+                objective = {reaction: 1 for reaction in args.objective}
+            else:
+                logging.info("Set objective function to community biomass.")
+                objective = {community.merged_model.biomass_reaction: 1}
+
             logging.info(
                 "Compute minimal communities for medium with id: %s", medium_id
             )
@@ -56,9 +63,7 @@ def main(args):
             minimizer = Minimizer(
                 org_id=args.strain,
                 medium=medium,
-                community=LayeredCommunity(
-                    "community", models, Env(params={"Method": 1, "LogToConsole": 0})
-                ),
+                community=community,
                 values=(
                     get_biomass(community)
                     + get_exchange_reactions(community.merged_model)
