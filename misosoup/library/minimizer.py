@@ -152,7 +152,6 @@ class Minimizer:
                 # check objective solution
                 if not self._check_solution(objective_solution):
                     logging.warning("Unable to optimize objective.")
-                    self._add_knowledge_constraint(not_selected)
                 else:
                     # objective solution successful
                     objective = True
@@ -176,7 +175,6 @@ class Minimizer:
                 # check parsimony solution
                 if not self._check_solution(parsimony_solution):
                     logging.warning("Unable to minimize fluxes.")
-                    self._add_knowledge_constraint(not_selected)
                 else:
                     parsimony = True
                     solution = parsimony_solution
