@@ -128,9 +128,6 @@ class Minimizer:
             community.setup_growth_requirement(self.minimal_growth)
             community.setup_medium(self.medium)
 
-            if self.parsimony:
-                community.setup_parsimony()
-
             objective_value = 0
             objective = False
             parsimony = False
@@ -141,6 +138,12 @@ class Minimizer:
                 logging.info("Community Inconsistent: %s", str(selected_names))
                 self._add_knowledge_constraint(not_selected)
                 continue
+
+            logging.info("Community feasible.")
+
+            if self.parsimony:
+                logging.info("Setup parsimony variables.")
+                community.setup_parsimony()
 
             if self.objective:
                 logging.info("Starting objective optimization.")
