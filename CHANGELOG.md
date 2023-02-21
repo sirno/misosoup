@@ -1,6 +1,11 @@
 # Changelog
 
-## 2.1.3 --- Reporting Madness (Feb 3, 2022)
+## 2.2.0 --- Consistency Crysis (Feb 21, 2023)
+
+- Use a separate environment for the MILP and the LPs
+- Fix incorrect addition of knowledge constraints when optimizations fail
+
+## 2.1.3 --- Reporting Madness (Feb 3, 2023)
 
 - Log community members when community solution is stored
 - Missing reaction warnings will be sorted
