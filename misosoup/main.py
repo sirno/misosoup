@@ -38,7 +38,7 @@ def main(args):
             community = LayeredCommunity(
                 "community",
                 models,
-                Env(params={"Method": 1, "LogToConsole": 0}),
+                Env(params={"LogToConsole": 0}),
                 copy_models=False,
             )
 

@@ -39,7 +39,7 @@ class Minimizer:
         self.objective = objective
         self.parsimony = parsimony
 
-        self._grb_verification_env = Env(params={"Method": 1, "LogToConsole": 0})
+        self._grb_verification_env = Env(params={"LogToConsole": 0})
 
         self._setup_binary_variables()
         self.community.setup_medium(self.medium)
