@@ -74,6 +74,8 @@ class Minimizer:
             logging.info("Loading constraints from cache file: %s", cache_file)
             with open(cache_file, encoding="utf8") as cache_fd:
                 cache = yaml.load(cache_fd, Loader=yaml.CSafeLoader)
+            logging.debug("Loaded %i knowledge constraints.", len(cache["knowledge_constraints"]))
+            logging.debug("Loaded %i community constraints.", len(cache["community_constraints"]))
             self._load_constraints_from_cache(cache)
 
     def minimize(self):

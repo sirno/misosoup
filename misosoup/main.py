@@ -206,10 +206,11 @@ def entry():
             "final solution."
         ),
     )
-    parser.add_argument("--log", default="INFO", help="Log level. Default: INFO")
+    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output.")
 
     args_parsed = parser.parse_args()
 
-    logging.basicConfig(level=args_parsed.log, format="%(asctime)s %(message)s")
+    verbosity = logging.DEBUG if args_parsed.verbose else logging.INFO
+    logging.basicConfig(level=verbosity, format="%(asctime)s %(message)s")
 
     main(args_parsed)
