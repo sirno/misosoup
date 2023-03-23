@@ -8,8 +8,6 @@ from collections import defaultdict
 
 import yaml
 
-from gurobipy import Env
-
 from .library.getters import get_biomass, get_exchange_reactions
 from .library.readwrite import load_models, read_compounds
 from .library.validate import validate_solution_dict
@@ -38,7 +36,6 @@ def main(args):
             community = LayeredCommunity(
                 "community",
                 models,
-                Env(params={"LogToConsole": 0}),
                 copy_models=False,
             )
 

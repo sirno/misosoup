@@ -22,14 +22,20 @@ from ..reframed.gurobi_env_solver import GurobiEnvSolver
 class LayeredCommunity(Community):
     """Community model with additional layer of exchange reactions for each member."""
 
+    default_environment = Env(params={"LogToConsole": 0})
+
     def __init__(
-        self, community_id: str, models: list, env: Env, copy_models=False, suffix="_i"
+        self, community_id: str, models: list, env: Env=None, copy_models=False, suffix="_i"
     ):
         super().__init__(
             community_id=community_id,
             models=models,
             copy_models=copy_models,
         )
+
+        if env is None:
+            env = self.default_environment
+
         self.suffix = suffix
         self.solver = GurobiEnvSolver(model=self.merged_model, env=env)
 
