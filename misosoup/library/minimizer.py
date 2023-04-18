@@ -1,18 +1,12 @@
 """Minimizer module."""
 
 import logging
-import math
 import os
 import yaml
 
-from gurobipy import Env
-
-from reframed.solvers.solver import VarType
 from reframed.solvers.solution import Status
 
 from ..reframed.layered_community import LayeredCommunity
-
-BOUND_INF = 1000
 
 
 class Minimizer:
@@ -43,7 +37,12 @@ class Minimizer:
         self.parsimony = parsimony
         self.parsimony_only = parsimony_only
 
-        self._setup_binary_variables()
+        # setup binary variables for community solutions
+        if not community.has_binary_variables:
+            logging.debug("Setting up binary variables.")
+            self.community.setup_binary_variables(self.minimal_growth)
+
+        # setup medium
         self.community.setup_medium(self.medium)
 
         # setup default binary variables for community solutions
@@ -299,60 +298,6 @@ class Minimizer:
                 cache_fd,
                 Dumper=yaml.CSafeDumper,
             )
-
-    def _setup_binary_variables(self):
-        """Add binary variables to the solver instance."""
-        for org_id in self.community.organisms.keys():
-            self.community.solver.add_variable(
-                f"y_{org_id}",
-                0,
-                1,
-                vartype=VarType.BINARY,
-                update=False,
-            )
-
-        self.community.solver.update()
-
-        for org_id, org_model in self.community.organisms.items():
-            org_var = f"y_{org_id}"
-            for r_id, reaction in org_model.reactions.items():
-                if (
-                    not r_id.startswith("R_EX")
-                    and r_id != org_model.biomass_reaction
-                    and reaction.lb * reaction.ub <= 0
-                ):
-                    continue
-
-                merged_id = self.community.reaction_map[(org_id, r_id)]
-                ubound = BOUND_INF
-                lbound = -BOUND_INF
-
-                if r_id == org_model.biomass_reaction:
-                    lbound = self.minimal_growth
-
-                if reaction.lb * reaction.ub > 0:
-                    lbound = -BOUND_INF if math.isinf(reaction.lb) else reaction.lb
-                    ubound = BOUND_INF if math.isinf(reaction.ub) else reaction.ub
-                    self.community.solver.set_bounds(
-                        {merged_id: (-BOUND_INF, BOUND_INF)}
-                    )
-
-                self.community.solver.add_constraint(
-                    f"c_{merged_id}_lb",
-                    {merged_id: 1, org_var: -lbound},
-                    ">",
-                    0,
-                    update=False,
-                )
-                self.community.solver.add_constraint(
-                    f"c_{merged_id}_ub",
-                    {merged_id: 1, org_var: -ubound},
-                    "<",
-                    0,
-                    update=False,
-                )
-
-        self.community.solver.update()
 
 
 def _get_dict(solution):

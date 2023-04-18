@@ -1,6 +1,7 @@
 """Layered community class implementation."""
 
 import logging
+import math
 
 from math import inf
 
@@ -15,8 +16,11 @@ from reframed import (
     Compartment,
     Metabolite,
 )
+from reframed.solvers.solver import VarType
 from gurobipy import Env
 from ..reframed.gurobi_env_solver import GurobiEnvSolver
+
+BOUND_INF = 1000
 
 
 class LayeredCommunity(Community):
@@ -44,6 +48,7 @@ class LayeredCommunity(Community):
 
         self.suffix = suffix
         self.solver = GurobiEnvSolver(model=self.merged_model, env=env, params=params)
+        self.has_binary_variables = False
 
     def merge_models(self):
         comm_model = CBModel(self.id)
@@ -192,6 +197,59 @@ class LayeredCommunity(Community):
 
         return comm_model
 
+    def setup_binary_variables(self, minimal_growth):
+        """Setup binary variables for each organism."""
+        for org_id in self.organisms.keys():
+            self.solver.add_variable(
+                f"y_{org_id}",
+                0,
+                1,
+                vartype=VarType.BINARY,
+                update=False,
+            )
+
+        self.solver.update()
+
+        for org_id, org_model in self.organisms.items():
+            org_var = f"y_{org_id}"
+            for r_id, reaction in org_model.reactions.items():
+                if (
+                    not r_id.startswith("R_EX")
+                    and r_id != org_model.biomass_reaction
+                    and reaction.lb * reaction.ub <= 0
+                ):
+                    continue
+
+                merged_id = self.reaction_map[(org_id, r_id)]
+                ubound = BOUND_INF
+                lbound = -BOUND_INF
+
+                if r_id == org_model.biomass_reaction:
+                    lbound = minimal_growth
+
+                if reaction.lb * reaction.ub > 0:
+                    lbound = -BOUND_INF if math.isinf(reaction.lb) else reaction.lb
+                    ubound = BOUND_INF if math.isinf(reaction.ub) else reaction.ub
+                    self.solver.set_bounds({merged_id: (-BOUND_INF, BOUND_INF)})
+
+                self.solver.add_constraint(
+                    f"c_{merged_id}_lb",
+                    {merged_id: 1, org_var: -lbound},
+                    ">",
+                    0,
+                    update=False,
+                )
+                self.solver.add_constraint(
+                    f"c_{merged_id}_ub",
+                    {merged_id: 1, org_var: -ubound},
+                    "<",
+                    0,
+                    update=False,
+                )
+
+        self.solver.update()
+        self.has_binary_variables = True
+
     def setup_growth_requirement(self, minimal_growth):
         for org_id, org_model in self.organisms.items():
             merged_id = self.reaction_map[(org_id, org_model.biomass_reaction)]
@@ -240,6 +298,7 @@ class LayeredCommunity(Community):
 
     def check_feasibility(self, values: list):
         existing_values = set(values) & set(self.merged_model.reactions.keys())
+        logging.debug("Gathering variables: %s", existing_values)
         return self.solver.solve(get_values=existing_values)
 
     def objective_optimization(self, objective: dict, values: list):
