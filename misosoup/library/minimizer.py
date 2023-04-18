@@ -26,7 +26,9 @@ class Minimizer:
         values: list,
         community_size: int,
         objective: dict,
+        feasible_solution: bool,
         parsimony: bool,
+        parsimony_only: bool,
         minimal_growth: float,
         cache_file: str = None,
     ):
@@ -37,10 +39,21 @@ class Minimizer:
         self.values = values
         self.community_size = community_size
         self.objective = objective
+        self.feasible_solution = feasible_solution
         self.parsimony = parsimony
+        self.parsimony_only = parsimony_only
 
         self._setup_binary_variables()
         self.community.setup_medium(self.medium)
+
+        # setup default binary variables for community solutions
+        self._solution_variables = {}
+        if objective:
+            self._solution_variables["objective_optimized"] = False
+        if objective and parsimony:
+            self._solution_variables["parsimony_optimized"] = False
+        if parsimony_only:
+            self._solution_variables["parsimony_only_optimized"] = False
 
         if not org_id or org_id == "min":
             self.community.solver.add_constraint(
@@ -72,8 +85,12 @@ class Minimizer:
             logging.info("Loading constraints from cache file: %s", cache_file)
             with open(cache_file, encoding="utf8") as cache_fd:
                 cache = yaml.load(cache_fd, Loader=yaml.CSafeLoader)
-            logging.debug("Loaded %i knowledge constraints.", len(cache["knowledge_constraints"]))
-            logging.debug("Loaded %i community constraints.", len(cache["community_constraints"]))
+            logging.debug(
+                "Loaded %i knowledge constraints.", len(cache["knowledge_constraints"])
+            )
+            logging.debug(
+                "Loaded %i community constraints.", len(cache["community_constraints"])
+            )
             self._load_constraints_from_cache(cache)
 
     def minimize(self):
@@ -129,9 +146,13 @@ class Minimizer:
             community.setup_growth_requirement(self.minimal_growth)
             community.setup_medium(self.medium)
 
+            # init community solution
+            community_solution = {
+                **self._solution_variables,
+                **selected,
+            }
+
             objective_value = 0
-            objective = False
-            parsimony = False
 
             logging.info("Check feasibility of community model.")
             solution = community.check_feasibility(values=self._get_values)
@@ -142,7 +163,10 @@ class Minimizer:
 
             logging.info("Community feasible.")
 
-            if self.parsimony:
+            if self.feasible_solution:
+                community_solution["feasible_solution"] = _get_dict(solution)
+
+            if self.parsimony or self.parsimony_only:
                 logging.info("Setup parsimony variables.")
                 community.setup_parsimony()
 
@@ -158,7 +182,7 @@ class Minimizer:
                     logging.warning("Unable to optimize objective.")
                 else:
                     # objective solution successful
-                    objective = True
+                    community_solution["objective_optimized"] = True
 
                     # compute objective value
                     for k, v in self.objective.items():
@@ -166,9 +190,11 @@ class Minimizer:
                             objective_value += v * objective_solution.values[k]
 
                     # retain solution
-                    solution = objective_solution
+                    community_solution["objective_solution"] = _get_dict(
+                        objective_solution
+                    )
 
-            if self.parsimony:
+            if self.parsimony and objective_value:
                 logging.info("Starting parsimony optimization.")
                 parsimony_solution = community.parsimony_optimization(
                     self.objective,
@@ -180,8 +206,27 @@ class Minimizer:
                 if not self._check_solution(parsimony_solution):
                     logging.warning("Unable to minimize fluxes.")
                 else:
-                    parsimony = True
-                    solution = parsimony_solution
+                    community_solution["parsimony_optimized"] = True
+                    community_solution["parsimony_solution"] = _get_dict(
+                        parsimony_solution
+                    )
+
+            if self.parsimony_only:
+                logging.info("Starting parsimony only optimization.")
+                parsimony_only_solution = community.parsimony_optimization(
+                    self.objective,
+                    0,
+                    self._get_values,
+                )
+
+                # check parsimony solution
+                if not self._check_solution(parsimony_only_solution):
+                    logging.warning("Unable to minimize fluxes.")
+                else:
+                    community_solution["parsimony_only_optimized"] = True
+                    community_solution["parsimony_only_solution"] = _get_dict(
+                        parsimony_only_solution
+                    )
 
             self.community.solver.add_constraint(
                 f"c_{i}", selected, "<", len(selected) - 1, update=True
@@ -192,15 +237,7 @@ class Minimizer:
                 break
 
             logging.info("Retain solution for community: %s", str(selected_names))
-            self.solutions.append(
-                {
-                    "objective_optimized": objective,
-                    "parsimony_optimized": parsimony,
-                    "parsimony_variables": self.parsimony,
-                    **{var: rate for var, rate in solution.values.items() if rate},
-                    **selected,
-                }
-            )
+            self.solutions.append(community_solution)
 
             i += 1
 
@@ -316,3 +353,7 @@ class Minimizer:
                 )
 
         self.community.solver.update()
+
+
+def _get_dict(solution):
+    return {k: v for k, v in solution.values.items() if v}

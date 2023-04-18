@@ -39,10 +39,7 @@ def main(args):
                 copy_models=False,
             )
 
-            if args.disable_objective:
-                logging.info("Disabling objective function.")
-                objective = None
-            elif args.objective:
+            if args.objective:
                 logging.info("Set objective function.")
                 objective = {reaction: 1 for reaction in args.objective}
             else:
@@ -67,7 +64,9 @@ def main(args):
                 ),
                 community_size=args.community_size,
                 objective=objective,
+                feasible_solution=args.feasible_solution,
                 parsimony=args.parsimony,
+                parsimony_only=args.parsimony_only,
                 minimal_growth=args.minimal_growth,
                 cache_file=args.cache_file,
             )
@@ -155,6 +154,11 @@ def entry():
         "--parsimony", action="store_true", help="Compute parsimony solution."
     )
     parser.add_argument(
+        "--parsimony-only",
+        action="store_true",
+        help="Compute parsimony solution without prior objective optimization.",
+    )
+    parser.add_argument(
         "--community-size",
         type=int,
         default=0,
@@ -182,14 +186,14 @@ def entry():
         ),
     )
     parser.add_argument(
-        "--disable-objective",
+        "--feasible-solution",
         action="store_true",
-        help="If set, no objective will be optimized.",
+        help="If set, a feasible solution will be reported after the feasibility check.",
     )
     parser.add_argument(
         "--objective",
         type=str,
-        nargs="+",
+        nargs="*",
         help=(
             "List of ids that are part of the objective function. By default "
             + "the community biomass is maximized."
