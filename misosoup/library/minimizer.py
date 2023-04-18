@@ -163,7 +163,10 @@ class Minimizer:
             logging.info("Community feasible.")
 
             if self.feasible_solution:
-                community_solution["feasible_solution"] = _get_dict(solution)
+                community_solution["feasible_solution"] = _get_dict(
+                    solution,
+                    self._get_values,
+                )
 
             if self.parsimony or self.parsimony_only:
                 logging.info("Setup parsimony variables.")
@@ -190,7 +193,8 @@ class Minimizer:
 
                     # retain solution
                     community_solution["objective_solution"] = _get_dict(
-                        objective_solution
+                        objective_solution,
+                        self._get_values,
                     )
 
             if self.parsimony and objective_value:
@@ -207,7 +211,8 @@ class Minimizer:
                 else:
                     community_solution["parsimony_optimized"] = True
                     community_solution["parsimony_solution"] = _get_dict(
-                        parsimony_solution
+                        parsimony_solution,
+                        self._get_values,
                     )
 
             if self.parsimony_only:
@@ -224,7 +229,8 @@ class Minimizer:
                 else:
                     community_solution["parsimony_only_optimized"] = True
                     community_solution["parsimony_only_solution"] = _get_dict(
-                        parsimony_only_solution
+                        parsimony_only_solution,
+                        self._get_values,
                     )
 
             self.community.solver.add_constraint(
@@ -300,5 +306,5 @@ class Minimizer:
             )
 
 
-def _get_dict(solution):
-    return {k: v for k, v in solution.values.items() if v}
+def _get_dict(solution, get_values):
+    return {k: v for k, v in solution.values.items() if v and k in get_values}
