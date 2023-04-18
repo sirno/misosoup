@@ -25,7 +25,13 @@ class LayeredCommunity(Community):
     default_environment = Env(params={"LogToConsole": 0})
 
     def __init__(
-        self, community_id: str, models: list, env: Env=None, copy_models=False, suffix="_i"
+        self,
+        community_id: str,
+        models: list,
+        env: Env = None,
+        copy_models=False,
+        suffix="_i",
+        params=None,
     ):
         super().__init__(
             community_id=community_id,
@@ -37,7 +43,7 @@ class LayeredCommunity(Community):
             env = self.default_environment
 
         self.suffix = suffix
-        self.solver = GurobiEnvSolver(model=self.merged_model, env=env)
+        self.solver = GurobiEnvSolver(model=self.merged_model, env=env, params=params)
 
     def merge_models(self):
         comm_model = CBModel(self.id)

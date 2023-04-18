@@ -8,6 +8,8 @@ from collections import defaultdict
 
 import yaml
 
+from reframed.solvers import Parameter
+
 from .library.getters import get_biomass, get_exchange_reactions
 from .library.readwrite import load_models, read_compounds
 from .library.validate import validate_solution_dict
@@ -37,6 +39,10 @@ def main(args):
                 "community",
                 models,
                 copy_models=False,
+                params={
+                    Parameter.OPTIMALITY_TOL: args.tolerance,
+                    Parameter.FEASIBILITY_TOL: args.tolerance,
+                },
             )
 
             if args.objective:
@@ -172,6 +178,16 @@ def entry():
             "Minimal required growth for strain or community."
             "Each strain that is considered to grow needs to at least achieve "
             "this minimal growth rate given by this argument."
+        ),
+    )
+    parser.add_argument(
+        "--tolerance",
+        type=float,
+        default=1e-6,
+        help=(
+            "Feasibility tolerance during community minimization. "
+            "Lower values may lead to slower computations and more communities found."
+            "Default: 1e-6."
         ),
     )
     parser.add_argument(
