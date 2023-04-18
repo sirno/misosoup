@@ -30,21 +30,21 @@ def main(args):
 
     solutions = defaultdict(dict)
 
+    logging.info("Construct community model.")
+    community = LayeredCommunity(
+        "community",
+        models,
+        copy_models=False,
+        params={
+            Parameter.OPTIMALITY_TOL: args.tolerance,
+            Parameter.FEASIBILITY_TOL: args.tolerance,
+        },
+    )
+
     for medium_id, medium_composition in media.items():
         if not medium_id == "base_medium" and (
             not args.media_select or medium_id in args.media_select
         ):
-            logging.info("Construct community model.")
-            community = LayeredCommunity(
-                "community",
-                models,
-                copy_models=False,
-                params={
-                    Parameter.OPTIMALITY_TOL: args.tolerance,
-                    Parameter.FEASIBILITY_TOL: args.tolerance,
-                },
-            )
-
             if args.objective:
                 logging.info("Set objective function.")
                 objective = {reaction: 1 for reaction in args.objective}
