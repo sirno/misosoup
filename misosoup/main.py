@@ -41,6 +41,9 @@ def main(args):
         },
     )
 
+    if args.cache_file:
+        os.makedirs(os.path.dirname(args.cache_file), exists_ok=True)
+
     for medium_id, medium_composition in media.items():
         if not medium_id == "base_medium" and (
             not args.media_select or medium_id in args.media_select
