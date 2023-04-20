@@ -294,7 +294,7 @@ class Minimizer:
         self.community.solver.update()
 
     def _dump_constraints_to_cache(self):
-        os.makedirs(os.path.basename(self.cache_file), exist_ok=True)
+        os.makedirs(os.path.dirname(self.cache_file), exist_ok=True)
         with open(self.cache_file, "w", encoding="utf8") as cache_fd:
             yaml.dump(
                 {
