@@ -1,9 +1,8 @@
 """Gurobi solver instance for individual environments."""
 
-from reframed.solvers.solver import Solver, Parameter
-from reframed.solvers.gurobi_solver import GurobiSolver, default_parameters
 from gurobipy import Model as GurobiModel
-
+from reframed.solvers.gurobi_solver import GurobiSolver, default_parameters
+from reframed.solvers.solver import Parameter, Solver
 
 default_parameters = {
     Parameter.OPTIMALITY_TOL: 1e-6,

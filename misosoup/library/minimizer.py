@@ -2,8 +2,8 @@
 
 import logging
 import os
-import yaml
 
+import yaml
 from reframed.solvers.solution import Status
 
 from ..reframed.layered_community import LayeredCommunity
@@ -149,7 +149,6 @@ class Minimizer:
             if self.parsimony or self.parsimony_only:
                 logging.info("Setup parsimony variables.")
                 community.setup_parsimony()
-
 
             # init community solution
             community_solution = {

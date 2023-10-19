@@ -2,22 +2,22 @@
 
 import logging
 import math
-
 from math import inf
 
+from gurobipy import Env
 from reframed import (
-    Community,
     CBModel,
     CBReaction,
-    Gene,
-    Protein,
-    GPRAssociation,
-    ReactionType,
+    Community,
     Compartment,
+    Gene,
+    GPRAssociation,
     Metabolite,
+    Protein,
+    ReactionType,
 )
 from reframed.solvers.solver import VarType
-from gurobipy import Env
+
 from ..reframed.gurobi_env_solver import GurobiEnvSolver
 
 BOUND_INF = 1000
@@ -126,7 +126,6 @@ class LayeredCommunity(Community):
 
             # add internal reactions
             for r_id, rxn in model.reactions.items():
-
                 new_id = rename(r_id)
 
                 if rxn.reaction_type == ReactionType.EXCHANGE and r_id.startswith(
