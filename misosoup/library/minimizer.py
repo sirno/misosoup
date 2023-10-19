@@ -140,6 +140,7 @@ class Minimizer:
             community = LayeredCommunity(
                 f"{selected_names}",
                 selected_models,
+                params=self.community.solver.params,
             )
 
             community.setup_growth_requirement(self.minimal_growth)

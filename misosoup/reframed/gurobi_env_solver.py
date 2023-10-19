@@ -19,7 +19,9 @@ class GurobiEnvSolver(GurobiSolver):
         Solver.__init__(self)
         self.problem = GurobiModel(env=env)
         self.set_parameters(default_parameters)
+        self.params = params
         if params is not None:
             self.set_parameters(params)
         if model:
             self.build_problem(model)
+        self.model.setParam("METHOD", 1)
