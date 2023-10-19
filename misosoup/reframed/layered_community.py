@@ -2,7 +2,6 @@
 
 import logging
 import math
-from math import inf
 
 from gurobipy import Env
 from reframed import (
@@ -78,7 +77,7 @@ class LayeredCommunity(Community):
             reversible=False,
             stoichiometry={biomass_id: -1},
             lb=0,
-            ub=inf,
+            ub=math.inf,
             objective=1,
         )
 
