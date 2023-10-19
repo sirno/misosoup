@@ -24,4 +24,3 @@ class GurobiEnvSolver(GurobiSolver):
             self.set_parameters(params)
         if model:
             self.build_problem(model)
-        self.model.setParam("METHOD", 1)

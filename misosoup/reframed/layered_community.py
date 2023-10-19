@@ -26,7 +26,7 @@ BOUND_INF = 1000
 class LayeredCommunity(Community):
     """Community model with additional layer of exchange reactions for each member."""
 
-    default_environment = Env(params={"LogToConsole": 0})
+    default_environment = Env(params={"LogToConsole": 0, "Method": 1})
 
     def __init__(
         self,

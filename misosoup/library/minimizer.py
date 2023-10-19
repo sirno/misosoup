@@ -146,6 +146,11 @@ class Minimizer:
             community.setup_growth_requirement(self.minimal_growth)
             community.setup_medium(self.medium)
 
+            if self.parsimony or self.parsimony_only:
+                logging.info("Setup parsimony variables.")
+                community.setup_parsimony()
+
+
             # init community solution
             community_solution = {
                 **self._solution_variables,
@@ -168,10 +173,6 @@ class Minimizer:
                     solution,
                     self._get_values,
                 )
-
-            if self.parsimony or self.parsimony_only:
-                logging.info("Setup parsimony variables.")
-                community.setup_parsimony()
 
             if self.objective:
                 logging.info("Starting objective optimization.")
