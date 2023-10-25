@@ -7,7 +7,7 @@ import os
 from collections import defaultdict
 
 import yaml
-from reframed.solvers import Parameter
+from reframed.solvers.solver import Parameter
 
 from .library.getters import get_biomass, get_exchange_reactions
 from .library.minimizer import Minimizer
