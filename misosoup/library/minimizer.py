@@ -158,16 +158,16 @@ class Minimizer:
 
             objective_value = 0
 
-            logging.info("Check feasibility of community model.")
-            solution = community.check_feasibility(values=self._get_values)
-            if not self._check_solution(solution):
-                logging.info("Community Inconsistent: %s", str(selected_names))
-                self._add_knowledge_constraint(not_selected)
-                continue
-
-            logging.info("Community feasible.")
-
             if self.feasible_solution:
+                logging.info("Check feasibility of community model.")
+                solution = community.check_feasibility(values=self._get_values)
+                if not self._check_solution(solution):
+                    logging.info("Community Inconsistent: %s", str(selected_names))
+                    self._add_knowledge_constraint(not_selected)
+                    continue
+
+                logging.info("Community feasible.")
+
                 community_solution["feasible_solution"] = _get_dict(
                     solution,
                     self._get_values,
