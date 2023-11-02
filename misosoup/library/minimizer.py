@@ -99,6 +99,9 @@ class Minimizer:
             with open(cache_file, encoding="utf8") as cache_fd:
                 cache = yaml.load(cache_fd, Loader=yaml.CSafeLoader)
             logging.debug(
+                "Loaded %i solutions.", len(cache["solutions"])
+            )
+            logging.debug(
                 "Loaded %i knowledge constraints.", len(cache["knowledge_constraints"])
             )
             logging.debug(
