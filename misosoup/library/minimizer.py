@@ -2,11 +2,18 @@
 
 import logging
 import os
+from enum import Enum
 
 import yaml
 from reframed.solvers.solution import Status
 
 from ..reframed.layered_community import LayeredCommunity
+
+
+class KnowledgeCriterion(Enum):
+    FEASIBILITY = 0
+    OBJECTIVE = 1
+    PARSIMONY = 2
 
 
 class Minimizer:
@@ -36,6 +43,13 @@ class Minimizer:
         self.feasible_solution = feasible_solution
         self.parsimony = parsimony
         self.parsimony_only = parsimony_only
+
+        if self.feasible_solution:
+            self.knowledge_criterion = KnowledgeCriterion.FEASIBILITY
+        elif self.parsimony_only:
+            self.knowledge_criterion = KnowledgeCriterion.PARSIMONY
+        else:
+            self.knowledge_criterion = KnowledgeCriterion.OBJECTIVE
 
         # setup binary variables for community solutions
         if not community.has_binary_variables:
@@ -161,8 +175,9 @@ class Minimizer:
             if self.feasible_solution:
                 logging.info("Check feasibility of community model.")
                 solution = community.check_feasibility(values=self._get_values)
-                if not self._check_solution(solution):
+                if self.knowledge_criterion == KnowledgeCriterion.FEASIBILITY and not self._check_solution(solution):
                     logging.info("Community Inconsistent: %s", str(selected_names))
+                    logging.debug("Add knowlege constraint.")
                     self._add_knowledge_constraint(not_selected)
                     continue
 
@@ -183,6 +198,11 @@ class Minimizer:
                 # check objective solution
                 if not self._check_solution(objective_solution):
                     logging.warning("Unable to optimize objective.")
+                    if self.knowledge_criterion == KnowledgeCriterion.OBJECTIVE:
+                        logging.info("Community Inconsistent: %s", str(selected_names))
+                        logging.debug("Add knowlege constraint.")
+                        self._add_knowledge_constraint(not_selected)
+                        continue
                 else:
                     # objective solution successful
                     community_solution["objective_optimized"] = True
@@ -227,6 +247,11 @@ class Minimizer:
                 # check parsimony solution
                 if not self._check_solution(parsimony_only_solution):
                     logging.warning("Unable to minimize fluxes.")
+                    if self.knowledge_criterion == KnowledgeCriterion.FEASIBILITY:
+                        logging.info("Community Inconsistent: %s", str(selected_names))
+                        logging.debug("Add knowlege constraint.")
+                        self._add_knowledge_constraint(not_selected)
+                        continue
                 else:
                     community_solution["parsimony_only_optimized"] = True
                     community_solution["parsimony_only_solution"] = _get_dict(
