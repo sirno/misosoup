@@ -22,7 +22,6 @@ reported in a human-readable and parseable format.
 
 ## Details
 
-
 To find minimal microbial communities `misosoup` solves a repeated sequence of
 optimization problems using MILP formulations:
 
@@ -136,6 +135,8 @@ misosoup MODEL_PATH/*.xml --output OUTPUT_FILE --media MEDIA_FILE --strain STRAI
     * Set the MINIMAL_GROWTH rate of strains. Every strain that makes up a
     community needs to satisfy this minimal growth constraint. The default
     growth rate used is 0.01 (1/h).
+* `--media-select`
+    * Choose which media that are defined in the MEDIA_FILE should be simulated
 
 For further description:
 
@@ -145,16 +146,20 @@ misosoup --help
 
 ## Output file
 
-The .yaml output file will give:
+As output `misosoup` will generate a yaml file with the following general
+structure:
 
-* The community members: `y_<STRAIN_NAME>: 1.0`.
-* The growth of each community member `Growth_<STRAIN_NAME>`.
-* The total community growth `community_growth`.
-* The flux at which metabolites are taken up or secreted to the medium. Negative
-  and positive fluxes indicate consumption and secretion, respectively. This
-  consumption/secretion pattern is given for:
-  * The community as a whole: (`R_EX_<ID>_e`)
-  * Each community member separately (`R_EX_<ID>_<STRAIN_NAME>_i`).
+```yaml
+carbon_source:
+    focal_strain:
+      - <Solution1>
+      - <Solution2>
+```
+
+The solutions indicated above contain multiple entries that depend on the
+specific settings misosoup has been run with. These entries indicate the
+different optimization / verification methods that `misosoup` used to verifiy
+the integrity of the solutions and whether they failed or succeded.
 
 ## Example
 
@@ -166,7 +171,7 @@ The following code will run `misosoup` to find minimal supplying communities for
 A1R12 in a medium that contains acetate as carbon source:
 
 ```bash
-misosoup ./strains/*.xml --output ./output_example.yaml --media media_mbm_no_co2_hco3.yaml --strain A1R12 --parsimony
+misosoup ./strains/*.xml --output ./output_example.yaml --media media.yaml --strain A1R12 --media-select ac
 ```
 
 In the example, we run `misosoup` to find minimal supplying communities that
