@@ -129,12 +129,15 @@ def entry():
         "-o",
         "--output",
         type=str,
-        help="Output file. Format: YAML. If not supplied, will print to stdout.",
+        help="Path to output file. Format: YAML. If not supplied, will print to stdout.",
     )
     parser.add_argument(
         "--cache-file",
         type=str,
-        help="Path to cache file. If set, intermediate constraints will be stored.",
+        help=(
+            "Path to cache file. If set, intermediate constraints will be stored and "
+            "the run can be restart in case it has been interrupted."
+        ),
     )
     parser.add_argument(
         "--media",
@@ -146,7 +149,7 @@ def entry():
         "--media-select",
         type=str,
         nargs="+",
-        help="List of media names to use from the media file.",
+        help="List of media names to select which media from the media file to run.",
     )
     parser.add_argument(
         "--strain",
@@ -202,7 +205,11 @@ def entry():
     parser.add_argument(
         "--feasible-solution",
         action="store_true",
-        help="If set, a feasible solution will be reported after the feasibility check.",
+        help=(
+            "If set, the optimizers preoptimization steps will be run, by setting a "
+            "constant optimization target. Warning: This will cause communities to "
+            "be accepted, that would fail during normal analysis with other packages."
+        ),
     )
     parser.add_argument(
         "--objective",
@@ -210,14 +217,14 @@ def entry():
         nargs="*",
         help=(
             "List of ids that are part of the objective function. By default "
-            + "the community biomass is maximized."
+            "the community biomass is maximized."
         ),
     )
     parser.add_argument(
         "--validate",
         action="store_true",
         help=(
-            "Validate solution. Numerical consistency will be verified on the "
+            "Validate solution. Verify if there are numerical inconsistencies in the "
             "final solution."
         ),
     )

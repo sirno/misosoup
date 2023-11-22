@@ -97,31 +97,31 @@ misosoup MODEL_PATH/*.xml --output OUTPUT_FILE --media MEDIA_FILE --strain STRAI
 
 ### Arguments
 
-* MODEL_PATH: indicates the path to the directory where the metabolic models are
+* `MODEL_PATH`: indicates the path to the directory where the metabolic models are
   described. Strains with metabolic models included in this directory will be
   considered as potential members in the minimal communities. The models should
   be in sbml format and follow the same naming conventions (e.g. if glucose's id
   in one model is 'glc__D', the same id should be used in the other models).
-* --output
+* `--output`
   * Use OUTPUT_FILE for output in yaml format. If it is not given, the results
     will be printed to stdout.
-* --media
+* `--media`
   * Load media from MEDIA_FILE. The file should contain the description of the
     growth media that shall be tested. The file should contain a dictionary with
     all media that the community should be evaluated on. Each of the media needs
     to contain a dictionary of exchange reactions and there lower bound, (i.e.
     `R_EX_ac_e: -10` provides _acetate_ to the communities). The medium with id
     `base_medium` will be added to all media.
-* --strain
+* `--strain`
   * Indicates the focal STRAIN model id. If no strain is provided, `misosoup`
     computes minimal communities.
 
 ## Additional arguments
 
-`misosoup` can be used with the additional arguments:
+`misosoup` can be used with additional arguments.
 
 ```bash
-misosoup MODEL_PATH/*.xml --output OUTPUT_FILE --media MEDIA_FILE --strain STRAIN --parsimony --community-size COMMUNITY_SIZE --minimal-growth MINIMAL_GROWTH --exchange-format EXCHANGE_FORMAT --validate --log LOG
+misosoup MODEL_PATH/*.xml --output OUTPUT_FILE --media MEDIA_FILE --strain STRAIN --parsimony --community-size COMMUNITY_SIZE --minimal-growth MINIMAL_GROWTH
 ```
 
 * `--parsimony`
@@ -135,10 +135,8 @@ misosoup MODEL_PATH/*.xml --output OUTPUT_FILE --media MEDIA_FILE --strain STRAI
     * Set the MINIMAL_GROWTH rate of strains. Every strain that makes up a
     community needs to satisfy this minimal growth constraint. The default
     growth rate used is 0.01 (1/h).
-* `--media-select`
-    * Choose which media that are defined in the MEDIA_FILE should be simulated
 
-For further description:
+All available options can be obtained with:
 
 ```bash
 misosoup --help
@@ -157,9 +155,10 @@ carbon_source:
 ```
 
 The solutions indicated above contain multiple entries that depend on the
-specific settings misosoup has been run with. These entries indicate the
-different optimization / verification methods that `misosoup` used to verifiy
-the integrity of the solutions and whether they failed or succeded.
+specific settings misosoup has been run with. Within the solutions there are
+several entries that indicate if the different optimization / verification
+methods that `misosoup` used to verify the integrity of the solution failed or
+succeded.
 
 ## Example
 
