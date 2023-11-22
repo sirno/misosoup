@@ -62,11 +62,11 @@ class Minimizer:
         # setup default binary variables for community solutions
         self._solution_variables = {}
         if objective:
-            self._solution_variables["objective_optimized"] = False
+            self._solution_variables["objective"] = {}
         if objective and parsimony:
-            self._solution_variables["parsimony_optimized"] = False
+            self._solution_variables["parsimony_objective"] = {}
         if parsimony_only:
-            self._solution_variables["parsimony_only_optimized"] = False
+            self._solution_variables["parsimony_only"] = {}
 
         if not org_id or org_id == "min":
             self.community.solver.add_constraint(
@@ -98,9 +98,7 @@ class Minimizer:
             logging.info("Loading constraints from cache file: %s", cache_file)
             with open(cache_file, encoding="utf8") as cache_fd:
                 cache = yaml.load(cache_fd, Loader=yaml.CSafeLoader)
-            logging.debug(
-                "Loaded %i solutions.", len(cache["solutions"])
-            )
+            logging.debug("Loaded %i solutions.", len(cache["solutions"]))
             logging.debug(
                 "Loaded %i knowledge constraints.", len(cache["knowledge_constraints"])
             )
@@ -178,7 +176,10 @@ class Minimizer:
             if self.feasible_solution:
                 logging.info("Check feasibility of community model.")
                 solution = community.check_feasibility(values=self._get_values)
-                if self.knowledge_criterion == KnowledgeCriterion.FEASIBILITY and not self._check_solution(solution):
+                if (
+                    self.knowledge_criterion == KnowledgeCriterion.FEASIBILITY
+                    and not self._check_solution(solution)
+                ):
                     logging.info("Community Inconsistent: %s", str(selected_names))
                     logging.debug("Add knowlege constraint.")
                     self._add_knowledge_constraint(not_selected)
@@ -207,16 +208,13 @@ class Minimizer:
                         self._add_knowledge_constraint(not_selected)
                         continue
                 else:
-                    # objective solution successful
-                    community_solution["objective_optimized"] = True
-
                     # compute objective value
                     for k, v in self.objective.items():
                         if k in objective_solution.values:
                             objective_value += v * objective_solution.values[k]
 
                     # retain solution
-                    community_solution["objective_solution"] = _get_dict(
+                    community_solution["objective"] = _get_dict(
                         objective_solution,
                         self._get_values,
                     )
@@ -233,8 +231,7 @@ class Minimizer:
                 if not self._check_solution(parsimony_solution):
                     logging.warning("Unable to minimize fluxes.")
                 else:
-                    community_solution["parsimony_optimized"] = True
-                    community_solution["parsimony_solution"] = _get_dict(
+                    community_solution["parsimony_objective"] = _get_dict(
                         parsimony_solution,
                         self._get_values,
                     )
@@ -256,8 +253,7 @@ class Minimizer:
                         self._add_knowledge_constraint(not_selected)
                         continue
                 else:
-                    community_solution["parsimony_only_optimized"] = True
-                    community_solution["parsimony_only_solution"] = _get_dict(
+                    community_solution["parsimony_only"] = _get_dict(
                         parsimony_only_solution,
                         self._get_values,
                     )
