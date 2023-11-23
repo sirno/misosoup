@@ -2,8 +2,10 @@
 
 ## 2.3.0 --- Multiplexing Catarsis (WIP)
 
-- Allow multiple different optimization targets to be reported
 - Fix selected community not being reported
+- REVERT: `check_feasibility` is no longer used to assess feasibility
+- REVERT: Execution and reporting of multiple optimization targets
+- Only one optimization target will be assessed and reported
 
 ## 2.2.0 --- Consistency Crysis (Feb 21, 2023)
 
