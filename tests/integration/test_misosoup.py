@@ -1,6 +1,7 @@
 """Integration tests for misosoup."""
 
 import subprocess
+
 import yaml
 
 
@@ -35,5 +36,6 @@ def test_integration():
     assert complete_process.returncode == 0
     # print(complete_process.stdout)
     out = yaml.safe_load(complete_process.stdout.decode("utf8"))
-    assert out["ac"]["A1R12"][0]["y_A1R12"] == 1
-    assert out["ac"]["A1R12"][0]["y_I2R16"] == 1
+    print(out)
+    assert out["ac"]["A1R12"][0]["community"]["y_A1R12"] == 1
+    assert out["ac"]["A1R12"][0]["community"]["y_I2R16"] == 1
