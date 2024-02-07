@@ -57,7 +57,13 @@ pip install misosoup
 
 ## Usage
 
-After installation, you can easily use `misosoup` with:
+After installation, detailed usage instructions can be found with:
+
+```bash
+misosoup -h
+```
+
+To use `misosoup` with its default settings, you can use the following command:
 
 ```bash
 misosoup MODEL_PATH/*.xml --output OUTPUT_FILE --media MEDIA_FILE --strain STRAIN
