@@ -1,24 +1,28 @@
 # MiSoS(oup)
 
-
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![PyPI version](https://badge.fury.io/py/misosoup.svg)](https://badge.fury.io/py/misosoup)
 
-Minimal Supplying Community Search (`misosoup`) is a command line tool that
-searches for minimal microbial communities --- where every member is required
-for the community to persist in a medium. `misosoup` can be used for two major
-objectives: (1) Find minimal communities in a given medium or (2) Find minimal
-_supplying_ communities in a medium; where every member is required for growth
-of a strain / species of interest (focal strain).
+Minimal Supplying Community Search (`misosoup`) is a command line utility
+designed to search for minimal microbial communities, wherein every member is
+essential for the community's persistence within a given medium. Its primary
+functions include:
 
-As input `misosoup` takes a set of genome-scale metabolic models; one for each
-strain / species that will be considered as potential community member. The tool
-will then execute a series of constraint-based optimizations to find minimal
-communities. For the computation of the solutions it is assumed a metabolic steady-state 
- (as in Flux Balance Analysis) but no optimization criteria are required (although
- can be optionally applied). Once computed, community members, their
-respective growth rates and there metabolic consumption and secretion will be
-reported in a human-readable and parseable format.
+- Identifying minimal communities within a specified medium.
+- Identifying minimal "supplying" communities within a medium, where each
+  member is crucial for the growth of a focal strain or species of interest.
+
+To utilize "misosoup," users provide a set of genome-scale metabolic models,
+each representing a potential member of the community. The program then employs
+constraint-based optimizations to determine minimal communities. These
+optimizations assume a metabolic steady-state, akin to Flux Balance Analysis,
+without necessitating specific optimization criteria (though they can be
+optionally applied).
+
+Once computations are complete, "misosoup" outputs information about community
+members, their respective growth rates, as well as their metabolic consumption
+and secretion, presented in a format both readable by humans and parseable by
+software.
 
 ## Details
 
@@ -34,7 +38,7 @@ optimization problems using MILP formulations:
 
 ## Install MiSoS(soup)
 
-`misosoup` requires a version of Python >3.7 and <3.10 (it will be compatible with 3.10 soon).
+`misosoup` requires a version of Python >3.7 and <3.11.
 
 The latest stable version of `misosoup` is available through `pip` and hence it can easily installed executing:
 
@@ -48,44 +52,8 @@ pip install misosoup
   requires a license.
 * Academic licenses can be obtained on the
   [gurobi license page](https://www.gurobi.com/academia/academic-program-and-licenses/)
-* To retrieve a license, the `grbgetkey` command is needed. The command is not
-  provided with `gurobipy` when installed through pip. Please download the full
-  gurobi version on their website and install gurobi with their installer.
-
-### Notes
-
-* If you are unable to install `gurobipy`, it may need to be installed manually
-e.g. on a hpc cluster, to make use of the local gurobi installation. In such
-a case please refer to the instructions on the cluster support page.
-
- * If `misosoup` requirements are not those of your local installation, you may consider installing it within a [conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html). Once you have `anaconda` installed in your computer you create an environment:
- 
-```bash
-conda create --name misosoup --channel gurobi python=3.9 gurobi
-```
- then you activate it:
- 
-```bash
-conda activate misosoup
-``` 
-
-and finally you can install `misosoup` within that environment.  
- 
-```bash
-pip install misosoup
-```
-
-By default, `pip` installation comes with a free-trial license. Once you obtain your academic license, you want to substitute the free license with the academic one. Search in the anaconda environment the license file:
-
-```bash
-find $path_misosoup_environment -iname '*gurobi.lic'
-```
-
-Which will return the $path_free_license. Now simply overwrite the free license by the academic one:
-
-```bash
-cp $path_academic_license $path_free_license
-```
+* Precise instructions on how to obtain and setup the gurobi licenses can be found on
+  the [gurobi website](https://www.gurobi.com).
 
 ## Usage
 
