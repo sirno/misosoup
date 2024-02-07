@@ -68,7 +68,6 @@ def main(args):
                 ),
                 community_size=args.community_size,
                 objective=objective,
-                feasible_solution=args.feasible_solution,
                 parsimony=args.parsimony,
                 parsimony_only=args.parsimony_only,
                 minimal_growth=args.minimal_growth,
@@ -200,15 +199,6 @@ def entry():
             "reaction. The group containing the carbon source, should be named "
             "`carbon_source`; as can be seen from the default. "
             "default: `R_EX_(\\w+)_e"
-        ),
-    )
-    parser.add_argument(
-        "--feasible-solution",
-        action="store_true",
-        help=(
-            "If set, the optimizers preoptimization steps will be run, by setting a "
-            "constant optimization target. Warning: This will cause communities to "
-            "be accepted, that would fail during normal analysis with other packages."
         ),
     )
     parser.add_argument(

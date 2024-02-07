@@ -27,7 +27,6 @@ class Minimizer:
         values: list,
         community_size: int,
         objective: dict,
-        feasible_solution: bool,
         parsimony: bool,
         parsimony_only: bool,
         minimal_growth: float,
@@ -41,7 +40,6 @@ class Minimizer:
         self.values = values
         self.community_size = community_size
         self.objective = objective
-        self.feasible_solution = feasible_solution
         self.parsimony = parsimony
         self.parsimony_only = parsimony_only
         self.parsimony_tolerance = parsimony_tolerance
