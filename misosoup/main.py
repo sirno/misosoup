@@ -113,10 +113,10 @@ def entry():
     growth rates of all participating strains:
 
         ```
-        carbon_source:
+        medium:
             strain:
-                - {}
-                - {}
+                - community: {}
+                  solution: {}
         ```
     """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -134,30 +134,34 @@ def entry():
         "--cache-file",
         type=str,
         help=(
-            "Path to cache file. If set, intermediate constraints will be stored and "
-            "the run can be restart in case it has been interrupted."
+            "Path to cache file. If set, a file will be created to store intermediate "
+            "solutions and the run can be interrupted and restored from this file at "
+            "any time."
         ),
     )
     parser.add_argument(
         "--media",
         type=str,
         required=True,
-        help="Path to media. Format: YAML. File needs to contain dictionary with media, see examples.",
+        help=(
+            "Path to media. Format: YAML. File needs to contain dictionary, "
+            "as shown in examples `<repo>/misosoup/examples`.",
+            ),
     )
     parser.add_argument(
         "--media-select",
         type=str,
         nargs="+",
-        help="List of media names to select which media from the media file to run.",
+        help="Set of media from media-file to run.",
     )
     parser.add_argument(
         "--strain",
         type=str,
         default="min",
-        help="Focal strain model id. If no strain is provided, we compute minimal communities.",
+        help="Focal strain model id. If not provided, we compute minimal communities.",
     )
     parser.add_argument(
-        "--parsimony", action="store_true", help="Compute parsimony solution."
+        "--parsimony", action="store_true", help="Compute parsimony solution.",
     )
     parser.add_argument(
         "--parsimony-only",
@@ -168,37 +172,22 @@ def entry():
         "--community-size",
         type=int,
         default=0,
-        help="Maximum community size. Default: 0 (Arbitrary).",
+        help="If set, only communities up to community-size will be computed.",
     )
     parser.add_argument(
         "--minimal-growth",
         type=float,
         default=0.01,
-        help=(
-            "Minimal required growth for strain or community."
-            "Each strain that is considered to grow needs to at least achieve "
-            "this minimal growth rate given by this argument."
-        ),
+        help="Minimal required growth for viable strains.",
     )
     parser.add_argument(
         "--tolerance",
         type=float,
         default=1e-6,
         help=(
-            "Feasibility tolerance during community minimization. "
-            "Lower values may lead to slower computations and more communities found."
-            "Default: 1e-6."
-        ),
-    )
-    parser.add_argument(
-        "--exchange-format",
-        type=str,
-        default="R_EX_{}_e",
-        help=(
-            "Regular expression to retrieve the carbon source from an exchange "
-            "reaction. The group containing the carbon source, should be named "
-            "`carbon_source`; as can be seen from the default. "
-            "default: `R_EX_(\\w+)_e"
+            "Feasibility and optimality tolerance used during community minimization "
+            "(see gurobi documentation). Lower values may lead to slower computations "
+            "and more communities found. Default: 1e-6."
         ),
     )
     parser.add_argument(
@@ -206,7 +195,7 @@ def entry():
         type=str,
         nargs="*",
         help=(
-            "List of ids that are part of the objective function. By default "
+            "List of reaction ids that are part of the objective function. By default "
             "the community biomass is maximized."
         ),
     )
