@@ -1,6 +1,10 @@
 # Changelog
 
-## 2.3.0 --- Multiplexing Catarsis (Feb 07, 2024)
+## 2.3.1 --- Minority Complex (WIP)
+
+- Restructure example description and organization
+
+## 2.3.0 --- Multiplexing Catharsis (Feb 07, 2024)
 
 - Fix selected community not being reported
 - REVERT: `check_feasibility` is no longer used to assess feasibility
@@ -8,7 +12,7 @@
 - Only one optimization target will be assessed and reported
 - Upgrade `reframed`
 
-## 2.2.0 --- Consistency Crysis (Feb 21, 2023)
+## 2.2.0 --- Consistency Crisis (Feb 21, 2023)
 
 - Use a separate environment for the MILP and the LPs
 - Fix incorrect addition of knowledge constraints when optimizations fail
