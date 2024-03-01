@@ -153,7 +153,7 @@ microbial communities capable of supporting A1R12 growth:
   relationship sufficient for growth on acetate.
 - **Solution 2:** Community comprising A1R12 and I3M07. Detailed analysis of
   this community shows:
-  - Both strains contribute to carbon dioxide production, with strain-specific
+  - Both strains produce carbon dioxide as a by-product, with strain-specific
     CO2 fluxes of `R_EX_co2_e_A1R12_i: 0.564` for A1R12 and
     `R_EX_co2_e_I3M07_i: 0.1312` for I3M07.
   - The total community-level carbon dioxide production is quantified by the
