@@ -3,6 +3,8 @@
 ## 2.3.1 --- Minority Complex (WIP)
 
 - Restructure example description and organization
+- Add auxotroph example
+- Fix issue with output in same directory
 
 ## 2.3.0 --- Multiplexing Catharsis (Feb 07, 2024)
 
