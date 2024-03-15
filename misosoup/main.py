@@ -89,8 +89,9 @@ def main(args):
     output = yaml.dump(output_dict, Dumper=yaml.CSafeDumper)
 
     if args.output:
-        if not os.path.exists(os.path.dirname(args.output)):
-            os.makedirs(os.path.dirname(args.output))
+        directory = os.path.dirname(args.output)
+        if directory and not os.path.exists(directory):
+            os.makedirs(directory, exist_ok=True)
         with open(args.output, "w", encoding="utf8") as file_descriptor:
             file_descriptor.write(output)
     else:
