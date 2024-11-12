@@ -135,7 +135,7 @@ To execute the analysis, navigate to the `example` directory and use the
 following command:
 
 ```bash
-cd example
+cd example/marine/
 misosoup ./strains/*.xml --output ./output.yaml --media media.yaml --strain A1R12 --media-select ac
 ```
 
