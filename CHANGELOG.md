@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.3.1 --- Minority Complex (WIP)
+## 2.3.1 --- Minority Complex (Jul 02, 2025)
 
 - Restructure example description and organization
 - Add auxotroph example
