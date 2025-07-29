@@ -4,6 +4,7 @@ import argparse
 import glob
 import logging
 import os
+import textwrap
 from collections import defaultdict
 
 import yaml
@@ -101,26 +102,27 @@ def main(args):
 def entry():
     """Misosoup entry point."""
     parser = argparse.ArgumentParser(
-        description="""
-    Compute minimal supplying communities with MiSoS(oup).
-
-    `misosoup` will create a large community network and evaluate which
-    communities can supply growth of some strain (or each other, if no strain
-    is chosen).
-
-    It will report the results in `yaml` format, where the dictionaries contain all
-    active exchange reactions and their rates, as well as the activity of strains (i.e.
-    `y_strain: 1` for any active strain), the community growth rate and the individual
-    growth rates of all participating strains:
-
-        ```
-        medium:
-            strain:
-                - community: {}
-                  solution: {}
-        ```
-    """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
+        description=textwrap.dedent(
+            """
+                Compute minimal supplying communities with `misosoup`.
+
+                `misosoup` will create a large community network and evaluate which communities
+                can supply growth of some strain (or each other, if no strain is chosen).
+
+                It will report the results in `yaml` format, where the dictionaries contain all
+                active exchange reactions and their rates, as well as the activity of strains
+                (i.e. `y_strain: 1` for any active strain), the community growth rate and the
+                individual growth rates of all participating strains:
+
+                    ```
+                    medium:
+                        strain:
+                            - community: {}
+                              solution: {}
+                    ```
+                """
+        ),
     )
     parser.add_argument(
         "input", nargs="+", type=str, help="List or wildcard for model paths."
@@ -146,8 +148,8 @@ def entry():
         required=True,
         help=(
             "Path to media. Format: YAML. File needs to contain dictionary, "
-            "as shown in examples `<repo>/misosoup/examples`.",
-            ),
+            "as shown in examples `<repo>/misosoup/examples`."
+        ),
     )
     parser.add_argument(
         "--media-select",
@@ -162,7 +164,9 @@ def entry():
         help="Focal strain model id. If not provided, we compute minimal communities.",
     )
     parser.add_argument(
-        "--parsimony", action="store_true", help="Compute parsimony solution.",
+        "--parsimony",
+        action="store_true",
+        help="Compute parsimony solution.",
     )
     parser.add_argument(
         "--parsimony-only",

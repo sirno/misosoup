@@ -58,7 +58,6 @@ class Minimizer:
                 {community.merged_model.biomass_reaction: 1},
                 ">",
                 minimal_growth,
-                update=True,
             )
         else:
             self.community.solver.add_constraint(
@@ -66,8 +65,9 @@ class Minimizer:
                 {f"y_{org_id}": 1},
                 ">",
                 0.5,
-                update=True,
             )
+
+        self.community.solver.update()
 
         self._community_objective = {
             f"y_{org_id}": 1 for org_id in self.community.organisms.keys()
@@ -221,8 +221,9 @@ class Minimizer:
                 )
 
             self.community.solver.add_constraint(
-                f"c_{i}", selected, "<", len(selected) - 1, update=True
+                f"c_{i}", selected, "<", len(selected) - 1
             )
+            self.community.solver.update()
             self.community_constraints[f"c_{i}"] = selected
 
             if self.community_size and len(selected) > self.community_size:
@@ -238,8 +239,11 @@ class Minimizer:
         if self.cache_file:
             self._dump_constraints_to_cache()
 
-        self.community.solver.remove_constraints(self.knowledge_constraints.keys())
-        self.community.solver.remove_constraints(self.community_constraints.keys())
+        for constraint in self.knowledge_constraints.values():
+            self.community.solver.remove_constraint(constraint)
+
+        for constraint in self.community_constraints.values():
+            self.community.solver.remove_constraint(constraint)
 
         return self.solutions
 
@@ -249,7 +253,7 @@ class Minimizer:
 
     def _minimize_community(self) -> Solution:
         return self.community.solver.solve(
-            linear=self._community_objective,
+            objective=self._community_objective,
             get_values=self._get_values,
             minimize=True,
         )

@@ -1,7 +1,7 @@
 """Gurobi solver instance for individual environments."""
 
 from gurobipy import Model as GurobiModel
-from reframed.solvers.gurobi_solver import GurobiSolver, default_parameters
+from reframed.solvers.gurobi_solver import GurobiSolver
 from reframed.solvers.solver import Parameter, Solver
 
 default_parameters = {
@@ -17,9 +17,14 @@ class GurobiEnvSolver(GurobiSolver):
         """Init GurobiEnvSolver."""
         Solver.__init__(self)
         self.problem = GurobiModel(env=env)
-        self.set_parameters(default_parameters)
+
+        for par, value in default_parameters.items():
+            self.set_parameter(par, value)
+
         self.params = params
         if params is not None:
-            self.set_parameters(params)
+            for par, value in params.items():
+                self.set_parameter(par, value)
+
         if model:
             self.build_problem(model)

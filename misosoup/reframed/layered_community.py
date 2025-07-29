@@ -203,7 +203,6 @@ class LayeredCommunity(Community):
                 0,
                 1,
                 vartype=VarType.BINARY,
-                update=False,
             )
 
         self.solver.update()
@@ -235,14 +234,12 @@ class LayeredCommunity(Community):
                     {merged_id: 1, org_var: -lbound},
                     ">",
                     0,
-                    update=False,
                 )
                 self.solver.add_constraint(
                     f"c_{merged_id}_ub",
                     {merged_id: 1, org_var: -ubound},
                     "<",
                     0,
-                    update=False,
                 )
 
         self.solver.update()
@@ -256,7 +253,6 @@ class LayeredCommunity(Community):
                 {merged_id: 1},
                 ">",
                 minimal_growth,
-                update=False,
             )
         self.solver.update()
 
@@ -280,8 +276,8 @@ class LayeredCommunity(Community):
     def setup_parsimony(self):
         # add absolute variables for each reaction
         for rid in self.merged_model.reactions:
-            self.solver.add_variable(f"abs_{rid}_pos", 0, 1000, update=False)
-            self.solver.add_variable(f"abs_{rid}_neg", 0, 1000, update=False)
+            self.solver.add_variable(f"abs_{rid}_pos", 0, 1000)
+            self.solver.add_variable(f"abs_{rid}_neg", 0, 1000)
 
         self.solver.update()
 
@@ -302,7 +298,7 @@ class LayeredCommunity(Community):
     def objective_optimization(self, objective: dict, values: list):
         existing_values = set(values) & set(self.merged_model.reactions.keys())
         return self.solver.solve(
-            linear=objective,
+            objective=objective,
             get_values=existing_values,
             minimize=False,
         )
@@ -314,12 +310,12 @@ class LayeredCommunity(Community):
                 objective,
                 ">",
                 value,
-                update=True,
             )
+            self.solver.update()
 
         existing_values = set(values) & set(self.merged_model.reactions.keys())
         parsimony_solution = self.solver.solve(
-            linear={
+            objective={
                 f"abs_{rid}_{sense}": 1
                 for rid in self.merged_model.reactions
                 for sense in ["pos", "neg"]
@@ -328,6 +324,6 @@ class LayeredCommunity(Community):
             minimize=True,
         )
 
-        self.solver.remove_constraints(["c_growth"])
+        self.solver.remove_constraint("c_growth")
 
         return parsimony_solution
