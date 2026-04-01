@@ -99,7 +99,7 @@ class Minimizer:
                 self._dump_constraints_to_cache()
 
             logging.info("------------")
-            logging.info("Starting optimization...")
+            logging.info("Starting community search...")
 
             solution = self._minimize_community()
 
@@ -113,6 +113,9 @@ class Minimizer:
                 for k in self._community_objective.keys()
                 if solution.values[k] > 0.5
             ]
+
+            # create dictionaries for selected and not selected community members
+            # these need to be dictionaries instead of sets to be used as constraints in reframed
             selected = {
                 k: 1
                 for k in self._community_objective.keys()
@@ -226,13 +229,35 @@ class Minimizer:
             self.community.solver.update()
             self.community_constraints[f"c_{i}"] = selected
 
+            # stop community search if we have reached the desired maximal community size
+            # this can result in missing solutions as we might find larger communities first
             if self.community_size and len(selected) > self.community_size:
                 break
 
-            logging.info("Retain solution for community: %s", str(selected_names))
-            self.solutions.append(
-                {"community": selected, "solution": community_solution}
-            )
+            # we need to check if there is a solution that contains this community
+            # and replace it with the current solution if it has less members
+            superset_index = -1
+            selected_set = set(selected.keys())
+            for i, s in enumerate(self.solutions):
+                if set(s["community"].keys()).issuperset(selected_set):
+                    logging.info(
+                        "Found superset solution for community: %s",
+                        str(s["community"].keys()),
+                    )
+                    superset_index = i
+                    break
+
+            if superset_index >= 0:
+                logging.info("Replace solution with community: %s", str(selected_names))
+                self.solutions[superset_index] = {
+                    "community": selected,
+                    "solution": community_solution,
+                }
+            else:
+                logging.info("Retain solution for community: %s", str(selected_names))
+                self.solutions.append(
+                    {"community": selected, "solution": community_solution}
+                )
 
             i += 1
 
