@@ -5,6 +5,7 @@
 .snakemake
 out
 .DS_Store
+Gemfile.lock
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
