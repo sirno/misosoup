@@ -5,7 +5,7 @@
 layout: home
 ---
 
-# misosoup
+# Home
 
 [![Github repo](https://img.shields.io/badge/github-repo-blue?logo=github)](https://github.com/sirno/misosoup)
 [![PyPI version](https://badge.fury.io/py/misosoup.svg)](https://badge.fury.io/py/misosoup)

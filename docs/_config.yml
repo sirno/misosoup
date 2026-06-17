@@ -45,6 +45,12 @@ titles_from_headings:
   strip_title: true
   collections: true
 
+header_pages:
+  - index.markdown
+  - installation.markdown
+  - usage.markdown
+  - example.markdown
+
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to

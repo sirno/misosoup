@@ -5,7 +5,7 @@
 layout: home
 ---
 
-# Installlation
+# Installation
 
 `misosoup` requires a version of Python >=3.9 and <3.12.
 
